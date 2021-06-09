@@ -14,7 +14,7 @@ class BootstrapTestCase(unittest.TestCase):
 
     def setUp(self):
         whoisit.clear_bootstrapping()
-        with open(BASE_DIR / 'test_bootstrap_data.json', 'rt') as f:
+        with open(BASE_DIR / 'data_bootstrap.json', 'rt') as f:
             self.bootstrap_data = f.read()
     
     def tearDown(self):
@@ -134,7 +134,7 @@ class BootstrapTestCase(unittest.TestCase):
         self.assertEqual(whoisit._bootstrap.get_dns_endpoints(test), expected)
         # Invalid TLDs should raise an error
         test = 'testtesttesttesttesttesttesttesttesttesttest'
-        with self.assertRaises(whoisit.errors.BootstrapError):
+        with self.assertRaises(whoisit.errors.UnsupportedError):
             whoisit._bootstrap.get_dns_endpoints(test)
 
         # IPv4 prefix endpoint tests
@@ -176,6 +176,27 @@ class BootstrapTestCase(unittest.TestCase):
         random_servers, exact_match = whoisit._bootstrap.get_entity_endpoints(test)
         self.assertTrue(isinstance(random_servers[0], str))
         self.assertEqual(exact_match, False)
+
+        # Clean up
+        whoisit.clear_bootstrapping()
+
+    def test_override_endpoint(self):
+
+        # Load bootstrap data
+        whoisit.clear_bootstrapping()
+        whoisit.load_bootstrap_data(self.bootstrap_data)
+
+        # Invalid RIR endpoint name
+        with self.assertRaises(whoisit.errors.BootstrapError):
+            whoisit._bootstrap.get_rir_endpoint('test')
+
+        # Check the RIRs are all supported
+        for name, endpoint in whoisit._bootstrap.RIR_RDAP_ENDPOINTS.items():
+            self.assertEqual(whoisit._bootstrap.get_rir_endpoint(name), endpoint)
+
+        # Check the RIR names are valid
+        expected = ('afrinic', 'arin', 'apnic', 'lacnic', 'ripe')
+        self.assertEqual(whoisit._bootstrap.get_rir_endpoint_names(), expected)
 
         # Clean up
         whoisit.clear_bootstrapping()

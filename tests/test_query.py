@@ -14,7 +14,7 @@ class BootstrapTestCase(unittest.TestCase):
 
     def setUp(self):
         whoisit.clear_bootstrapping()
-        with open(BASE_DIR / 'test_bootstrap_data.json', 'rt') as f:
+        with open(BASE_DIR / 'data_bootstrap.json', 'rt') as f:
             whoisit.load_bootstrap_data(f.read())
 
     def test_adding_query_url_params(self):
@@ -60,8 +60,8 @@ class BootstrapTestCase(unittest.TestCase):
                                                        query_value='test.no')
         self.assertEqual(method, 'GET')
         self.assertEqual(url, 'https://rdap.norid.no/domain/test.no')
-        # TLD with no RDAP service should raise a BootstrapError
-        with self.assertRaises(whoisit.errors.BootstrapError):
+        # TLD with no RDAP service should raise a UnsupportedError
+        with self.assertRaises(whoisit.errors.UnsupportedError):
             whoisit.build_query(query_type='domain', query_value='test.test')
 
         # IP requests
@@ -89,3 +89,17 @@ class BootstrapTestCase(unittest.TestCase):
             query_type='ip', query_value=IPv6Network('2606:4700::/32'))
         self.assertEqual(method, 'GET')
         self.assertEqual(url, 'https://rdap.arin.net/registry/ip/2606%3A4700%3A%3A/32')
+
+    def test_building_override_request(self):
+        # Test that overriding the endpoint works, 1.1.1.1 is not allocated to afrinic
+        method, url, exact_match = whoisit.build_query(query_type='ip',
+                                                       query_value='1.1.1.1',
+                                                       rir='afrinic')
+        self.assertEqual(method, 'GET')
+        self.assertEqual(url, 'https://rdap.afrinic.net/rdap/ip/1.1.1.1')
+        # ... or ripe
+        method, url, exact_match = whoisit.build_query(query_type='ip',
+                                                       query_value='1.1.1.1',
+                                                       rir='ripe')
+        self.assertEqual(method, 'GET')
+        self.assertEqual(url, 'https://rdap.db.ripe.net/ip/1.1.1.1')

@@ -17,3 +17,9 @@ class UnsupportedError(WhoisItError):
     '''
         Raised when a feature in a query is unsupported.
     '''
+
+
+class ParseError(WhoisItError):
+    '''
+        Raised when failing to parse response data.
+    '''

@@ -6,7 +6,7 @@ from urllib.parse import urlsplit
 from ipaddress import IPv4Network, IPv4Address, IPv6Network, IPv6Address
 from .logger import get_logger
 from .utils import http_request, is_subnet_of
-from .errors import BootstrapError
+from .errors import BootstrapError, UnsupportedError
 
 
 log = get_logger('bootstrap')
@@ -30,6 +30,14 @@ class Bootstrap:
         'https://rdap.db.ripe.net/',
         'https://rdap.apnic.net/'
     )
+    # Map of RIR RDAP endpoints
+    RIR_RDAP_ENDPOINTS = {
+        'afrinic': 'https://rdap.afrinic.net/rdap/',
+        'arin': 'https://rdap.apnic.net/',
+        'apnic': 'https://rdap.arin.net/registry/',
+        'lacnic': 'https://rdap.lacnic.net/rdap/',
+        'ripe': 'https://rdap.db.ripe.net/',
+    }
 
     def __init__(self):
         self.bootstrap_parsers = {
@@ -79,7 +87,7 @@ class Bootstrap:
             self._bootstrap_timestamp = int(time())
             self._is_bootstrapped = True
             self.parse_bootstrap_data()
-            log.debug('Boostrapped')
+            log.debug('Bootstrapped')
             return True
         else:
             items_missing = self._expected_items - items_loaded
@@ -139,7 +147,7 @@ class Bootstrap:
 
     def parse_bootstrap_data(self):
         '''
-            The boostrap data itself is not organised in a way that can be quickly
+            The bootstrap data itself is not organised in a way that can be quickly
             resolved. Parse each bootstrap objects data to make fast lookups possible.
         '''
         if not self.is_bootstrapped():
@@ -239,8 +247,8 @@ class Bootstrap:
         if endpoints:
             return endpoints, True
         # Domains have no fallback endpoints
-        raise BootstrapError(f'TLD "{tld}" has no known RDAP endpoint '
-                             f'and is unsupported')
+        raise UnsupportedError(f'TLD "{tld}" has no known RDAP endpoint '
+                               f'and is unsupported')
 
     def get_ipv4_endpoints(self, ipv4):
         if not self.is_bootstrapped():
@@ -283,3 +291,16 @@ class Bootstrap:
     def get_entity_endpoints(self, entity):
         # No match possible, return a random entry
         return self.get_fallback_endpoints(), False
+
+    def get_rir_endpoint(self, name):
+        # allow 'ripencc' as an alias
+        if name == 'ripencc':
+            name = 'ripe'
+        try:
+            return self.RIR_RDAP_ENDPOINTS[name]
+        except KeyError:
+            raise BootstrapError(f'Invalid RIR endpoint name: {name}, must be '
+                                 f'one of: {self.get_rir_endpoint_names()}')
+
+    def get_rir_endpoint_names(self):
+        return tuple(self.RIR_RDAP_ENDPOINTS.keys())

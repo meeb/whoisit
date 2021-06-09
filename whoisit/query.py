@@ -39,7 +39,7 @@ class QueryBuilder:
         }
         self.bootstrap = bootstrap
 
-    def build(self, query_type=None, query_value=None):
+    def build(self, query_type=None, query_value=None, rir=None):
         if not self.bootstrap.is_bootstrapped():
             raise QueryError(f'You need to load bootstrap data before making '
                              f'any queries')
@@ -49,8 +49,11 @@ class QueryBuilder:
             raise QueryError(f'Unknown query_type: {query_type}')
         if not query_value:
             raise QueryError(f'query_value must be set')
-        fetcher = self.query_endpoints_fetchers[what]
-        url, exact_match = fetcher(query_value)
+        if rir:
+            url, exact_match = self.get_override_endpoint(rir, what, query_value)
+        else:
+            fetcher = self.query_endpoints_fetchers[what]
+            url, exact_match = fetcher(query_value)
         return 'GET', url, exact_match
 
     def construct_url(self, base_url, what, value):
@@ -127,6 +130,20 @@ class QueryBuilder:
         endpoints, exact_match = self.bootstrap.get_entity_endpoints(value)
         endpoint = random.choice(endpoints)
         return self.construct_url(endpoint, 'entity', value), exact_match
+
+    def get_override_endpoint(self, rir_endpoint_name, query_name, value):
+        '''
+            The query should be built using a manually overriden RIR endpoint name,
+            such as 'arin' or 'ripe' and not use the bootstrap data.
+        '''
+        if isinstance(value, str):
+            value = value.strip()
+        query_name = str(query_name).strip()
+        endpoint = self.bootstrap.get_rir_endpoint(rir_endpoint_name)
+        if not endpoint:
+            rir_names = self.bootstrap.get_rir_endpoint_names()
+            raise QueryError(f'Unknown RIR endpoint name, must be one of: {rir_names}')
+        return self.construct_url(endpoint, query_name, value), True
 
 
 class Query:

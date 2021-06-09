@@ -164,31 +164,151 @@ whoisit.asn(12345)
 ```
 
 
-## Parsers
+## Response data
 
-While by default `whoisit` returns parsed, summary useful information. The following
-keys are returned for each request type:
+While by default `whoisit` returns parsed, summary useful information. This information
+is *simplified*. This means that some information is lost from the raw, original data.
+For example, `whoisit` only returns one entity for each role and doesn't return the date
+that nameservers were last updated. If you need more information than `whoisit` returns
+by default remember to add `raw=True` to your query and parse the RDAP response
+yourself.
 
-### Parsed ASN results
+Data from `whoisit` is returned, where possible, as rich data types such as `datetime`,
+`IPv4Network` and `IPv6Network` objects, not strings.
 
-| key | description     |
-|-----|-----------------|
+The following values are returned for every successful response:
 
-### Parsed domain results
+```python
+response = {
+    'handle': str,               # Entity handle for the object, always set
+    'parent_handle': str,        # Parent entity handle for the object
+    'name': str,                 # Name of the object
+    'whois_server': str,         # WHOIS server hostname object data can be found on
+    'type': str,                 # Object type, such as autnum or domain
+    'terms_of_service_url': str, # URL to the terms of service for using the object data
+    'copyright_notice', str,     # Copyright notice for the object data
+    'description': list,         # List of text lines that describe the object
+    'last_changed_date': datetime or None,  # Date and time the object was last updated
+    'registration_date': datetime or None,  # Date and time the object was registered
+    'expiration_date': datetime or None,    # Date and time the object expires
+    'rir': str,                  # Short name of the RIR for the object, such as 'arin'
+    'url': str,                  # URL to the RDAP query which was made for this request
+    'entities': dict,            # A dict of entities linked to the object
+}
+```
 
-| key | description     |
-|-----|-----------------|
+The entities dictionary has the following format:
 
-### Parsed IP results
+```python
+response['entities']['some_role'] = { # Role names are strings, like 'registrant'
+    'email': str,          # Email address of the entity
+    'handle': str,         # Handle of the entity
+    'name': str,           # Name of the entity
+    'rir': str,            # Short name of the RIR where the entity is registered
+    'type': str,           # Type of the entity, usually 'entity'
+    'url': str,            # URL to an RDAP service to query this entity 
+    'whois_server': str,   # WHOIS server hostname entity data can be found on
+}
+```
 
-| key | description     |
-|-----|-----------------|
+In addition to the default data for all responses listed above requests have additional
+extra fields in their responses, these are:
 
-### Parsed entity results
+### Additional ASN response data
 
-| key | description     |
-|-----|-----------------|
+```python
+# ASN response data includes all shared general response fields above and also:
+response = {
+    'asn_range': list,       # A list of the start and end range for an AS allocation
+                             # For example, [123,134] or [123,123]
+}
+```
 
+### Additional domain response data
+
+```python
+# Domain response data includes all shared general response fields above and also:
+response = {
+    'nameservers': list,     # List of name servers for the domain as strings
+    'status': list,          # List of the domain states as strings
+}
+```
+
+### Additional IP response data
+
+```python
+# IP response data includes all shared general response fields above and also:
+response = {
+    'country': str,          # Two letter country code for the IP block
+    'ip_version': int,       # 4 or 6 to denote the IP version
+    'assignment_type': str,  # Assignment type, such as 'assigned portable'
+    'network': IPvXNetwork,  # A IPv4Network or IPv6Network object for the prefix
+}
+```
+
+### Full response example
+
+A full example response for an IP query for the IPv4 address 1.1.1.1:
+
+```python
+import whoisit
+whoisit.bootstrap()
+response = whoisit.ip('1.1.1.1')
+print(response)
+{
+    'handle': '1.1.1.0 - 1.1.1.255',
+    'parent_handle': '',
+    'name': 'APNIC-LABS',
+    'whois_server': 'whois.apnic.net',
+    'type': 'ip network',
+    'terms_of_service_url': 'http://www.apnic.net/db/dbcopyright.html',
+    'copyright_notice': '',
+    'description': [
+        'APNIC and Cloudflare DNS Resolver project',
+        'Routed globally by AS13335/Cloudflare',
+        'Research prefix for APNIC Labs'
+    ],
+    'last_changed_date': datetime.datetime(2020, 7, 15, 13, 10, 57, tzinfo=tzutc()),
+    'registration_date': None,
+    'expiration_date': None,
+    'url': 'https://rdap.apnic.net/ip/1.1.1.0/24',
+    'rir': 'apnic',
+    'entities': {
+        'abuse': {
+            'handle':
+            'IRT-APNICRANDNET-AU',
+            'url': 'https://rdap.apnic.net/entity/IRT-APNICRANDNET-AU',
+            'type': 'entity',
+            'whois_server': '',
+            'name': 'IRT-APNICRANDNET-AU',
+            'email': 'helpdesk@apnic.net',
+            'rir': 'apnic'
+        }, 
+        'administrative': {
+            'handle': 'AR302-AP',
+            'url': 'https://rdap.apnic.net/entity/AR302-AP',
+            'type': 'entity',
+            'whois_server': '',
+            'name': 'APNIC RESEARCH',
+            'email': 'research@apnic.net',
+            'rir': 'apnic'
+        },
+        'technical': {
+            'handle': 'AR302-AP',
+            'url': 'https://rdap.apnic.net/entity/AR302-AP',
+            'type': 'entity',
+            'whois_server': '',
+            'name': 'APNIC RESEARCH',
+            'email': 'research@apnic.net',
+            'rir': 'apnic'
+        }
+    },
+    'country': 'AU',
+    'ip_version': 4,
+    'assignment_type': 'assigned portable',
+    'network': IPv4Network('1.1.1.0/24')
+}
+```
 
 ## Full API synopsis
 

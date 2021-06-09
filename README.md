@@ -247,7 +247,7 @@ response = {
 
 ### Full response example
 
-A full example response for an IP query for the IPv4 address 1.1.1.1:
+A full example response for an IP query for the IPv4 address `1.1.1.1`:
 
 ```python
 import whoisit

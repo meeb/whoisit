@@ -215,7 +215,7 @@ If no bootstrap data is loaded a `whoisit.errors.BootstrapError` exception will 
 raised. If the TLD is unsupported a `whoisit.errors.UnsupportedError` exception will be
 raised.
 
-### `whoisit.ip(ip=str, raw=False)` -> dict
+### `whoisit.ip(ip=str, raw=False)` -> `dict`
 
 Queries a remote RDAP server for information about the specified IP address or CIDR. The
 IP address or CIDR must be a string and in the correct IP address or CIDR format.
@@ -224,7 +224,7 @@ response will be returned. If the query fails a `whoisit.errors.QueryError`
 exception will be raised. If no bootstrap data is loaded a
 `whoisit.errors.BootstrapError` exception will be raised.
 
-### `whoisit.entity(entity=str, raw=False)` -> dict
+### `whoisit.entity(entity=str, raw=False)` -> `dict`
 
 Queries a remote RDAP server for information about the specified entity name. The
 entity name must be a string and in the correct entity format. Returns a dict of

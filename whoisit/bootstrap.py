@@ -329,7 +329,7 @@ class Bootstrap:
                           f'endpoints: {endpoints}')
                 return endpoints, True
         # No match found, as querying a random RIR RDAP endpoint for a likely unknown
-        # entity is almost certainly going to fail raise it as unsupported
+        # entity is almost certainly going to fail, raise it as unsupported
         raise UnsupportedError(f'Entity "{entity}" has no detectable RDAP endpoint, '
                                f'try specifying one manually with rir=...')
 

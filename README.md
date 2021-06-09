@@ -430,7 +430,7 @@ The LACNIC RDAP server in particular only permits a low number of requests per m
 
 # Tests
 
-There is a test suite that you can run by cloing this repository, installing the
+There is a test suite that you can run by cloning this repository, installing the
 required dependancies and execuiting:
 
 ```bash

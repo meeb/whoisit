@@ -84,7 +84,8 @@ namespaces linked to particular registries. For these queries `whoisit` will att
 guess the RDAP service to query by examining the name for prefixes or postfix, such as
 many RIPE entities are named `RIPE-SOMETHING`. If your entity does not have an obvious
 prefix or postfix like `ARIN-*` or `*-AP` you will need to tell `whoisit` which registry
-to make the request to by specifying the `rir=name` argument. For example:
+to make the request to by specifying the `rir=name` argument. The `rir` argument stands
+for "Regional Internet Registry". For example:
 
 ```python
 # This will work OK because the entity is prefixed with an obvious RIR name
@@ -366,12 +367,14 @@ dict of information. If `raw=True` is passed a large dict of the raw RDAP respon
 be returned. If the query fails a `whoisit.errors.QueryError` exception will be raised.
 If no bootstrap data is loaded a `whoisit.errors.BootstrapError` exception will be
 raised. If the TLD is unsupported a `whoisit.errors.UnsupportedError` exception will be
-raised. Examples:
+raised. **Note that not all TLDs are supported, only some have RDAP services!**
+Examples:
 
 ```python
 whoisit.domain('example.com')
 whoisit.domain('example.com', raw=True)
 ```
+
 
 ### `whoisit.ip(ip="1.1.1.1", rir=str, raw=bool)` -> `dict`
 

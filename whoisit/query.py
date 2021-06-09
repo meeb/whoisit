@@ -54,7 +54,10 @@ class QueryBuilder:
         else:
             fetcher = self.query_endpoints_fetchers[what]
             url, exact_match = fetcher(query_value)
-        return 'GET', url, exact_match
+        method = 'GET'
+        match_str = ' (exact match)' if exact_match else ''
+        log.debug(f'{what} query for {query_value} built as {method} {url}{match_str}')
+        return method, url, exact_match
 
     def construct_url(self, base_url, what, value):
         if not base_url.endswith('/'):

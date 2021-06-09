@@ -22,7 +22,7 @@ def http_request(url, method='GET', headers={}, data={}, *args, **kwargs):
         return requests.request(method, url, headers=headers, data=data, *args,
                                 **kwargs)
     except Exception as e:
-        raise QueryError('Failed to make a {method} request to {url}: {e}') from e
+        raise QueryError(f'Failed to make a {method} request to {url}: {e}') from e
 
 
 def is_subnet_of(network_a, network_b):

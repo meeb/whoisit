@@ -1,8 +1,11 @@
 from .bootstrap import Bootstrap
 from .query import QueryBuilder, Query
+from .parser import parse
+from .logger import get_logger
 
 
 version = '1.0'
+log = get_logger('whoisit')
 
 
 # Expose class methods as the public API
@@ -25,32 +28,32 @@ build_query = _query_builder.build
 
 
 def asn(as_number, rir=None, raw=False):
-    method, url, exact_match = build_query(query_type='asn',
-                                           query_value=as_number,
-                                           rir=rir)
+    method, url, exact_match = build_query(
+        query_type='asn', query_value=as_number, rir=rir)
     q = Query(method, url)
-    return q.request(raw=raw)
+    response = q.request()
+    return response if raw else parse('autnum', response)
 
 
 def domain(domain_name, rir=None, raw=False):
-    method, url, exact_match = build_query(query_type='domain',
-                                           query_value=domain_name,
-                                           rir=rir)
+    method, url, exact_match = build_query(
+        query_type='domain', query_value=domain_name, rir=rir)
     q = Query(method, url)
-    return q.request(raw=raw)
+    response = q.request()
+    return response if raw else parse('domain', response)
 
 
 def ip(ip_address_or_network, rir=None, raw=False):
-    method, url, exact_match = build_query(query_type='ip',
-                                           query_value=ip_address_or_network,
-                                           rir=rir)
+    method, url, exact_match = build_query(
+        query_type='ip', query_value=ip_address_or_network, rir=rir)
     q = Query(method, url)
-    return q.request(raw=raw)
+    response = q.request()
+    return response if raw else parse('ip', response)
 
 
 def entity(entity_handle, rir=None, raw=False):
-    method, url, exact_match = build_query(query_type='entity',
-                                           query_value=entity_handle,
-                                           rir=rir)
+    method, url, exact_match = build_query(
+        query_type='entity', query_value=entity_handle, rir=rir)
     q = Query(method, url)
-    return q.request(raw=raw)
+    response = q.request()
+    return response if raw else parse('entity', response)

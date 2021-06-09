@@ -8,7 +8,7 @@ import whoisit
 BASE_DIR = Path(__file__).resolve().parent
 
 
-class BootstrapTestCase(unittest.TestCase):
+class QueryTestCase(unittest.TestCase):
 
     maxDiff = None
 

@@ -233,8 +233,8 @@ class Bootstrap:
         return parsed
 
     def parse_object_data(self, services):
-        # There seems to be no obvious way related entity tags to a particular RDAP
-        # service... so don't even bother, return an empty dict
+        # Bootstrap entity information doesn't contain any mappings to RIR endpoints
+        # so just ignore it and return an empty dict
         return {}
 
     def get_fallback_endpoints(self):

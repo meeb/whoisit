@@ -105,7 +105,7 @@ results = whoisit.entity('AS5089-MNT', rir='ripe')
 
 `whoisit` needs to know which RDAP service to query for a resource. This information is
 provided by the IANA as bootstrapping information. Bootstrapping data simply says things
-like 'this CIDR is allocated to ARIN, this CIDR is allocated to RIPE' and so on for all
+like "this CIDR is allocated to ARIN, this CIDR is allocated to RIPE" and so on for all
 resources. The bootstrap data means you should be directly querying the correct RDAP
 server for your request at all times. You should cache the bootstrap information locally
 if you plan to make more than a single request otherwise you'll make additional requests

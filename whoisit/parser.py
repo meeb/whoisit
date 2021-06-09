@@ -1,5 +1,6 @@
 from sys import getsizeof
-from .errors import ParseError
+from dateutil.parser import parse as dateutil_parse
+from .errors import BootstrapError, ParseError
 from .logger import get_logger
 
 
@@ -9,21 +10,173 @@ log = get_logger('parser')
 class Parser:
     '''
         A Parser extracts the most useful information from an RDAP response for each
-        response type (ip, domain etc.) and returns it as a flat dictionary.
+        response type (ip, domain etc.) and returns it as a flat dictionary. This
+        parent class extracts generic information available to all entity types where
+        available.
     '''
 
-    def __init__(self, raw_data):
+    def __init__(self, bootstrap, raw_data):
+        self.bootstrap = bootstrap
         self.raw_data = raw_data
+        self.parsed = {}
+        self.extract_handle()
+        self.extract_name()
+        if not self.parsed['handle'] or not self.parsed['name']:
+            raise ParseError(f'Failed to parse any meaningful data (handle or name) '
+                             f'from raw data: {self.raw_data}') 
+        self.extract_whois_server()
+        self.extract_response_type()
+        self.extract_notices()
+        self.extract_dates()
+        self.extract_self_link()
+        self.extract_entities()
 
     def parse(self):
         raise NotImplemented('parse must be implemented')
 
+    def parse_vcard_array(self, vcard):
+        '''
+            Extract useful summary information from a vcard array. This only extracts
+            the email address and name.
+        '''
+        if not isinstance(vcard, list):
+            return False
+        if len(vcard) != 2:
+            return False
+        card_field, card_data = vcard
+        if card_field != 'vcard':
+            return False
+        name, email = '', ''
+        for field in card_data:
+            if len(field) != 4:
+                continue
+            entry_field, entry_data, entry_type, entry_label = field
+            if entry_type != 'text':
+                continue
+            elif entry_field == 'fn':
+                name = entry_label
+            elif entry_field == 'email':
+                email = entry_label
+        return (name, email)
+
+    def extract_handle(self):
+        self.parsed['handle'] = self.raw_data.get('handle', '').strip().upper()
+
+    def extract_name(self):
+        self.parsed['name'] = self.raw_data.get('name', '').strip()
+
+    def extract_whois_server(self):
+        self.parsed['whois_server'] = self.raw_data.get('port43', '').strip()
+
+    def extract_response_type(self):
+        self.parsed['type'] = self.raw_data.get('objectClassName', '').strip()
+
+    def extract_notices(self):
+        self.parsed['terms_of_service_url'] = ''
+        self.parsed['copyright_notice'] = ''
+        for notice in self.raw_data.get('notices', []):
+            title = notice.get('title', '').strip().lower()
+            if title == 'terms of service':
+                links = notice.get('links', [])
+                try:
+                    link = links[0]
+                except IndexError:
+                    continue
+                self.parsed['terms_of_service_url'] = link.get('href', '').strip()
+            elif title == 'copyright notice':
+                descriptions = notice.get('description', [])
+                try:
+                    description = descriptions[0]
+                except IndexError:
+                    continue
+                self.parsed['copyright_notice'] = description.strip()
+
+    def extract_dates(self):
+        self.parsed['last_changed_date'] = None
+        self.parsed['registration_date'] = None
+        for event in self.raw_data.get('events', []):
+            action = event.get('eventAction').strip().lower()
+            if action == 'last changed':
+                last_changed_date = event.get('eventDate', '')
+                if last_changed_date:
+                    self.parsed['last_changed_date'] = dateutil_parse(last_changed_date)
+            elif action == 'registration':
+                registration_date = event.get('eventDate', '')
+                if registration_date:
+                    self.parsed['registration_date'] = dateutil_parse(registration_date)
+
+    def extract_self_link(self):
+        self.parsed['url'] = ''
+        for link in self.raw_data.get('links', []):
+            if link.get('rel', '').strip().lower() == 'self':
+                self.parsed['url'] = link.get('href', '').strip()
+        self.parsed['rir'] = ''
+        if self.parsed['url']:
+            try:
+                self.parsed['rir'] = self.bootstrap.get_rir_name_by_endpoint_url(
+                    self.parsed['url'])
+            except BootstrapError:
+                pass
+
+    def extract_entities(self):
+        self.parsed['entities'] = {}
+        for entity in self.raw_data.get('entities', []):
+            handle = entity.get('handle', '').strip().upper()
+            if not handle:
+                continue
+            url = ''
+            for link in entity.get('links', []):
+                if link.get('rel', '').strip().lower() == 'self':
+                    url = link.get('href', '').strip()
+            rir = ''
+            if url:
+                try:
+                    rir = self.bootstrap.get_rir_name_by_endpoint_url(url)
+                except BootstrapError:
+                    pass
+            entity_type = entity.get('objectClassName', '').strip()
+            whois_server = entity.get('port43', '').strip()
+            name, address, email = '', '', ''
+            vcard = self.parse_vcard_array(entity.get('vcardArray', []))
+            if vcard:
+                name, email = vcard
+            for role in entity.get('roles', []):
+                # While multiple entities can share roles, it's rare, keep it simple
+                # and just use one. If people need to they can parse the raw
+                # vcard data themselves
+                self.parsed['entities'][role] = {
+                    'handle': handle,
+                    'url': url,
+                    'type': entity_type,
+                    'whois_server': whois_server,
+                    'name': name,
+                    'email': email,
+                    'rir': rir,
+                }
+
+
+from pprint import pprint
 
 class ParseAutnum(Parser):
+    '''
+        Additional data extractors for autnum objects.
+    '''
 
     def parse(self):
-        rtn = {}
-        return self.raw_data
+        response_type = self.parsed['type']
+        if response_type != 'autnum':
+            raise ParseError(f'Expected response type of "autnum", got reply '
+                             f'data of type "{response_type}" instead')
+        self.extract_asn_range()
+        return self.parsed
+
+    def extract_asn_range(self):
+        start_asn_range = self.raw_data.get('startAutnum', 0)
+        end_asn_range = self.raw_data.get('endAutnum', 0)
+        if start_asn_range > 0 and end_asn_range > 0:
+            self.parsed['asn_range'] = [start_asn_range, end_asn_range]
+        else:
+            self.parsed['asn_range'] = None
 
 
 class ParseDomain(Parser):
@@ -55,10 +208,10 @@ parser_map = {
 }
 
 
-def parse(data_type, raw_data):
+def parse(bootstrap, data_type, raw_data):
     parser_class = parser_map.get(data_type, None)
     if not parser_class:
         raise ParseError(f'No parser for data_type: {data_type}')
     log.debug(f'Parsing {getsizeof(raw_data)} byte dict with parser: {parser_class}')
-    p = parser_class(raw_data)
+    p = parser_class(bootstrap, raw_data)
     return p.parse()

@@ -13,8 +13,8 @@ RDAP responses is extensive enough that a library like this is useful.
 
 ## Installation
 
-`whoisit` is pure Python and only has a dependancy on the `requests` library. You can
-install it via pip:
+`whoisit` is pure Python and only has a dependancy on the `requests` and `dateutil`
+libraries. You can install `whoisit` via pip:
 
 ```bash
 $ pip install whoisit

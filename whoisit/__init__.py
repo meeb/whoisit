@@ -32,7 +32,7 @@ def asn(as_number, rir=None, raw=False):
         query_type='asn', query_value=as_number, rir=rir)
     q = Query(method, url)
     response = q.request()
-    return response if raw else parse('autnum', response)
+    return response if raw else parse(_bootstrap, 'autnum', response)
 
 
 def domain(domain_name, rir=None, raw=False):
@@ -40,7 +40,7 @@ def domain(domain_name, rir=None, raw=False):
         query_type='domain', query_value=domain_name, rir=rir)
     q = Query(method, url)
     response = q.request()
-    return response if raw else parse('domain', response)
+    return response if raw else parse(_bootstrap, 'domain', response)
 
 
 def ip(ip_address_or_network, rir=None, raw=False):
@@ -48,7 +48,7 @@ def ip(ip_address_or_network, rir=None, raw=False):
         query_type='ip', query_value=ip_address_or_network, rir=rir)
     q = Query(method, url)
     response = q.request()
-    return response if raw else parse('ip', response)
+    return response if raw else parse(_bootstrap, 'ip', response)
 
 
 def entity(entity_handle, rir=None, raw=False):
@@ -56,4 +56,4 @@ def entity(entity_handle, rir=None, raw=False):
         query_type='entity', query_value=entity_handle, rir=rir)
     q = Query(method, url)
     response = q.request()
-    return response if raw else parse('entity', response)
+    return response if raw else parse(_bootstrap, 'entity', response)

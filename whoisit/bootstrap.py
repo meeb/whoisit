@@ -38,7 +38,7 @@ class Bootstrap:
         'lacnic': 'https://rdap.lacnic.net/rdap/',
         'ripe': 'https://rdap.db.ripe.net/',
     }
-    # Map of entity prefix and postfixes to RIRs
+    # Map of entity prefix and postfixes to RIRs, used to guess entity RIR
     RIR_ENTITY_PREFIXES = {
         'AFRINIC': 'afrinic',
         'ARIN': 'arin',
@@ -55,6 +55,10 @@ class Bootstrap:
             'ipv6': self.parse_ipv6_data,
             'object': self.parse_object_data,
         }
+        self.rir_endpoints_by_domain = {}
+        for name, url in self.RIR_RDAP_ENDPOINTS.items():
+            url_parts = urlsplit(url)
+            self.rir_endpoints_by_domain[url_parts.netloc] = name
         self._is_bootstrapped = False
         self._bootstrap_timestamp = 0
         self._expected_items = set(self.BOOTSTRAP_URLS.keys())
@@ -341,3 +345,14 @@ class Bootstrap:
 
     def get_rir_endpoint_names(self):
         return tuple(self.RIR_RDAP_ENDPOINTS.keys())
+
+    def get_rir_name_by_endpoint_url(self, url):
+        '''
+            A reverse lookup that maps endpoint URLs like https://rdap.arin.net/whatever
+            to a name like 'arin'.
+        '''
+        url_parts = urlsplit(url)
+        try:
+            return self.rir_endpoints_by_domain[url_parts.netloc]
+        except KeyError:
+            raise BootstrapError(f'Unknown endpoint URL: {url}')

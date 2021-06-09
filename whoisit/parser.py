@@ -21,7 +21,7 @@ class Parser:
         self.parsed = {}
         self.extract_handle()
         self.extract_name()
-        if not self.parsed['handle'] or not self.parsed['name']:
+        if not self.parsed['handle']:
             raise ParseError(f'Failed to parse any meaningful data (handle or name) '
                              f'from raw data: {self.raw_data}') 
         self.extract_whois_server()
@@ -57,7 +57,7 @@ class Parser:
                 name = entry_label
             elif entry_field == 'email':
                 email = entry_label
-        return (name, email)
+        return (name, email) if name or email else False
 
     def extract_handle(self):
         self.parsed['handle'] = self.raw_data.get('handle', '').strip().upper()
@@ -76,7 +76,7 @@ class Parser:
         self.parsed['copyright_notice'] = ''
         for notice in self.raw_data.get('notices', []):
             title = notice.get('title', '').strip().lower()
-            if title == 'terms of service':
+            if title in ('terms of service', 'terms of use'):
                 links = notice.get('links', [])
                 try:
                     link = links[0]
@@ -94,6 +94,7 @@ class Parser:
     def extract_dates(self):
         self.parsed['last_changed_date'] = None
         self.parsed['registration_date'] = None
+        self.parsed['expiration_date'] = None
         for event in self.raw_data.get('events', []):
             action = event.get('eventAction').strip().lower()
             if action == 'last changed':
@@ -104,6 +105,10 @@ class Parser:
                 registration_date = event.get('eventDate', '')
                 if registration_date:
                     self.parsed['registration_date'] = dateutil_parse(registration_date)
+            elif action == 'expiration':
+                expiration_date = event.get('eventDate', '')
+                if expiration_date:
+                    self.parsed['expiration_date'] = dateutil_parse(expiration_date)
 
     def extract_self_link(self):
         self.parsed['url'] = ''
@@ -182,8 +187,30 @@ class ParseAutnum(Parser):
 class ParseDomain(Parser):
 
     def parse(self):
-        rtn = {}
-        return self.raw_data
+        response_type = self.parsed['type']
+        if response_type != 'domain':
+            raise ParseError(f'Expected response type of "domain", got reply '
+                             f'data of type "{response_type}" instead')
+        self.extract_domain_name()
+        self.extract_domain_nameservers()
+        self.extract_domain_status()
+        return self.parsed
+
+    def extract_domain_name(self):
+        self.parsed['name'] = self.raw_data.get('ldhName', '').strip()
+
+    def extract_domain_nameservers(self):
+        self.parsed['nameservers'] = []
+        for nameserver in self.raw_data.get('nameservers', []):
+            if nameserver.get('objectClassName', '') == 'nameserver':
+                nameserver = nameserver.get('ldhName', '')
+                if nameserver:
+                    self.parsed['nameservers'].append(nameserver.strip())
+
+    def extract_domain_status(self):
+        self.parsed['status'] = []
+        for status in self.raw_data.get('status', []):
+            self.parsed['status'].append(status.strip())
 
 
 class ParseIP(Parser):

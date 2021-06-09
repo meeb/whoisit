@@ -73,6 +73,33 @@ results = whoisit.domain('example.com', raw=True)
 # 'results' is now the full, raw response from the RDAP service
 ```
 
+If for some reason you accidentally end up querying the wrong RDAP endpoint your query
+should end up still working, for example if you query ARIN for information on the IP
+address `1.1.1.1` it will redirect you to APNIC (where `1.1.1.1` is allocated)
+automatically.
+
+Some resources, most notably entity handles, do not redirect or have assigned obvious
+namespaces linked to particular registries. For these queries `whoisit` will attempt to
+guess the RDAP service to query by examining the name for prefixes or postfix, such as
+many RIPE entities are named `RIPE-SOMETHING`. If your entity does not have an obvious
+prefix or postfix like `ARIN-*` or `*-AP` you will need to tell `whoisit` which registry
+to make the request to by specifying the `rir=name` argument. For example:
+
+```python
+# This will work OK because the entity is prefixed with an obvious RIR name
+results = whoisit.entity('RIPE-NCC-MNT')
+
+# This will cause a QueryError to be raised because ARIN returns a 404 for RIPE-NCC-MNT
+results = whoisit.entity('RIPE-NCC-MNT', rir='arin')
+
+# This will cause a UnsupportedError to be raised because we have no way to detect
+# which RDAP service to query as the entity has no RIR prefix or postfix
+results = whoisit.entity('AS5089-MNT')
+
+# This will work OK because the entity is registered at RIPE
+results = whoisit.entity('AS5089-MNT', rir='ripe')
+```
+
 
 ## Bootstrapping
 
@@ -196,7 +223,7 @@ Tests if the loaded bootstrap data is older than the specified number of days as
 integer. Returns True or False. If no bootstrap information is loaded a
 `whoisit.errors.BootstrapError` exception will be raised.
 
-### `whoisit.asn(asn=int, raw=False)` -> `dict`
+### `whoisit.asn(asn=123, rir=None, raw=False)` -> `dict`
 
 Queries a remote RDAP server for information about the specified AS number. AS number
 must be an integer. Returns a dict of information. If `raw=True` is passed a large dict
@@ -205,7 +232,7 @@ of the raw RDAP response will be returned. If the query fails a
 a `whoisit.errors.BootstrapError` exception will be raised. 
 
 
-### `whoisit.domain(domain=str, raw=False)` -> `dict`
+### `whoisit.domain(domain="example.com", raw=False)` -> `dict`
 
 Queries a remote RDAP server for information about the specified domain name. The domain
 name must be a string and in a valid domain name "something.tld" style format. Returns a
@@ -215,7 +242,7 @@ If no bootstrap data is loaded a `whoisit.errors.BootstrapError` exception will 
 raised. If the TLD is unsupported a `whoisit.errors.UnsupportedError` exception will be
 raised.
 
-### `whoisit.ip(ip=str, raw=False)` -> `dict`
+### `whoisit.ip(ip="1.1.1.1", raw=False)` -> `dict`
 
 Queries a remote RDAP server for information about the specified IP address or CIDR. The
 IP address or CIDR must be a string and in the correct IP address or CIDR format.

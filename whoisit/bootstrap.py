@@ -33,10 +33,18 @@ class Bootstrap:
     # Map of RIR RDAP endpoints
     RIR_RDAP_ENDPOINTS = {
         'afrinic': 'https://rdap.afrinic.net/rdap/',
-        'arin': 'https://rdap.apnic.net/',
-        'apnic': 'https://rdap.arin.net/registry/',
+        'arin': 'https://rdap.arin.net/registry/',
+        'apnic': 'https://rdap.apnic.net/',
         'lacnic': 'https://rdap.lacnic.net/rdap/',
         'ripe': 'https://rdap.db.ripe.net/',
+    }
+    # Map of entity prefix and postfixes to RIRs
+    RIR_ENTITY_PREFIXES = {
+        'AFRINIC': 'afrinic',
+        'ARIN': 'arin',
+        'AP': 'apnic',
+        'LACNIC': 'lacnic',
+        'RIPE': 'ripe',
     }
 
     def __init__(self):
@@ -235,7 +243,10 @@ class Bootstrap:
             raise BootstrapError('asn must be an int')
         for (range_start, range_end), endpoints in self._parsed_data['asn'].items():
             if range_start <= asn <= range_end:
+                log.debug(f'Mapped ASN "{asn}" as between "{range_start}-{range_end}" '
+                          f'and to endpoints: {endpoints}')
                 return endpoints, True
+        log.debug(f'Failed to map ASN "{asn}" to an endpoint, using a fallback')
         return self.get_fallback_endpoints(), False
     
     def get_dns_endpoints(self, tld):
@@ -245,6 +256,7 @@ class Bootstrap:
             raise BootstrapError('tld must be an str')
         endpoints = self._parsed_data['dns'].get(tld, None)
         if endpoints:
+            log.debug(f'Mapped TLD "{tld}" to endpoints: {endpoints}')
             return endpoints, True
         # Domains have no fallback endpoints
         raise UnsupportedError(f'TLD "{tld}" has no known RDAP endpoint '
@@ -260,12 +272,18 @@ class Bootstrap:
         if isinstance(ipv4, IPv4Address):
             for prefix, endpoints in self._parsed_data['ipv4'].items():
                 if ipv4 in prefix:
+                    log.debug(f'Mapped IPv4 address "{ipv4}" as in prefix "{prefix}" '
+                              f'and to endpoints: {endpoints}')
                     return endpoints, True
         else:
             for prefix, endpoints in self._parsed_data['ipv4'].items():
                 if ipv4 == prefix:
+                    log.debug(f'Mapped IPv4 prefix "{ipv4}" exactly to endpoints: '
+                              f'{endpoints}')
                     return endpoints, True
                 elif is_subnet_of(ipv4, prefix):
+                    log.debug(f'Mapped IPv4 prefix "{ipv4}" as a subnet of prefix '
+                              f'"{prefix}" and to endpoints: {endpoints}')
                     return endpoints, True
         return self.get_fallback_endpoints(), False
     
@@ -279,18 +297,37 @@ class Bootstrap:
         if isinstance(ipv6, IPv6Address):
             for prefix, endpoints in self._parsed_data['ipv6'].items():
                 if ipv6 in prefix:
+                    log.debug(f'Mapped IPv6 address "{ipv6}" as in prefix "{prefix}" '
+                              f'and to endpoints: {endpoints}')
                     return endpoints, True
         else:
             for prefix, endpoints in self._parsed_data['ipv6'].items():
                 if ipv6 == prefix:
+                    log.debug(f'Mapped IPv6 prefix "{ipv6}" exactly to endpoints: '
+                              f'{endpoints}')
                     return endpoints, True
                 elif is_subnet_of(ipv6, prefix):
+                    log.debug(f'Mapped IPv6 prefix "{ipv6}" as a subnet of prefix '
+                              f'"{prefix}" and to endpoints: {endpoints}')
                     return endpoints, True
         return self.get_fallback_endpoints(), False
 
     def get_entity_endpoints(self, entity):
-        # No match possible, return a random entry
-        return self.get_fallback_endpoints(), False
+        entity = entity.strip().upper()
+        # Attempt to match a prefix or postfix to an RIR, for example many entities have
+        # names such as RIPE-NAME or EXAMPLE-AP, we can use these prefixes and postfixes
+        # to attempt to guess the correct RIR to query
+        for part, rir_name in self.RIR_ENTITY_PREFIXES.items():
+            if entity.startswith(f'{part}-') or entity.endswith(f'-{part}'):
+                endpoint = self.RIR_RDAP_ENDPOINTS.get(rir_name)
+                endpoints = [endpoint]
+                log.debug(f'Mapped entity "{entity}" to RIR "{rir_name}" and to '
+                          f'endpoints: {endpoints}')
+                return endpoints, True
+        # No match found, as querying a random RIR RDAP endpoint for a likely unknown
+        # entity is almost certainly going to fail raise it as unsupported
+        raise UnsupportedError(f'Entity "{entity}" has no detectable RDAP endpoint, '
+                               f'try specifying one manually with rir=...')
 
     def get_rir_endpoint(self, name):
         # allow 'ripencc' as an alias

@@ -171,11 +171,19 @@ class BootstrapTestCase(unittest.TestCase):
             # Private IP addresses can't have a public RDAP endpoint at all
             whoisit._bootstrap.get_ipv6_endpoints(IPv6Address('fc00::1'))
 
-        # Entity endpoint tests, just check it returns a random endpoint
-        test = 'ANYTHING'
-        random_servers, exact_match = whoisit._bootstrap.get_entity_endpoints(test)
-        self.assertTrue(isinstance(random_servers[0], str))
-        self.assertEqual(exact_match, False)
+        # Entity endpoint tests with prefixes
+        test = 'ENTITY-RIPE'
+        expected = ['https://rdap.db.ripe.net/'], True
+        self.assertEqual(whoisit._bootstrap.get_entity_endpoints(test), expected)
+        test = 'ENTITY-AP'
+        expected = ['https://rdap.apnic.net/'], True
+        self.assertEqual(whoisit._bootstrap.get_entity_endpoints(test), expected)
+        test = 'ARIN-ENTITY'
+        expected = ['https://rdap.arin.net/registry/'], True
+        self.assertEqual(whoisit._bootstrap.get_entity_endpoints(test), expected)
+        # Entities without a prefix or postfix we can parse are unsupported
+        with self.assertRaises(whoisit.errors.UnsupportedError):
+            whoisit._bootstrap.get_entity_endpoints('ANYTHING')
 
         # Clean up
         whoisit.clear_bootstrapping()

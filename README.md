@@ -118,10 +118,9 @@ print(whoisit.is_bootstrapped())  # -> False
 whoisit.bootstrap()               # Slow, makes several HTTP requests to the IANA
 print(whoisit.is_bootstrapped())  # -> True
 
-if whoisit.is_bootstrapped():
-    # bootstrap_info returned here is a string of JSON serialised bootstap information
-    # You can store it in a memory cache or write it to disk for a few days
-    bootstrap_info = whoisit.save_bootstrap_data()
+# bootstrap_info returned here is a string of JSON serialised bootstap information
+# You can store it in a memory cache or write it to disk for a few days
+bootstrap_info = whoisit.save_bootstrap_data()
 
 # Clear bootstrapping data
 whoisit.clear_bootstrapping()
@@ -166,9 +165,9 @@ whoisit.asn(12345)
 
 ## Response data
 
-While by default `whoisit` returns parsed, summary useful information. This information
-is *simplified*. This means that some information is lost from the raw, original data.
-For example, `whoisit` only returns one entity for each role and doesn't return the date
+By default `whoisit` returns parsed, summary useful information. This information is
+*simplified*. This means that some information is lost from the raw, original data. For
+example, `whoisit` only returns one entity for each role and doesn't return the date
 that nameservers were last updated. If you need more information than `whoisit` returns
 by default remember to add `raw=True` to your query and parse the RDAP response
 yourself.

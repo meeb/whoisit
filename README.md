@@ -173,7 +173,7 @@ by default remember to add `raw=True` to your query and parse the RDAP response
 yourself.
 
 Data from `whoisit` is returned, where possible, as rich data types such as `datetime`,
-`IPv4Network` and `IPv6Network` objects, not strings.
+`IPv4Network` and `IPv6Network` objects.
 
 The following values are returned for every successful response:
 

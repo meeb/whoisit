@@ -32,7 +32,7 @@ Any modern version of Python3 will be compatible.
  * IPv4 and IPv6 addresses and CIDRs / prefixes known as `ip` objects
  * Entities (People, organisations etc. by ENTITY-HANDLES) known as `entity` objects
 
-`whoisit` returns parsed RDAP formatted JSON as a flat dictionary by default.
+`whoisit` returns parsed RDAP formatted JSON as (mostly) flat dictionaries by default.
 
 Basic examples:
 

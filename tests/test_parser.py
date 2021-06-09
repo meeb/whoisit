@@ -2,6 +2,7 @@ import unittest
 import json
 from pathlib import Path
 from datetime import datetime
+from ipaddress import IPv4Network, IPv6Network
 from dateutil.tz import tzoffset, tzutc
 import whoisit
 
@@ -26,7 +27,7 @@ class ParserTestCase(unittest.TestCase):
         whoisit.parser.parse(whoisit._bootstrap, 'autnum', fake_response)
         fake_response['objectClassName'] = 'domain'
         whoisit.parser.parse(whoisit._bootstrap, 'domain', fake_response)
-        fake_response['objectClassName'] = 'ip'
+        fake_response['objectClassName'] = 'ip network'
         whoisit.parser.parse(whoisit._bootstrap, 'ip', fake_response)
         fake_response['objectClassName'] = 'entity'
         whoisit.parser.parse(whoisit._bootstrap, 'entity', fake_response)
@@ -85,7 +86,6 @@ class ParserTestCase(unittest.TestCase):
         })
 
     def test_domain_response_parser(self):
-        from pprint import pprint
 
         # google.com
         with open(BASE_DIR / 'data_rdap_response_domain1.json') as f:
@@ -168,7 +168,222 @@ class ParserTestCase(unittest.TestCase):
         })
 
     def test_ip_response_parser(self):
-        pass
+         
+        from pprint import pprint
+
+        # ipv4 address
+        with open(BASE_DIR / 'data_rdap_response_ip_v4.json') as f:
+            test_data = json.loads(f.read())
+        parsed = whoisit.parser.parse(whoisit._bootstrap, 'ip', test_data)
+        self.assertEqual(parsed['type'], 'ip network')
+        self.assertEqual(parsed['name'], 'APNIC-LABS')
+        self.assertEqual(parsed['handle'], '1.1.1.0 - 1.1.1.255')
+        self.assertEqual(parsed['rir'], 'apnic')
+        self.assertEqual(parsed['last_changed_date'], datetime(2020, 7, 15, 13, 10, 57, tzinfo=tzutc()))
+        self.assertEqual(parsed['registration_date'], None)
+        self.assertEqual(parsed['expiration_date'], None)
+        self.assertEqual(parsed['url'], 'https://rdap.apnic.net/ip/1.1.1.0/24')
+        self.assertEqual(parsed['terms_of_service_url'], 'http://www.apnic.net/db/dbcopyright.html')
+        self.assertEqual(parsed['whois_server'], 'whois.apnic.net')
+        self.assertEqual(parsed['copyright_notice'], '')
+        self.assertEqual(parsed['description'], [
+            'APNIC and Cloudflare DNS Resolver project',
+            'Routed globally by AS13335/Cloudflare',
+            'Research prefix for APNIC Labs'
+        ])
+        self.assertEqual(parsed['entities']['administrative'], {
+            'email': 'research@apnic.net',
+            'handle': 'AR302-AP',
+            'name': 'APNIC RESEARCH',
+            'rir': 'apnic',
+            'type': 'entity',
+            'url': 'https://rdap.apnic.net/entity/AR302-AP',
+            'whois_server': ''
+        })
+        self.assertEqual(parsed['entities']['abuse'], {
+            'email': 'helpdesk@apnic.net',
+            'handle': 'IRT-APNICRANDNET-AU',
+            'name': 'IRT-APNICRANDNET-AU',
+            'rir': 'apnic',
+            'type': 'entity',
+            'url': 'https://rdap.apnic.net/entity/IRT-APNICRANDNET-AU',
+            'whois_server': ''
+        })
+        self.assertEqual(parsed['entities']['technical'], {
+            'email': 'research@apnic.net',
+            'handle': 'AR302-AP',
+            'name': 'APNIC RESEARCH',
+            'rir': 'apnic',
+            'type': 'entity',
+            'url': 'https://rdap.apnic.net/entity/AR302-AP',
+            'whois_server': ''
+        })
+
+        # ipv4 network
+        with open(BASE_DIR / 'data_rdap_response_cidr_v4.json') as f:
+            test_data = json.loads(f.read())
+        parsed = whoisit.parser.parse(whoisit._bootstrap, 'ip', test_data)
+        self.assertEqual(parsed['type'], 'ip network')
+        self.assertEqual(parsed['name'], 'APNIC-LABS')
+        self.assertEqual(parsed['handle'], '1.1.1.0 - 1.1.1.255')
+        self.assertEqual(parsed['rir'], 'apnic')
+        self.assertEqual(parsed['last_changed_date'], datetime(2020, 7, 15, 13, 10, 57, tzinfo=tzutc()))
+        self.assertEqual(parsed['registration_date'], None)
+        self.assertEqual(parsed['expiration_date'], None)
+        self.assertEqual(parsed['url'], 'https://rdap.apnic.net/ip/1.1.1.0/24')
+        self.assertEqual(parsed['terms_of_service_url'], 'http://www.apnic.net/db/dbcopyright.html')
+        self.assertEqual(parsed['whois_server'], 'whois.apnic.net')
+        self.assertEqual(parsed['copyright_notice'], '')
+        self.assertEqual(parsed['assignment_type'], 'assigned portable')
+        self.assertEqual(parsed['country'], 'AU')
+        self.assertEqual(parsed['ip_version'], 4)
+        self.assertEqual(parsed['network'], IPv4Network('1.1.1.0/24'))
+        self.assertEqual(parsed['description'], [
+            'APNIC and Cloudflare DNS Resolver project',
+            'Routed globally by AS13335/Cloudflare',
+            'Research prefix for APNIC Labs'
+        ])
+        self.assertEqual(parsed['entities']['administrative'], {
+            'email': 'research@apnic.net',
+            'handle': 'AR302-AP',
+            'name': 'APNIC RESEARCH',
+            'rir': 'apnic',
+            'type': 'entity',
+            'url': 'https://rdap.apnic.net/entity/AR302-AP',
+            'whois_server': ''
+        })
+        self.assertEqual(parsed['entities']['abuse'], {
+            'email': 'helpdesk@apnic.net',
+            'handle': 'IRT-APNICRANDNET-AU',
+            'name': 'IRT-APNICRANDNET-AU',
+            'rir': 'apnic',
+            'type': 'entity',
+            'url': 'https://rdap.apnic.net/entity/IRT-APNICRANDNET-AU',
+            'whois_server': ''
+        })
+        self.assertEqual(parsed['entities']['technical'], {
+            'email': 'research@apnic.net',
+            'handle': 'AR302-AP',
+            'name': 'APNIC RESEARCH',
+            'rir': 'apnic',
+            'type': 'entity',
+            'url': 'https://rdap.apnic.net/entity/AR302-AP',
+            'whois_server': ''
+        })
+
+        # ipv6 address
+        with open(BASE_DIR / 'data_rdap_response_ip_v6.json') as f:
+            test_data = json.loads(f.read())
+        parsed = whoisit.parser.parse(whoisit._bootstrap, 'ip', test_data)
+        self.assertEqual(parsed['type'], 'ip network')
+        self.assertEqual(parsed['name'], 'GOOGLE-IPV6')
+        self.assertEqual(parsed['handle'], 'NET6-2001-4860-1')
+        self.assertEqual(parsed['parent_handle'], 'NET6-2001-4800-0')
+        self.assertEqual(parsed['rir'], 'arin')
+        self.assertEqual(parsed['last_changed_date'], datetime(2012, 2, 24, 9, 44, 34, tzinfo=tzoffset(None, -18000)))
+        self.assertEqual(parsed['registration_date'], datetime(2005, 3, 14, 11, 31, 8, tzinfo=tzoffset(None, -18000)))
+        self.assertEqual(parsed['expiration_date'], None)
+        self.assertEqual(parsed['url'], 'https://rdap.arin.net/registry/ip/2001:4860::')
+        self.assertEqual(parsed['terms_of_service_url'], 'https://www.arin.net/resources/registry/whois/tou/')
+        self.assertEqual(parsed['whois_server'], 'whois.arin.net')
+        self.assertEqual(parsed['copyright_notice'], 'Copyright 1997-2021, American Registry for Internet Numbers, Ltd.')
+        self.assertEqual(parsed['assignment_type'], 'direct allocation')
+        self.assertEqual(parsed['ip_version'], 6)
+        self.assertEqual(parsed['network'], IPv6Network('2001:4860::/32'))
+        self.assertEqual(parsed['description'], [])
+        self.assertEqual(parsed['entities']['registrant'], {
+            'email': '',
+            'handle': 'GOGL',
+            'name': 'Google LLC',
+            'rir': 'arin',
+            'type': 'entity',
+            'url': 'https://rdap.arin.net/registry/entity/GOGL',
+            'whois_server': 'whois.arin.net'
+        })
+        self.assertEqual(parsed['entities']['noc'], {
+            'email': 'arin-contact@google.com',
+            'handle': 'ZG39-ARIN',
+            'name': 'Google LLC',
+            'rir': 'arin',
+            'type': 'entity',
+            'url': 'https://rdap.arin.net/registry/entity/ZG39-ARIN',
+            'whois_server': 'whois.arin.net'
+        })
+        self.assertEqual(parsed['entities']['technical'], {
+            'email': 'arin-contact@google.com',
+            'handle': 'ZG39-ARIN',
+            'name': 'Google LLC',
+            'rir': 'arin',
+            'type': 'entity',
+            'url': 'https://rdap.arin.net/registry/entity/ZG39-ARIN',
+            'whois_server': 'whois.arin.net'
+        })
+        self.assertEqual(parsed['entities']['abuse'], {
+            'email': 'arin-contact@google.com',
+            'handle': 'ZG39-ARIN',
+            'name': 'Google LLC',
+            'rir': 'arin',
+            'type': 'entity',
+            'url': 'https://rdap.arin.net/registry/entity/ZG39-ARIN',
+            'whois_server': 'whois.arin.net'
+        })
+
+        # ipv6 network
+        with open(BASE_DIR / 'data_rdap_response_cidr_v6.json') as f:
+            test_data = json.loads(f.read())
+        parsed = whoisit.parser.parse(whoisit._bootstrap, 'ip', test_data)
+        self.assertEqual(parsed['type'], 'ip network')
+        self.assertEqual(parsed['name'], 'GOOGLE-IPV6')
+        self.assertEqual(parsed['handle'], 'NET6-2001-4860-1')
+        self.assertEqual(parsed['parent_handle'], 'NET6-2001-4800-0')
+        self.assertEqual(parsed['rir'], 'arin')
+        self.assertEqual(parsed['last_changed_date'], datetime(2012, 2, 24, 9, 44, 34, tzinfo=tzoffset(None, -18000)))
+        self.assertEqual(parsed['registration_date'], datetime(2005, 3, 14, 11, 31, 8, tzinfo=tzoffset(None, -18000)))
+        self.assertEqual(parsed['expiration_date'], None)
+        self.assertEqual(parsed['url'], 'https://rdap.arin.net/registry/ip/2001:4860::')
+        self.assertEqual(parsed['terms_of_service_url'], 'https://www.arin.net/resources/registry/whois/tou/')
+        self.assertEqual(parsed['whois_server'], 'whois.arin.net')
+        self.assertEqual(parsed['copyright_notice'], 'Copyright 1997-2021, American Registry for Internet Numbers, Ltd.')
+        self.assertEqual(parsed['assignment_type'], 'direct allocation')
+        self.assertEqual(parsed['ip_version'], 6)
+        self.assertEqual(parsed['network'], IPv6Network('2001:4860::/32'))
+        self.assertEqual(parsed['description'], [])
+        self.assertEqual(parsed['entities']['registrant'], {
+            'email': '',
+            'handle': 'GOGL',
+            'name': 'Google LLC',
+            'rir': 'arin',
+            'type': 'entity',
+            'url': 'https://rdap.arin.net/registry/entity/GOGL',
+            'whois_server': 'whois.arin.net'
+        })
+        self.assertEqual(parsed['entities']['noc'], {
+            'email': 'arin-contact@google.com',
+            'handle': 'ZG39-ARIN',
+            'name': 'Google LLC',
+            'rir': 'arin',
+            'type': 'entity',
+            'url': 'https://rdap.arin.net/registry/entity/ZG39-ARIN',
+            'whois_server': 'whois.arin.net'
+        })
+        self.assertEqual(parsed['entities']['technical'], {
+            'email': 'arin-contact@google.com',
+            'handle': 'ZG39-ARIN',
+            'name': 'Google LLC',
+            'rir': 'arin',
+            'type': 'entity',
+            'url': 'https://rdap.arin.net/registry/entity/ZG39-ARIN',
+            'whois_server': 'whois.arin.net'
+        })
+        self.assertEqual(parsed['entities']['abuse'], {
+            'email': 'arin-contact@google.com',
+            'handle': 'ZG39-ARIN',
+            'name': 'Google LLC',
+            'rir': 'arin',
+            'type': 'entity',
+            'url': 'https://rdap.arin.net/registry/entity/ZG39-ARIN',
+            'whois_server': 'whois.arin.net'
+        })
 
     def test_entity_response_parser(self):
         pass

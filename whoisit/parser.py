@@ -1,4 +1,5 @@
 from sys import getsizeof
+from ipaddress import ip_address, IPv4Network, IPv6Network
 from dateutil.parser import parse as dateutil_parse
 from .errors import BootstrapError, ParseError
 from .logger import get_logger
@@ -20,13 +21,16 @@ class Parser:
         self.raw_data = raw_data
         self.parsed = {}
         self.extract_handle()
-        self.extract_name()
+        # As a basic check every object must have at least a handle set
         if not self.parsed['handle']:
-            raise ParseError(f'Failed to parse any meaningful data (handle or name) '
-                             f'from raw data: {self.raw_data}') 
+            raise ParseError(f'Failed to parse any meaningful data to find a handle in '
+                             f'raw data: {self.raw_data}')
+        self.extract_parent_handle()
+        self.extract_name()
         self.extract_whois_server()
         self.extract_response_type()
         self.extract_notices()
+        self.extract_description()
         self.extract_dates()
         self.extract_self_link()
         self.extract_entities()
@@ -62,6 +66,9 @@ class Parser:
     def extract_handle(self):
         self.parsed['handle'] = self.raw_data.get('handle', '').strip().upper()
 
+    def extract_parent_handle(self):
+        self.parsed['parent_handle'] = self.raw_data.get('parentHandle', '').strip().upper()
+
     def extract_name(self):
         self.parsed['name'] = self.raw_data.get('name', '').strip()
 
@@ -76,7 +83,7 @@ class Parser:
         self.parsed['copyright_notice'] = ''
         for notice in self.raw_data.get('notices', []):
             title = notice.get('title', '').strip().lower()
-            if title in ('terms of service', 'terms of use'):
+            if title in ('terms of service', 'terms of use', 'terms and conditions'):
                 links = notice.get('links', [])
                 try:
                     link = links[0]
@@ -90,6 +97,14 @@ class Parser:
                 except IndexError:
                     continue
                 self.parsed['copyright_notice'] = description.strip()
+
+    def extract_description(self):
+        self.parsed['description'] = []
+        for remark in self.raw_data.get('remarks', []):
+            title = remark.get('title', '').strip().lower()
+            description = remark.get('description', [])
+            if title == 'description' and len(description) > 0:
+                self.parsed['description'] = description
 
     def extract_dates(self):
         self.parsed['last_changed_date'] = None
@@ -141,7 +156,8 @@ class Parser:
                     pass
             entity_type = entity.get('objectClassName', '').strip()
             whois_server = entity.get('port43', '').strip()
-            name, address, email = '', '', ''
+            # Most common use cases care about the name and email address
+            name, email = '', ''
             vcard = self.parse_vcard_array(entity.get('vcardArray', []))
             if vcard:
                 name, email = vcard
@@ -176,12 +192,11 @@ class ParseAutnum(Parser):
         return self.parsed
 
     def extract_asn_range(self):
+        self.parsed['asn_range'] = None
         start_asn_range = self.raw_data.get('startAutnum', 0)
         end_asn_range = self.raw_data.get('endAutnum', 0)
         if start_asn_range > 0 and end_asn_range > 0:
             self.parsed['asn_range'] = [start_asn_range, end_asn_range]
-        else:
-            self.parsed['asn_range'] = None
 
 
 class ParseDomain(Parser):
@@ -216,8 +231,61 @@ class ParseDomain(Parser):
 class ParseIP(Parser):
 
     def parse(self):
-        rtn = {}
-        return self.raw_data
+        response_type = self.parsed['type']
+        if response_type != 'ip':
+            raise ParseError(f'Expected response type of "ip", got reply '
+                             f'data of type "{response_type}" instead')
+        return self.parsed
+
+
+class ParseIPNetwork(Parser):
+
+    def parse(self):
+        response_type = self.parsed['type']
+        if response_type != 'ip network':
+            raise ParseError(f'Expected response type of "ip network", got reply '
+                             f'data of type "{response_type}" instead')
+        self.extract_country()
+        self.extract_ip_version()
+        self.extract_assignment_type()
+        self.extract_network()
+        return self.parsed
+
+    def extract_country(self):
+        self.parsed['country'] = self.raw_data.get('country', '').strip()
+
+    def extract_ip_version(self):
+        self.parsed['ip_version'] = None
+        ip_version = self.raw_data.get('ipVersion', '')
+        if ip_version == 'v4':
+            self.parsed['ip_version'] = 4
+        elif ip_version == 'v6':
+            self.parsed['ip_version'] = 6
+
+    def extract_assignment_type(self):
+        self.parsed['assignment_type'] = self.raw_data.get('type', '').strip().lower()
+
+    def extract_network(self):
+        self.parsed['network'] = None
+        cidr = self.raw_data.get('cidr0_cidrs', [])
+        try:
+            cidr_parts = cidr[0]
+        except IndexError:
+            return
+        length = cidr_parts.get('length', '')
+        v4prefix = cidr_parts.get('v4prefix', '')
+        v6prefix = cidr_parts.get('v6prefix', '')
+        if length:
+            if v4prefix:
+                try:
+                    self.parsed['network'] = IPv4Network(f'{v4prefix}/{length}')
+                except (TypeError, ValueError):
+                    return
+            elif v6prefix:
+                try:
+                    self.parsed['network'] = IPv6Network(f'{v6prefix}/{length}')
+                except (TypeError, ValueError):
+                    return
 
 
 class ParseEntity(Parser):
@@ -227,18 +295,22 @@ class ParseEntity(Parser):
         return self.raw_data
 
 
+# These map the objectClassName values returned in RDAP responses
 parser_map = {
     'autnum': ParseAutnum,
     'domain': ParseDomain,
-    'ip': ParseIP,
+    'ip network': ParseIPNetwork,
     'entity': ParseEntity,
 }
 
 
 def parse(bootstrap, data_type, raw_data):
-    parser_class = parser_map.get(data_type, None)
+    # Find a parser for the response type, falling back to the request / data type
+    response_type = raw_data.get('objectClassName', data_type)
+    parser_class = parser_map.get(response_type, None)
     if not parser_class:
-        raise ParseError(f'No parser for data_type: {data_type}')
-    log.debug(f'Parsing {getsizeof(raw_data)} byte dict with parser: {parser_class}')
+        raise ParseError(f'No parser for response_type: {response_type}')
+    log.debug(f'Parsing request type {data_type} {getsizeof(raw_data)} byte dict '
+              f'with parser: {response_type} / {parser_class}')
     p = parser_class(bootstrap, raw_data)
     return p.parse()

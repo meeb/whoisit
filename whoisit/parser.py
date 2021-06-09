@@ -176,8 +176,6 @@ class Parser:
                 }
 
 
-from pprint import pprint
-
 class ParseAutnum(Parser):
     '''
         Additional data extractors for autnum objects.

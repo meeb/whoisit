@@ -168,8 +168,6 @@ class ParserTestCase(unittest.TestCase):
         })
 
     def test_ip_response_parser(self):
-         
-        from pprint import pprint
 
         # ipv4 address
         with open(BASE_DIR / 'data_rdap_response_ip_v4.json') as f:

@@ -61,7 +61,7 @@ results = whoisit.ip('2404:1234::/32')
 print(results['name'])
 
 results = whoisit.entity('ARIN-CHA-1')
-print(results['email'])
+print(results['last_changed_date'])
 ```
 
 In each case `results` will be a dictionary containing the most useful information for

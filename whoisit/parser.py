@@ -198,6 +198,9 @@ class ParseAutnum(Parser):
 
 
 class ParseDomain(Parser):
+    '''
+        Additional data extractors for domain objects.
+    '''
 
     def parse(self):
         response_type = self.parsed['type']
@@ -226,17 +229,10 @@ class ParseDomain(Parser):
             self.parsed['status'].append(status.strip())
 
 
-class ParseIP(Parser):
-
-    def parse(self):
-        response_type = self.parsed['type']
-        if response_type != 'ip':
-            raise ParseError(f'Expected response type of "ip", got reply '
-                             f'data of type "{response_type}" instead')
-        return self.parsed
-
-
 class ParseIPNetwork(Parser):
+    '''
+        Additional data extractors for ip network objects.
+    '''
 
     def parse(self):
         response_type = self.parsed['type']
@@ -287,6 +283,9 @@ class ParseIPNetwork(Parser):
 
 
 class ParseEntity(Parser):
+    '''
+        Additional data extractors for entity objects.
+    '''
 
     def parse(self):
         response_type = self.parsed['type']

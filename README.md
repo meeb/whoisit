@@ -342,16 +342,22 @@ Tests if the loaded bootstrap data is older than the specified number of days as
 integer. Returns True or False. If no bootstrap information is loaded a
 `whoisit.errors.BootstrapError` exception will be raised.
 
-### `whoisit.asn(asn=123, rir=None, raw=False)` -> `dict`
+### `whoisit.asn(asn=int, rir=str, raw=bool)` -> `dict`
 
 Queries a remote RDAP server for information about the specified AS number. AS number
 must be an integer. Returns a dict of information. If `raw=True` is passed a large dict
 of the raw RDAP response will be returned. If the query fails a
 `whoisit.errors.QueryError` exception will be raised. If no bootstrap data is loaded
-a `whoisit.errors.BootstrapError` exception will be raised. 
+a `whoisit.errors.BootstrapError` exception will be raised. Examples:
 
+```python
+whoisit.asn(12345)
+whoisit.asn(12345, rir='arin')
+whoisit.asn(12345, raw=True)
+whoisit.asn(12345, rir='arin', raw=True)
+```
 
-### `whoisit.domain(domain="example.com", raw=False)` -> `dict`
+### `whoisit.domain(domain=str, raw=bool)` -> `dict`
 
 Queries a remote RDAP server for information about the specified domain name. The domain
 name must be a string and in a valid domain name "something.tld" style format. Returns a
@@ -359,25 +365,48 @@ dict of information. If `raw=True` is passed a large dict of the raw RDAP respon
 be returned. If the query fails a `whoisit.errors.QueryError` exception will be raised.
 If no bootstrap data is loaded a `whoisit.errors.BootstrapError` exception will be
 raised. If the TLD is unsupported a `whoisit.errors.UnsupportedError` exception will be
-raised.
+raised. Examples:
 
-### `whoisit.ip(ip="1.1.1.1", raw=False)` -> `dict`
+```python
+whoisit.domain('example.com')
+whoisit.domain('example.com', raw=True)
+```
+
+### `whoisit.ip(ip="1.1.1.1", rir=str, raw=bool)` -> `dict`
 
 Queries a remote RDAP server for information about the specified IP address or CIDR. The
-IP address or CIDR must be a string and in the correct IP address or CIDR format.
-Returns a dict of information. If `raw=True` is passed a large dict of the raw RDAP
-response will be returned. If the query fails a `whoisit.errors.QueryError`
-exception will be raised. If no bootstrap data is loaded a
-`whoisit.errors.BootstrapError` exception will be raised.
+IP address or CIDR must be a string and in the correct IP address or CIDR format or
+any one of IPv4Address, IPv4Network, IPv6Address or IPv6Network objects. Returns a dict
+of information. If `raw=True` is passed a large dict of the raw RDAP response will be
+returned. If the query fails a `whoisit.errors.QueryError` exception will be raised. If
+no bootstrap data is loaded a `whoisit.errors.BootstrapError` exception will be raised.
+Examples:
 
-### `whoisit.entity(entity=str, raw=False)` -> `dict`
+```python
+whoisit.ip('1.1.1.1')
+whoisit.ip('1.1.1.1', rir='apnic')
+whoisit.ip('1.1.1.1', raw=True, rir='apnic')
+whoisit.ip('1.1.1.0/24')
+whoisit.ip(IPv4Address('1.1.1.1'))
+whoisit.ip(IPv4Network('1.1.1.0/24'))
+whoisit.ip(IPv6Address('2001:4860:4860::8888'))
+whoisit.ip(IPv6Network('2001:4860::/32'), rir='arin')
+```
+
+### `whoisit.entity(entity=str, rir=str, raw=bool)` -> `dict`
 
 Queries a remote RDAP server for information about the specified entity name. The
 entity name must be a string and in the correct entity format. Returns a dict of
 information. If `raw=True` is passed a large dict of the raw RDAP response will be
 returned. If the query fails a `whoisit.errors.QueryError` exception will be raised.
 If no bootstrap data is loaded a `whoisit.errors.BootstrapError` exception will be
-raised.
+raised. Examples:
+
+```python
+whoisit.entity('ZG39-ARIN')
+whoisit.entity('ZG39-ARIN', rir='arin')
+whoisit.entity('ZG39-ARIN', rir='arin', raw=True)
+```
 
 
 ## Data usage

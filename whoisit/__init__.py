@@ -35,9 +35,9 @@ def asn(as_number, rir=None, raw=False):
     return response if raw else parse(_bootstrap, 'autnum', response)
 
 
-def domain(domain_name, rir=None, raw=False):
+def domain(domain_name, raw=False):
     method, url, exact_match = build_query(
-        query_type='domain', query_value=domain_name, rir=rir)
+        query_type='domain', query_value=domain_name)
     q = Query(method, url)
     response = q.request()
     return response if raw else parse(_bootstrap, 'domain', response)

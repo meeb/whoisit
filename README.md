@@ -6,9 +6,10 @@ Data Access Protocol) query services for internet resource information. These se
 started to appear in 2017 and have become more widespread since 2020.
 
 `whoisit` is designed to abstract over RDAP. While RDAP is a basic HTTP and JSON based
-protocol which can be implemented in a single line with `requests` the bootstrapping
-(which RDAP service to query for what item) and extracting useful information from the
-RDAP responses is extensive enough that a library like this is useful.
+protocol which can be implemented in a single line of Python with `requests` the
+bootstrapping (which RDAP service to query for what item) and extracting useful
+information from the RDAP responses is extensive enough that a library like this is
+useful.
 
 
 ## Installation

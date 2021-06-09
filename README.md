@@ -1,11 +1,14 @@
 # whoisit
 
 A Python client to RDAP WHOIS-like services for internet resources (IPs, ASNs, domains,
-etc.). `whoisit` is a simple library that makes requests to the "new" (since about
-2017, becoming widespread in 2019 / 2020) RDAP (Registration Data Access Protocol) query
-services for internet resource information.
+etc.). `whoisit` is a simple library that makes requests to the "new" RDAP (Registration
+Data Access Protocol) query services for internet resource information. These services
+started to appear in 2017 and have become more widespread since 2020.
 
-This is not a complicated library, it just makes some HTTP requests.
+`whoisit` is designed to abstract over RDAP. While RDAP is a basic HTTP and JSON based
+protocol which can be implemented in a single line with `requests` the bootstrapping
+(which RDAP service to query for what item) and extracting useful information from the
+RDAP responses is extensive enough that a library like this is useful.
 
 
 ## Installation
@@ -17,6 +20,8 @@ install it via pip:
 $ pip install whoisit
 ```
 
+Any modern version of Python3 will be compatible.
+
 
 ## Usage
 
@@ -27,7 +32,7 @@ $ pip install whoisit
  * IPv4 and IPv6 addresses and CIDRs / prefixes known as `ip` objects
  * Entities (People, organisations etc. by ENTITY-HANDLES) known as `entity` objects
 
-`whoisit` returns the RDAP formatted JSON as a dictionary verbatim by default.
+`whoisit` returns parsed RDAP formatted JSON as a flat dictionary by default.
 
 Basic examples:
 
@@ -37,22 +42,43 @@ import whoisit
 whoisit.bootstrap()
 
 results = whoisit.asn(1234)
+print(results['name'])
+
 results = whoisit.domain('example.com')
+print(results['nameservers'])
+
 results = whoisit.ip('1.2.3.4')
+print(results['name'])
+
 results = whoisit.ip('1.2.3.0/24')
+print(results['name'])
+
 results = whoisit.ip('2404:1234:1234:1234:1234:1234:1234:1234')
+print(results['name'])
+
 results = whoisit.ip('2404:1234::/32')
+print(results['name'])
+
 results = whoisit.entity('ARIN-CHA-1')
+print(results['email'])
 ```
 
-In each case `results` will be a large dictionary containing RDAP formatted information.
+In each case `results` will be a dictionary containing the most useful information for
+each request type. If the data you want is not in the response you can request the raw,
+unparsed and large RDAP JSON data by adding the `raw=True` argument to the request, for
+example:
+
+```python
+results = whoisit.domain('example.com', raw=True)
+# 'results' is now the full, raw response from the RDAP service
+```
 
 
 ## Bootstrapping
 
-`whoisit` needs to know which RDAP service to query for a resourcce, to do it needs get
-the bootstrap information from the IANA. Bootstrapping data simply says things like
-'this CIDR is allocated to ARIN, this one is allocated to RIPE' and so on for all
+`whoisit` needs to know which RDAP service to query for a resource. This information is
+provided by the IANA as bootstrapping information. Bootstrapping data simply says things
+like 'this CIDR is allocated to ARIN, this CIDR is allocated to RIPE' and so on for all
 resources. The bootstrap data means you should be directly querying the correct RDAP
 server for your request at all times. You should cache the bootstrap information locally
 if you plan to make more than a single request otherwise you'll make additional requests
@@ -62,7 +88,7 @@ to the IANA every time you run a query. Example bootstrap information caching:
 import whoisit
 
 print(whoisit.is_bootstrapped())  # -> False
-whoisit.bootstrap()               # Slow, makes several HTTP requests
+whoisit.bootstrap()               # Slow, makes several HTTP requests to the IANA
 print(whoisit.is_bootstrapped())  # -> True
 
 if whoisit.is_bootstrapped():
@@ -106,32 +132,15 @@ else:
     expire_in_3_days = 60 * 60 * 24 *3
     r.set('whoisit_bootstrap_info', bootstrap_info, ex=expire_in_3_days)
 
-# Send queries as normal
+# Send queries as normal once bootstrapped
 whoisit.asn(12345)
 ```
 
 
 ## Parsers
 
-While by default `whoisit` returns raw RDAP formatted data it can be troublesome to
-extract reliable meaningful information from the results. To help with this `whoisit`
-comes with some utility helper methods to parse the results. Examples:
-
-```python
-import whoisit
-
-# Load some cached bootstrapping data from somewhere
-bootstrap_info = your_load_bootstrap_data_method()
-whoisit.load_bootstrap_data(bootstrap_info)
-
-# Look something up
-results = whoisit.domain('example.com')
-
-# Parse the results, returns another dict but far smaller and with standardised keys
-parsed_results = whoisit.parse(results)
-```
-
-The following keys are returned by the parser for each results type:
+While by default `whoisit` returns parsed, summary useful information. The following
+keys are returned for each request type:
 
 ### Parsed ASN results
 
@@ -156,82 +165,80 @@ The following keys are returned by the parser for each results type:
 
 ## Full API synopsis
 
-### `whoisit.is_bootstrapped()` -> bool
+### `whoisit.is_bootstrapped()` -> `bool`
 
 Returns boolean True or False if your `whoisit` instance is bootstrapped or not.
 
-### `whoisit.bootstrap()` -> bool
+### `whoisit.bootstrap()` -> `bool`
 
 Bootstraps your `whoisit` instance with remote IANA bootstrap information. Returns
-True or raises a `whoisit.errors.BootstrapError` exception if it fails.
+True or raises a `whoisit.errors.BootstrapError` exception if it fails. This method
+makes HTTP requests to the IANA.
 
-### `whoisit.clear_bootstrapping()` -> bool
+### `whoisit.clear_bootstrapping()` -> `bool`
 
 Clears any stored bootstrap information. Always returns boolean True.
 
-### `whoisit.save_bootstrap_data()` -> str
+### `whoisit.save_bootstrap_data()` -> `str`
 
 Returns a string of JSON serialised bootstrap information if any is loaded. If no
-bootstrap information loaded a a `whoisit.errors.BootstrapError` will be raised.
+bootstrap information loaded a `whoisit.errors.BootstrapError` will be raised.
 
-### `whoisit.load_bootstrap_data(data=str)` -> bool
+### `whoisit.load_bootstrap_data(data=str)` -> `bool`
 
 Loads a string of JSON serialised bootstrap data as returned by `save_bootstrap_data()`.
 Returns True if the data is loaded or raises a `whoisit.errors.BootstrapError` if
 loading fails.
 
-### `whoisit.bootstrap_is_older_than(days=int)` -> bool
+### `whoisit.bootstrap_is_older_than(days=int)` -> `bool`
 
 Tests if the loaded bootstrap data is older than the specified number of days as an
 integer. Returns True or False. If no bootstrap information is loaded a
 `whoisit.errors.BootstrapError` exception will be raised.
 
-### `whoisit.asn(asn=int)` -> dict
+### `whoisit.asn(asn=int, raw=False)` -> `dict`
 
 Queries a remote RDAP server for information about the specified AS number. AS number
-must be an integer. Returns a dict of RDAP information. If the query fails a
+must be an integer. Returns a dict of information. If `raw=True` is passed a large dict
+of the raw RDAP response will be returned. If the query fails a
 `whoisit.errors.QueryError` exception will be raised. If no bootstrap data is loaded
-a `whoisit.errors.BootstrapError` exception will be raised.
+a `whoisit.errors.BootstrapError` exception will be raised. 
 
-`whoisit.autnum(asn=int)` is an alias for `whoisit.asn(asn=int)`.
 
-### `whoisit.domain(domain=str)` -> dict
+### `whoisit.domain(domain=str, raw=False)` -> `dict`
 
 Queries a remote RDAP server for information about the specified domain name. The domain
-name must be a string and in a valid domain name style format. Returns a dict of RDAP
-information. If the query fails a `whoisit.errors.QueryError` exception will be raised.
+name must be a string and in a valid domain name "something.tld" style format. Returns a
+dict of information. If `raw=True` is passed a large dict of the raw RDAP response will
+be returned. If the query fails a `whoisit.errors.QueryError` exception will be raised.
 If no bootstrap data is loaded a `whoisit.errors.BootstrapError` exception will be
 raised. If the TLD is unsupported a `whoisit.errors.UnsupportedError` exception will be
 raised.
 
-### `whoisit.ip(ip=str)` -> dict
+### `whoisit.ip(ip=str, raw=False)` -> dict
 
 Queries a remote RDAP server for information about the specified IP address or CIDR. The
 IP address or CIDR must be a string and in the correct IP address or CIDR format.
-Returns a dict of RDAP information. If the query fails a `whoisit.errors.QueryError`
+Returns a dict of information. If `raw=True` is passed a large dict of the raw RDAP
+response will be returned. If the query fails a `whoisit.errors.QueryError`
 exception will be raised. If no bootstrap data is loaded a
 `whoisit.errors.BootstrapError` exception will be raised.
 
-### `whoisit.entity(entity=str)` -> dict
+### `whoisit.entity(entity=str, raw=False)` -> dict
 
 Queries a remote RDAP server for information about the specified entity name. The
-entity name must be a string and in the correct entity format. Returns a dict of RDAP
-information. If the query fails a `whoisit.errors.QueryError` exception will be raised.
+entity name must be a string and in the correct entity format. Returns a dict of
+information. If `raw=True` is passed a large dict of the raw RDAP response will be
+returned. If the query fails a `whoisit.errors.QueryError` exception will be raised.
 If no bootstrap data is loaded a `whoisit.errors.BootstrapError` exception will be
 raised.
-
-### `whoisit.parse(data=dict)` -> dict
-
-Parses a results dict and returns a summarised standard dict. The input data must be a
-dict. Note if you pass this method a malformed dictionary it will simply return a empty
-values.
 
 
 ## Data usage
 
 All data returned by RDAP servers are covered by the various policies embeddd in the
 results. As such you should carefuly review your usage of the data to make sure it
-complies with the policy of the RDAP server you are querying
+complies with the policy of the RDAP server you are querying.
 
 
 ## Excessive use
@@ -244,8 +251,8 @@ The LACNIC RDAP server in particular only permits a low number of requests per m
 
 # Tests
 
-There is a minimal test suite mostly to verify the parsers, you can run it by cloing
-this repository, installing the required dependancies and execuiting:
+There is a test suite that you can run by cloing this repository, installing the
+required dependancies and execuiting:
 
 ```bash
 $ make test

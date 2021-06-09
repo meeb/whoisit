@@ -291,8 +291,11 @@ class ParseIPNetwork(Parser):
 class ParseEntity(Parser):
 
     def parse(self):
-        rtn = {}
-        return self.raw_data
+        response_type = self.parsed['type']
+        if response_type != 'entity':
+            raise ParseError(f'Expected response type of "entity", got reply '
+                             f'data of type "{response_type}" instead')
+        return self.parsed
 
 
 # These map the objectClassName values returned in RDAP responses

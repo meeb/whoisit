@@ -386,4 +386,46 @@ class ParserTestCase(unittest.TestCase):
         })
 
     def test_entity_response_parser(self):
-        pass
+        with open(BASE_DIR / 'data_rdap_response_entity.json') as f:
+            test_data = json.loads(f.read())
+        parsed = whoisit.parser.parse(whoisit._bootstrap, 'ip', test_data)
+        self.assertEqual(parsed['type'], 'entity')
+        self.assertEqual(parsed['name'], '')
+        self.assertEqual(parsed['handle'], 'IPAM2-RIPE')
+        self.assertEqual(parsed['parent_handle'], '')
+        self.assertEqual(parsed['rir'], 'ripe')
+        self.assertEqual(parsed['last_changed_date'], datetime(2020, 8, 24, 20, 23, 47, tzinfo=tzutc()))
+        self.assertEqual(parsed['registration_date'], None)
+        self.assertEqual(parsed['expiration_date'], None)
+        self.assertEqual(parsed['url'], 'https://rdap.db.ripe.net/entity/IPAM2-RIPE')
+        self.assertEqual(parsed['terms_of_service_url'], 'http://www.ripe.net/db/support/db-terms-conditions.pdf')
+        self.assertEqual(parsed['whois_server'], 'whois.ripe.net')
+        self.assertEqual(parsed['copyright_notice'], '')
+        self.assertEqual(parsed['description'], [])
+        self.assertEqual(parsed['entities']['registrant'], {
+            'email': '',
+            'handle': 'ORG-NI9-RIPE',
+            'name': '',
+            'rir': '',
+            'type': 'entity',
+            'url': '',
+            'whois_server': ''
+        })
+        self.assertEqual(parsed['entities']['administrative'], {
+            'email': '',
+            'handle': 'WB1700-RIPE',
+            'name': '',
+            'rir': '',
+            'type': 'entity',
+            'url': '',
+            'whois_server': ''
+        })
+        self.assertEqual(parsed['entities']['technical'], {
+            'email': '',
+            'handle': 'WB1700-RIPE',
+            'name': '',
+            'rir': '',
+            'type': 'entity',
+            'url': '',
+            'whois_server': ''
+        })

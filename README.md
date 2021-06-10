@@ -438,6 +438,18 @@ $ make test
 ```
 
 
+# Debugging
+
+`whoisit` will check for a `DEBUG` environment variable and if set, will output debug
+logs that detail the internals for the bootstrapping, requests and parsing operations.
+If you want to enable debug logging, set `DEBUG=1`. For example:
+
+```bash
+$ export DEBUG=1
+$ python3 some-script-that-uses-whoisit.py
+```
+
+
 # Contributing
 
 All properly formatted and sensible pull requests, issues and comments are

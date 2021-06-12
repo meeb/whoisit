@@ -80,15 +80,15 @@ class QueryTestCase(unittest.TestCase):
         method, url, exact_match = whoisit.build_query(
             query_type='ip', query_value='2606:4700:4700::1111')
         self.assertEqual(method, 'GET')
-        self.assertEqual(url, 'https://rdap.arin.net/registry/ip/2606%3A4700%3A4700%3A%3A1111')
+        self.assertEqual(url, 'https://rdap.arin.net/registry/ip/2606:4700:4700::1111')
         method, url, exact_match = whoisit.build_query(
             query_type='ip', query_value=IPv6Address('2606:4700:4700::1111'))
         self.assertEqual(method, 'GET')
-        self.assertEqual(url, 'https://rdap.arin.net/registry/ip/2606%3A4700%3A4700%3A%3A1111')
+        self.assertEqual(url, 'https://rdap.arin.net/registry/ip/2606:4700:4700::1111')
         method, url, exact_match = whoisit.build_query(
             query_type='ip', query_value=IPv6Network('2606:4700::/32'))
         self.assertEqual(method, 'GET')
-        self.assertEqual(url, 'https://rdap.arin.net/registry/ip/2606%3A4700%3A%3A/32')
+        self.assertEqual(url, 'https://rdap.arin.net/registry/ip/2606:4700::/32')
 
     def test_building_override_request(self):
         # Test that overriding the endpoint works, 1.1.1.1 is not allocated to afrinic

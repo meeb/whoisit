@@ -8,6 +8,14 @@ from .logger import get_logger
 log = get_logger('parser')
 
 
+def clean(s):
+    if s is None:
+        s = ''
+    if not isinstance(s, str):
+        s = str(s)
+    return s.strip()
+
+
 class Parser:
     '''
         A Parser extracts the most useful information from an RDAP response for each
@@ -58,50 +66,52 @@ class Parser:
             if entry_type != 'text':
                 continue
             elif entry_field == 'fn':
-                name = entry_label
+                name = clean(entry_label)
             elif entry_field == 'email':
-                email = entry_label
+                email = clean(entry_label)
         return (name, email) if name or email else False
 
     def extract_handle(self):
-        self.parsed['handle'] = self.raw_data.get('handle', '').strip().upper()
+        self.parsed['handle'] = clean(self.raw_data.get('handle', '')).upper()
 
     def extract_parent_handle(self):
-        self.parsed['parent_handle'] = self.raw_data.get('parentHandle', '').strip().upper()
+        self.parsed['parent_handle'] = clean(
+            self.raw_data.get('parentHandle', '')).upper()
 
     def extract_name(self):
-        self.parsed['name'] = self.raw_data.get('name', '').strip()
+        self.parsed['name'] = clean(self.raw_data.get('name', ''))
 
     def extract_whois_server(self):
-        self.parsed['whois_server'] = self.raw_data.get('port43', '').strip()
+        self.parsed['whois_server'] = clean(self.raw_data.get('port43', ''))
 
     def extract_response_type(self):
-        self.parsed['type'] = self.raw_data.get('objectClassName', '').strip()
+        self.parsed['type'] = clean(self.raw_data.get('objectClassName', ''))
 
     def extract_notices(self):
         self.parsed['terms_of_service_url'] = ''
         self.parsed['copyright_notice'] = ''
         for notice in self.raw_data.get('notices', []):
-            title = notice.get('title', '').strip().lower()
+            title = clean(notice.get('title', '')).lower()
             if title in ('terms of service', 'terms of use', 'terms and conditions'):
                 links = notice.get('links', [])
                 try:
                     link = links[0]
                 except IndexError:
                     continue
-                self.parsed['terms_of_service_url'] = link.get('href', '').strip()
+                self.parsed['terms_of_service_url'] = clean(
+                    link.get('href', '')).strip()
             elif title == 'copyright notice':
                 descriptions = notice.get('description', [])
                 try:
                     description = descriptions[0]
                 except IndexError:
                     continue
-                self.parsed['copyright_notice'] = description.strip()
+                self.parsed['copyright_notice'] = clean(description)
 
     def extract_description(self):
         self.parsed['description'] = []
         for remark in self.raw_data.get('remarks', []):
-            title = remark.get('title', '').strip().lower()
+            title = clean(remark.get('title', '')).lower()
             description = remark.get('description', [])
             if title == 'description' and len(description) > 0:
                 self.parsed['description'] = description
@@ -129,7 +139,7 @@ class Parser:
         self.parsed['url'] = ''
         for link in self.raw_data.get('links', []):
             if link.get('rel', '').strip().lower() == 'self':
-                self.parsed['url'] = link.get('href', '').strip()
+                self.parsed['url'] = clean(link.get('href', ''))
         self.parsed['rir'] = ''
         if self.parsed['url']:
             try:
@@ -141,21 +151,21 @@ class Parser:
     def extract_entities(self):
         self.parsed['entities'] = {}
         for entity in self.raw_data.get('entities', []):
-            handle = entity.get('handle', '').strip().upper()
+            handle = clean(entity.get('handle', '')).upper()
             if not handle:
                 continue
             url = ''
             for link in entity.get('links', []):
                 if link.get('rel', '').strip().lower() == 'self':
-                    url = link.get('href', '').strip()
+                    url = clean(link.get('href', ''))
             rir = ''
             if url:
                 try:
                     rir = self.bootstrap.get_rir_name_by_endpoint_url(url)
                 except BootstrapError:
                     pass
-            entity_type = entity.get('objectClassName', '').strip()
-            whois_server = entity.get('port43', '').strip()
+            entity_type = clean(entity.get('objectClassName', ''))
+            whois_server = clean(entity.get('port43', ''))
             # Most common use cases care about the name and email address
             name, email = '', ''
             vcard = self.parse_vcard_array(entity.get('vcardArray', []))
@@ -213,7 +223,7 @@ class ParseDomain(Parser):
         return self.parsed
 
     def extract_domain_name(self):
-        self.parsed['name'] = self.raw_data.get('ldhName', '').strip()
+        self.parsed['name'] = clean(self.raw_data.get('ldhName', ''))
 
     def extract_domain_nameservers(self):
         self.parsed['nameservers'] = []
@@ -221,12 +231,12 @@ class ParseDomain(Parser):
             if nameserver.get('objectClassName', '') == 'nameserver':
                 nameserver = nameserver.get('ldhName', '')
                 if nameserver:
-                    self.parsed['nameservers'].append(nameserver.strip())
+                    self.parsed['nameservers'].append(clean(nameserver))
 
     def extract_domain_status(self):
         self.parsed['status'] = []
         for status in self.raw_data.get('status', []):
-            self.parsed['status'].append(status.strip())
+            self.parsed['status'].append(clean(status))
 
 
 class ParseIPNetwork(Parser):
@@ -246,18 +256,18 @@ class ParseIPNetwork(Parser):
         return self.parsed
 
     def extract_country(self):
-        self.parsed['country'] = self.raw_data.get('country', '').strip()
+        self.parsed['country'] = clean(self.raw_data.get('country', ''))
 
     def extract_ip_version(self):
         self.parsed['ip_version'] = None
-        ip_version = self.raw_data.get('ipVersion', '')
+        ip_version = clean(self.raw_data.get('ipVersion', ''))
         if ip_version == 'v4':
             self.parsed['ip_version'] = 4
         elif ip_version == 'v6':
             self.parsed['ip_version'] = 6
 
     def extract_assignment_type(self):
-        self.parsed['assignment_type'] = self.raw_data.get('type', '').strip().lower()
+        self.parsed['assignment_type'] = clean(self.raw_data.get('type', '')).lower()
 
     def extract_network(self):
         self.parsed['network'] = None

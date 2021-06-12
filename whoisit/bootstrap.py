@@ -35,6 +35,7 @@ class Bootstrap:
         'afrinic': 'https://rdap.afrinic.net/rdap/',
         'arin': 'https://rdap.arin.net/registry/',
         'apnic': 'https://rdap.apnic.net/',
+        'jpnic': 'https://jpnic.rdap.apnic.net/',
         'lacnic': 'https://rdap.lacnic.net/rdap/',
         'ripe': 'https://rdap.db.ripe.net/',
     }
@@ -43,6 +44,7 @@ class Bootstrap:
         'AFRINIC': 'afrinic',
         'ARIN': 'arin',
         'AP': 'apnic',
+        'JPNIC': 'jpnic',
         'LACNIC': 'lacnic',
         'RIPE': 'ripe',
     }

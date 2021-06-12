@@ -1,5 +1,6 @@
 import random
-from urllib.parse import urlsplit, urlunsplit, parse_qs, urljoin, urlencode, quote
+from urllib.parse import (urlsplit, urlunsplit, parse_qs, urljoin, urlencode, quote,
+                          unquote)
 from ipaddress import (ip_address, ip_network, IPv4Address, IPv4Network, IPv6Address,
                        IPv6Network)
 from .utils import http_request, contains_only_chars
@@ -66,7 +67,7 @@ class QueryBuilder:
         if not resource.endswith('/'):
             resource += '/'
         quoted_value = quote(str(value))
-        return urljoin(resource, quoted_value)
+        return unquote(urljoin(resource, quoted_value))
 
     def get_autnum_endpoint(self, value):
         if isinstance(value, str):

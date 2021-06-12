@@ -23,3 +23,9 @@ class ParseError(WhoisItError):
     '''
         Raised when failing to parse response data.
     '''
+
+
+class ResourceDoesNotExist(WhoisItError):
+    '''
+        Raised when querying a resource which doesn't exist.
+    '''

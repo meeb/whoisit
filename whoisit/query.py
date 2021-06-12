@@ -5,7 +5,7 @@ from ipaddress import (ip_address, ip_network, IPv4Address, IPv4Network, IPv6Add
                        IPv6Network)
 from .utils import http_request, contains_only_chars
 from .logger import get_logger
-from .errors import QueryError
+from .errors import QueryError, ResourceDoesNotExist
 
 
 log = get_logger('query')
@@ -178,7 +178,11 @@ class Query:
     def request(self, *args, **kwargs):
         # args and kwargs here are passed directly to requests.request(...)
         response = http_request(self.url, self.method, *args, **kwargs)
-        if response.status_code != 200:
+        if response.status_code == 404:
+            raise ResourceDoesNotExist(f'RDAP {self.method} request to {self.url} '
+                                       f'returned a 404 error, the resource does '
+                                       f'not exist')
+        elif response.status_code != 200:
             raise QueryError(f'RDAP {self.method} request to {self.url} returned a '
                              f'non-200 status code of {response.status_code}')
         try:

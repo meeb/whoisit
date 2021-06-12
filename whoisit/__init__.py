@@ -2,7 +2,9 @@ from .bootstrap import Bootstrap
 from .query import QueryBuilder, Query
 from .parser import parse
 from .logger import get_logger
-from .version import version
+
+
+version = '1.1'
 
 
 # Expose class methods as the public API

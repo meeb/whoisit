@@ -307,7 +307,21 @@ class ParseEntity(Parser):
         if response_type != 'entity':
             raise ParseError(f'Expected response type of "entity", got reply '
                              f'data of type "{response_type}" instead')
+        self.extract_root_vcard()
         return self.parsed
+
+    def extract_root_vcard(self):
+        self.parsed['name'] = ''
+        self.parsed['email'] = ''
+        root_vcard = self.raw_data.get('vcardArray', [])
+        if root_vcard:
+            parsed = self.parse_vcard_array(root_vcard)
+            if parsed:
+                name, email = parsed
+                if name:
+                    self.parsed['organisation_name'] = name
+                if email:
+                    self.parsed['organisation_email'] = email
 
 
 # These map the objectClassName values returned in RDAP responses

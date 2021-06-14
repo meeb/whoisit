@@ -247,6 +247,15 @@ response = {
 }
 ```
 
+### Additional entity response data
+
+```python
+# Entity response data includes all shared general response fields above and also:
+response = {
+    'email': str,            # If the entity as a root vcard the email address
+}
+```
+
 ### Full response example
 
 A full example response for an IP query for the IPv4 address `1.1.1.1`:

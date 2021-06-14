@@ -368,42 +368,27 @@ class ParserTestCase(unittest.TestCase):
         parsed = whoisit.parser.parse(whoisit._bootstrap, 'ip', test_data)
         self.assertEqual(parsed['type'], 'entity')
         self.assertEqual(parsed['name'], '')
-        self.assertEqual(parsed['handle'], 'IPAM2-RIPE')
+        self.assertEqual(parsed['handle'], 'GOVI')
         self.assertEqual(parsed['parent_handle'], '')
-        self.assertEqual(parsed['rir'], 'ripe')
-        self.assertEqual(parsed['last_changed_date'], datetime(2020, 8, 24, 20, 23, 47, tzinfo=tzutc()))
-        self.assertEqual(parsed['registration_date'], None)
+        self.assertEqual(parsed['rir'], 'arin')
+        self.assertEqual(parsed['last_changed_date'], datetime(2017, 1, 28, 8, 32, 29, tzinfo=tzoffset(None, -18000)))
+        self.assertEqual(parsed['registration_date'], datetime(2001, 5, 8, 0, 0, tzinfo=tzoffset(None, -14400)))
         self.assertEqual(parsed['expiration_date'], None)
-        self.assertEqual(parsed['url'], 'https://rdap.db.ripe.net/entity/IPAM2-RIPE')
-        self.assertEqual(parsed['terms_of_service_url'], 'http://www.ripe.net/db/support/db-terms-conditions.pdf')
-        self.assertEqual(parsed['whois_server'], 'whois.ripe.net')
-        self.assertEqual(parsed['copyright_notice'], '')
+        self.assertEqual(parsed['url'], 'https://rdap.arin.net/registry/entity/GOVI')
+        self.assertEqual(parsed['terms_of_service_url'], 'https://www.arin.net/resources/registry/whois/tou/')
+        self.assertEqual(parsed['whois_server'], 'whois.arin.net')
+        self.assertEqual(parsed['copyright_notice'], 'Copyright 1997-2021, American Registry for Internet Numbers, Ltd.')
         self.assertEqual(parsed['description'], [])
-        self.assertEqual(parsed['entities']['registrant'],
+        self.assertEqual(parsed['entities']['technical'],
             [
                 {
-                    'handle': 'AS5089-MNT',
-                    'type': 'entity'
-                },
-                {
-                    'handle': 'AS5462-MNT',
-                    'type': 'entity'
-                },
-                {
-                    'handle': 'DH687-MNT',
-                    'type': 'entity'
-                },
-                {
-                    'handle': 'DIA118-MNT',
-                    'type': 'entity'
-                },
-                {
-                    'handle': 'DPVM2-MNT',
-                    'type': 'entity'
-                },
-                {
-                    'handle': 'ORG-NI9-RIPE',
-                    'type': 'entity'
+                    'email': 'support@govital.net',
+                    'handle': 'GTS7-ARIN',
+                    'name': 'Govital Technical Support',
+                    'rir': 'arin',
+                    'type': 'entity',
+                    'url': 'https://rdap.arin.net/registry/entity/GTS7-ARIN',
+                    'whois_server': 'whois.arin.net'
                 }
             ]
         )

@@ -319,9 +319,9 @@ class ParseEntity(Parser):
             if parsed:
                 name, email = parsed
                 if name:
-                    self.parsed['organisation_name'] = name
+                    self.parsed['name'] = name
                 if email:
-                    self.parsed['organisation_email'] = email
+                    self.parsed['email'] = email
 
 
 # These map the objectClassName values returned in RDAP responses

@@ -169,10 +169,9 @@ whoisit.asn(12345)
 
 By default `whoisit` returns parsed, summary useful information. This information is
 *simplified*. This means that some information is lost from the raw, original data. For
-example, `whoisit` only returns one entity for each role and doesn't return the date
-that nameservers were last updated. If you need more information than `whoisit` returns
-by default remember to add `raw=True` to your query and parse the RDAP response
-yourself.
+example, `whoisit` doesn't return the date that nameservers were last updated. If you
+need more information than `whoisit` returns by default remember to add `raw=True` to
+your query and parse the RDAP response yourself.
 
 Data from `whoisit` is returned, where possible, as rich data types such as `datetime`,
 `IPv4Network` and `IPv6Network` objects.
@@ -198,10 +197,11 @@ response = {
 }
 ```
 
-The entities dictionary has the following format:
+The entities dictionary has the following format, note there may be multiple entities
+for each role:
 
 ```python
-response['entities']['some_role'] = { # Role names are strings, like 'registrant'
+response['entities']['some_role'][] = { # Role names are strings, like 'registrant'
     'email': str,          # Email address of the entity
     'handle': str,         # Handle of the entity
     'name': str,           # Name of the entity
@@ -275,34 +275,35 @@ print(response)
     'url': 'https://rdap.apnic.net/ip/1.1.1.0/24',
     'rir': 'apnic',
     'entities': {
-        'abuse': {
-            'handle':
-            'IRT-APNICRANDNET-AU',
-            'url': 'https://rdap.apnic.net/entity/IRT-APNICRANDNET-AU',
-            'type': 'entity',
-            'whois_server': '',
-            'name': 'IRT-APNICRANDNET-AU',
-            'email': 'helpdesk@apnic.net',
-            'rir': 'apnic'
-        }, 
-        'administrative': {
-            'handle': 'AR302-AP',
-            'url': 'https://rdap.apnic.net/entity/AR302-AP',
-            'type': 'entity',
-            'whois_server': '',
-            'name': 'APNIC RESEARCH',
-            'email': 'research@apnic.net',
-            'rir': 'apnic'
-        },
-        'technical': {
-            'handle': 'AR302-AP',
-            'url': 'https://rdap.apnic.net/entity/AR302-AP',
-            'type': 'entity',
-            'whois_server': '',
-            'name': 'APNIC RESEARCH',
-            'email': 'research@apnic.net',
-            'rir': 'apnic'
-        }
+        'abuse': [
+            {
+                'handle': 'IRT-APNICRANDNET-AU',
+                'url': 'https://rdap.apnic.net/entity/IRT-APNICRANDNET-AU',
+                'type': 'entity',
+                'name': 'IRT-APNICRANDNET-AU',
+                'email': 'helpdesk@apnic.net',
+                'rir': 'apnic'
+            }
+        ],
+        'administrative': [
+            {
+                'handle': 'AR302-AP',
+                'url': 'https://rdap.apnic.net/entity/AR302-AP',
+                'type': 'entity',
+                'name': 'APNIC RESEARCH',
+                'email': 'research@apnic.net',
+                'rir': 'apnic'
+            }
+        ],
+        'technical': [
+            {
+                'handle': 'AR302-AP',
+                'url': 'https://rdap.apnic.net/entity/AR302-AP',
+                'type': 'entity',
+                'name': 'APNIC RESEARCH',
+                'email': 'research@apnic.net',
+                'rir': 'apnic'
+        ]
     },
     'country': 'AU',
     'ip_version': 4,

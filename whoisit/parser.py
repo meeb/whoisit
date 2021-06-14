@@ -172,18 +172,23 @@ class Parser:
             if vcard:
                 name, email = vcard
             for role in entity.get('roles', []):
-                # While multiple entities can share roles, it's rare, keep it simple
-                # and just use one. If people need to they can parse the raw
-                # vcard data themselves
-                self.parsed['entities'][role] = {
-                    'handle': handle,
-                    'url': url,
-                    'type': entity_type,
-                    'whois_server': whois_server,
-                    'name': name,
-                    'email': email,
-                    'rir': rir,
-                }
+                entity = {}
+                if handle:
+                    entity['handle'] = handle
+                if url:
+                    entity['url'] = url
+                if entity_type:
+                    entity['type'] = entity_type
+                if whois_server:
+                    entity['whois_server'] = whois_server
+                if name:
+                    entity['name'] = name
+                if email:
+                    entity['email'] = email
+                if rir:
+                    entity['rir'] = rir
+                if entity:
+                    self.parsed['entities'].setdefault(role, []).append(entity)
 
 
 class ParseAutnum(Parser):

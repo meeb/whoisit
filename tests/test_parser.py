@@ -48,42 +48,57 @@ class ParserTestCase(unittest.TestCase):
         self.assertEqual(parsed['terms_of_service_url'], 'https://www.arin.net/resources/registry/whois/tou/')
         self.assertEqual(parsed['last_changed_date'], datetime(2017, 2, 17, 18, 4, 32, tzinfo=tzoffset(None, -18000)))
         self.assertEqual(parsed['registration_date'], datetime(2010, 7, 14, 18, 35, 57, tzinfo=tzoffset(None, -14400)))
-        self.assertEqual(parsed['entities']['registrant'], {
-            'email': '',
-            'handle': 'CLOUD14',
-            'name': 'Cloudflare, Inc.',
-            'rir': 'arin',
-            'type': 'entity',
-            'url': 'https://rdap.arin.net/registry/entity/CLOUD14',
-            'whois_server': 'whois.arin.net',
-        })
-        self.assertEqual(parsed['entities']['abuse'], {
-            'email': 'abuse@cloudflare.com',
-            'handle': 'ABUSE2916-ARIN',
-            'name': 'Abuse',
-            'rir': 'arin',
-            'type': 'entity',
-            'url': 'https://rdap.arin.net/registry/entity/ABUSE2916-ARIN',
-            'whois_server': 'whois.arin.net',
-        })
-        self.assertEqual(parsed['entities']['noc'], {
-            'email': 'noc@cloudflare.com',
-            'handle': 'NOC11962-ARIN',
-            'name': 'NOC',
-            'rir': 'arin',
-            'type': 'entity',
-            'url': 'https://rdap.arin.net/registry/entity/NOC11962-ARIN',
-            'whois_server': 'whois.arin.net',
-        })
-        self.assertEqual(parsed['entities']['technical'], {
-            'email': 'rir@cloudflare.com',
-            'handle': 'ADMIN2521-ARIN',
-            'name': 'Admin',
-            'rir': 'arin',
-            'type': 'entity',
-            'url': 'https://rdap.arin.net/registry/entity/ADMIN2521-ARIN',
-            'whois_server': 'whois.arin.net'
-        })
+        self.assertEqual(parsed['entities']['registrant'],
+            [
+                {
+                    'handle': 'CLOUD14',
+                    'url': 'https://rdap.arin.net/registry/entity/CLOUD14',
+                    'type': 'entity',
+                    'whois_server': 'whois.arin.net',
+                    'name': 'Cloudflare, Inc.',
+                    'rir': 'arin'
+                }
+            ]
+        )
+        self.assertEqual(parsed['entities']['abuse'],
+            [
+                {
+                    'handle': 'ABUSE2916-ARIN',
+                    'url': 'https://rdap.arin.net/registry/entity/ABUSE2916-ARIN',
+                    'type': 'entity',
+                    'whois_server': 'whois.arin.net',
+                    'name': 'Abuse',
+                    'email': 'abuse@cloudflare.com',
+                    'rir': 'arin'
+                }
+            ]
+        )
+        self.assertEqual(parsed['entities']['noc'],
+            [
+                {
+                    'handle': 'NOC11962-ARIN',
+                    'url': 'https://rdap.arin.net/registry/entity/NOC11962-ARIN',
+                    'type': 'entity',
+                    'whois_server': 'whois.arin.net',
+                    'name': 'NOC',
+                    'email': 'noc@cloudflare.com',
+                    'rir': 'arin'
+                }
+            ]
+        )
+        self.assertEqual(parsed['entities']['technical'],
+            [
+                {
+                    'handle': 'ADMIN2521-ARIN',
+                    'url': 'https://rdap.arin.net/registry/entity/ADMIN2521-ARIN',
+                    'type': 'entity',
+                    'whois_server': 'whois.arin.net',
+                    'name': 'Admin',
+                    'email': 'rir@cloudflare.com',
+                    'rir': 'arin'
+                }
+            ]
+        )
 
     def test_domain_response_parser(self):
 
@@ -116,15 +131,15 @@ class ParserTestCase(unittest.TestCase):
             'server transfer prohibited',
             'server update prohibited'
         ])
-        self.assertEqual(parsed['entities']['registrar'], {
-            'email': '',
-            'handle': '292',
-            'name': 'MarkMonitor Inc.',
-            'rir': '',
-            'type': 'entity',
-            'url': '',
-            'whois_server': ''
-        })
+        self.assertEqual(parsed['entities']['registrar'],
+            [
+                {
+                    'handle': '292',
+                    'type': 'entity',
+                    'name': 'MarkMonitor Inc.'
+                }
+            ]
+        )
 
         # norway.no
         with open(BASE_DIR / 'data_rdap_response_domain2.json') as f:
@@ -148,24 +163,28 @@ class ParserTestCase(unittest.TestCase):
             'ns4-09.azure-dns.info'
         ])
         self.assertEqual(parsed['status'], [])
-        self.assertEqual(parsed['entities']['registrar'], {
-            'email': 'kundeservice@domeneshop.no',
-            'handle': 'REG42-NORID',
-            'name': 'Domeneshop AS',
-            'rir': '',
-            'type': 'entity',
-            'url': 'https://rdap.norid.no/entity/reg42-NORID',
-            'whois_server': ''
-        })
-        self.assertEqual(parsed['entities']['technical'], {
-            'email': 'hostmaster@domeneshop.no',
-            'handle': 'DH21326R-NORID',
-            'name': 'Domeneshop Hostmaster',
-            'rir': '',
-            'type': 'entity',
-            'url': 'https://rdap.norid.no/entity/DH21326R-NORID',
-            'whois_server': ''
-        })
+        self.assertEqual(parsed['entities']['registrar'],
+            [
+                {
+                    'handle': 'REG42-NORID',
+                    'url': 'https://rdap.norid.no/entity/reg42-NORID',
+                    'type': 'entity',
+                    'name': 'Domeneshop AS',
+                    'email': 'kundeservice@domeneshop.no'
+                }
+            ]
+        )
+        self.assertEqual(parsed['entities']['technical'],
+            [
+                {
+                    'handle': 'DH21326R-NORID',
+                    'url': 'https://rdap.norid.no/entity/DH21326R-NORID',
+                    'type': 'entity',
+                    'name': 'Domeneshop Hostmaster',
+                    'email': 'hostmaster@domeneshop.no'
+                }
+            ]
+        )
 
     def test_ip_response_parser(self):
 
@@ -189,33 +208,18 @@ class ParserTestCase(unittest.TestCase):
             'Routed globally by AS13335/Cloudflare',
             'Research prefix for APNIC Labs'
         ])
-        self.assertEqual(parsed['entities']['administrative'], {
-            'email': 'research@apnic.net',
-            'handle': 'AR302-AP',
-            'name': 'APNIC RESEARCH',
-            'rir': 'apnic',
-            'type': 'entity',
-            'url': 'https://rdap.apnic.net/entity/AR302-AP',
-            'whois_server': ''
-        })
-        self.assertEqual(parsed['entities']['abuse'], {
-            'email': 'helpdesk@apnic.net',
-            'handle': 'IRT-APNICRANDNET-AU',
-            'name': 'IRT-APNICRANDNET-AU',
-            'rir': 'apnic',
-            'type': 'entity',
-            'url': 'https://rdap.apnic.net/entity/IRT-APNICRANDNET-AU',
-            'whois_server': ''
-        })
-        self.assertEqual(parsed['entities']['technical'], {
-            'email': 'research@apnic.net',
-            'handle': 'AR302-AP',
-            'name': 'APNIC RESEARCH',
-            'rir': 'apnic',
-            'type': 'entity',
-            'url': 'https://rdap.apnic.net/entity/AR302-AP',
-            'whois_server': ''
-        })
+        self.assertEqual(parsed['entities']['administrative'],
+            [
+                {
+                    'handle': 'AR302-AP',
+                    'url': 'https://rdap.apnic.net/entity/AR302-AP',
+                    'type': 'entity',
+                    'name': 'APNIC RESEARCH',
+                    'email': 'research@apnic.net',
+                    'rir': 'apnic'
+                }
+            ]
+        )
 
         # ipv4 network
         with open(BASE_DIR / 'data_rdap_response_cidr_v4.json') as f:
@@ -241,33 +245,18 @@ class ParserTestCase(unittest.TestCase):
             'Routed globally by AS13335/Cloudflare',
             'Research prefix for APNIC Labs'
         ])
-        self.assertEqual(parsed['entities']['administrative'], {
-            'email': 'research@apnic.net',
-            'handle': 'AR302-AP',
-            'name': 'APNIC RESEARCH',
-            'rir': 'apnic',
-            'type': 'entity',
-            'url': 'https://rdap.apnic.net/entity/AR302-AP',
-            'whois_server': ''
-        })
-        self.assertEqual(parsed['entities']['abuse'], {
-            'email': 'helpdesk@apnic.net',
-            'handle': 'IRT-APNICRANDNET-AU',
-            'name': 'IRT-APNICRANDNET-AU',
-            'rir': 'apnic',
-            'type': 'entity',
-            'url': 'https://rdap.apnic.net/entity/IRT-APNICRANDNET-AU',
-            'whois_server': ''
-        })
-        self.assertEqual(parsed['entities']['technical'], {
-            'email': 'research@apnic.net',
-            'handle': 'AR302-AP',
-            'name': 'APNIC RESEARCH',
-            'rir': 'apnic',
-            'type': 'entity',
-            'url': 'https://rdap.apnic.net/entity/AR302-AP',
-            'whois_server': ''
-        })
+        self.assertEqual(parsed['entities']['administrative'],
+            [
+                {
+                    'handle': 'AR302-AP',
+                    'url': 'https://rdap.apnic.net/entity/AR302-AP',
+                    'type': 'entity',
+                    'name': 'APNIC RESEARCH',
+                    'email': 'research@apnic.net',
+                    'rir': 'apnic'
+                }
+            ]
+        )
 
         # ipv6 address
         with open(BASE_DIR / 'data_rdap_response_ip_v6.json') as f:
@@ -289,43 +278,57 @@ class ParserTestCase(unittest.TestCase):
         self.assertEqual(parsed['ip_version'], 6)
         self.assertEqual(parsed['network'], IPv6Network('2001:4860::/32'))
         self.assertEqual(parsed['description'], [])
-        self.assertEqual(parsed['entities']['registrant'], {
-            'email': '',
-            'handle': 'GOGL',
-            'name': 'Google LLC',
-            'rir': 'arin',
-            'type': 'entity',
-            'url': 'https://rdap.arin.net/registry/entity/GOGL',
-            'whois_server': 'whois.arin.net'
-        })
-        self.assertEqual(parsed['entities']['noc'], {
-            'email': 'arin-contact@google.com',
-            'handle': 'ZG39-ARIN',
-            'name': 'Google LLC',
-            'rir': 'arin',
-            'type': 'entity',
-            'url': 'https://rdap.arin.net/registry/entity/ZG39-ARIN',
-            'whois_server': 'whois.arin.net'
-        })
-        self.assertEqual(parsed['entities']['technical'], {
-            'email': 'arin-contact@google.com',
-            'handle': 'ZG39-ARIN',
-            'name': 'Google LLC',
-            'rir': 'arin',
-            'type': 'entity',
-            'url': 'https://rdap.arin.net/registry/entity/ZG39-ARIN',
-            'whois_server': 'whois.arin.net'
-        })
-        self.assertEqual(parsed['entities']['abuse'], {
-            'email': 'arin-contact@google.com',
-            'handle': 'ZG39-ARIN',
-            'name': 'Google LLC',
-            'rir': 'arin',
-            'type': 'entity',
-            'url': 'https://rdap.arin.net/registry/entity/ZG39-ARIN',
-            'whois_server': 'whois.arin.net'
-        })
-
+        self.assertEqual(parsed['entities']['registrant'],
+            [
+                {
+                    'handle': 'GOGL',
+                    'name': 'Google LLC',
+                    'rir': 'arin',
+                    'type': 'entity',
+                    'url': 'https://rdap.arin.net/registry/entity/GOGL',
+                    'whois_server': 'whois.arin.net'
+                }
+            ]
+        )
+        self.assertEqual(parsed['entities']['noc'],
+            [
+                {
+                    'email': 'arin-contact@google.com',
+                    'handle': 'ZG39-ARIN',
+                    'name': 'Google LLC',
+                    'rir': 'arin',
+                    'type': 'entity',
+                    'url': 'https://rdap.arin.net/registry/entity/ZG39-ARIN',
+                    'whois_server': 'whois.arin.net'
+                }
+            ]
+        )
+        self.assertEqual(parsed['entities']['technical'],
+            [
+                {
+                    'email': 'arin-contact@google.com',
+                    'handle': 'ZG39-ARIN',
+                    'name': 'Google LLC',
+                    'rir': 'arin',
+                    'type': 'entity',
+                    'url': 'https://rdap.arin.net/registry/entity/ZG39-ARIN',
+                    'whois_server': 'whois.arin.net'
+                }
+            ]
+        )
+        self.assertEqual(parsed['entities']['abuse'],
+            [
+                {
+                    'email': 'arin-contact@google.com',
+                    'handle': 'ZG39-ARIN',
+                    'name': 'Google LLC',
+                    'rir': 'arin',
+                    'type': 'entity',
+                    'url': 'https://rdap.arin.net/registry/entity/ZG39-ARIN',
+                    'whois_server': 'whois.arin.net'
+                }
+            ]
+        )
         # ipv6 network
         with open(BASE_DIR / 'data_rdap_response_cidr_v6.json') as f:
             test_data = json.loads(f.read())
@@ -346,42 +349,18 @@ class ParserTestCase(unittest.TestCase):
         self.assertEqual(parsed['ip_version'], 6)
         self.assertEqual(parsed['network'], IPv6Network('2001:4860::/32'))
         self.assertEqual(parsed['description'], [])
-        self.assertEqual(parsed['entities']['registrant'], {
-            'email': '',
-            'handle': 'GOGL',
-            'name': 'Google LLC',
-            'rir': 'arin',
-            'type': 'entity',
-            'url': 'https://rdap.arin.net/registry/entity/GOGL',
-            'whois_server': 'whois.arin.net'
-        })
-        self.assertEqual(parsed['entities']['noc'], {
-            'email': 'arin-contact@google.com',
-            'handle': 'ZG39-ARIN',
-            'name': 'Google LLC',
-            'rir': 'arin',
-            'type': 'entity',
-            'url': 'https://rdap.arin.net/registry/entity/ZG39-ARIN',
-            'whois_server': 'whois.arin.net'
-        })
-        self.assertEqual(parsed['entities']['technical'], {
-            'email': 'arin-contact@google.com',
-            'handle': 'ZG39-ARIN',
-            'name': 'Google LLC',
-            'rir': 'arin',
-            'type': 'entity',
-            'url': 'https://rdap.arin.net/registry/entity/ZG39-ARIN',
-            'whois_server': 'whois.arin.net'
-        })
-        self.assertEqual(parsed['entities']['abuse'], {
-            'email': 'arin-contact@google.com',
-            'handle': 'ZG39-ARIN',
-            'name': 'Google LLC',
-            'rir': 'arin',
-            'type': 'entity',
-            'url': 'https://rdap.arin.net/registry/entity/ZG39-ARIN',
-            'whois_server': 'whois.arin.net'
-        })
+        self.assertEqual(parsed['entities']['registrant'],
+            [
+                {
+                    'handle': 'GOGL',
+                    'name': 'Google LLC',
+                    'rir': 'arin',
+                    'type': 'entity',
+                    'url': 'https://rdap.arin.net/registry/entity/GOGL',
+                    'whois_server': 'whois.arin.net'
+                }
+            ]
+        )
 
     def test_entity_response_parser(self):
         with open(BASE_DIR / 'data_rdap_response_entity.json') as f:
@@ -400,30 +379,31 @@ class ParserTestCase(unittest.TestCase):
         self.assertEqual(parsed['whois_server'], 'whois.ripe.net')
         self.assertEqual(parsed['copyright_notice'], '')
         self.assertEqual(parsed['description'], [])
-        self.assertEqual(parsed['entities']['registrant'], {
-            'email': '',
-            'handle': 'ORG-NI9-RIPE',
-            'name': '',
-            'rir': '',
-            'type': 'entity',
-            'url': '',
-            'whois_server': ''
-        })
-        self.assertEqual(parsed['entities']['administrative'], {
-            'email': '',
-            'handle': 'WB1700-RIPE',
-            'name': '',
-            'rir': '',
-            'type': 'entity',
-            'url': '',
-            'whois_server': ''
-        })
-        self.assertEqual(parsed['entities']['technical'], {
-            'email': '',
-            'handle': 'WB1700-RIPE',
-            'name': '',
-            'rir': '',
-            'type': 'entity',
-            'url': '',
-            'whois_server': ''
-        })
+        self.assertEqual(parsed['entities']['registrant'],
+            [
+                {
+                    'handle': 'AS5089-MNT',
+                    'type': 'entity'
+                },
+                {
+                    'handle': 'AS5462-MNT',
+                    'type': 'entity'
+                },
+                {
+                    'handle': 'DH687-MNT',
+                    'type': 'entity'
+                },
+                {
+                    'handle': 'DIA118-MNT',
+                    'type': 'entity'
+                },
+                {
+                    'handle': 'DPVM2-MNT',
+                    'type': 'entity'
+                },
+                {
+                    'handle': 'ORG-NI9-RIPE',
+                    'type': 'entity'
+                }
+            ]
+        )

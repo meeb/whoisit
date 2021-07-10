@@ -4,7 +4,7 @@ from .parser import parse
 from .logger import get_logger
 
 
-version = '1.8'
+version = '1.9'
 
 
 # Expose class methods as the public API

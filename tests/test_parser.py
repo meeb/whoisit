@@ -379,7 +379,7 @@ class ParserTestCase(unittest.TestCase):
         self.assertEqual(parsed['terms_of_service_url'], 'https://www.arin.net/resources/registry/whois/tou/')
         self.assertEqual(parsed['whois_server'], 'whois.arin.net')
         self.assertEqual(parsed['copyright_notice'], 'Copyright 1997-2021, American Registry for Internet Numbers, Ltd.')
-        self.assertEqual(parsed['description'], [])
+        self.assertEqual(parsed['description'], ['http://www.govital.net\\r', 'Standard NOC hours are 10am to 6pm EST M-F'])
         self.assertEqual(parsed['entities']['technical'],
             [
                 {

@@ -110,11 +110,19 @@ class Parser:
 
     def extract_description(self):
         self.parsed['description'] = []
-        for remark in self.raw_data.get('remarks', []):
+        remarks = self.raw_data.get('remarks', [])
+        for remark in remarks:
             title = clean(remark.get('title', '')).lower()
             description = remark.get('description', [])
-            if title == 'description' and len(description) > 0:
+            if not description:
+                continue
+            if len(remarks) == 1:
+                # There is only one remark, use it
                 self.parsed['description'] = description
+            elif title == 'description':
+                # Multiple remarks, add only the description
+                self.parsed['description'] = description
+
 
     def extract_dates(self):
         self.parsed['last_changed_date'] = None

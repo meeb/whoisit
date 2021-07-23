@@ -41,6 +41,7 @@ class Bootstrap:
         'lacnic': 'https://rdap.lacnic.net/rdap/',
         'registro.br': 'https://rdap.registro.br/',
         'ripe': 'https://rdap.db.ripe.net/',
+        'twnic': 'https://twnic.rdap.apnic.net/',
     }
     # Map of entity prefix and postfixes to RIRs, used to guess entity RIR
     RIR_ENTITY_PREFIXES = {
@@ -53,6 +54,7 @@ class Bootstrap:
         'LACNIC': 'lacnic',
         'BR': 'registro.br', # registro.br currently does not use entity prefixes
         'RIPE': 'ripe',
+        'TW': 'twnic',
     }
 
     def __init__(self):

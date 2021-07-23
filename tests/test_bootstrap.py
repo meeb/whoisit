@@ -203,7 +203,8 @@ class BootstrapTestCase(unittest.TestCase):
             self.assertEqual(whoisit._bootstrap.get_rir_endpoint(name), endpoint)
 
         # Check the RIR names are valid
-        expected = ('afrinic', 'arin', 'apnic', 'jpnic', 'lacnic', 'ripe')
+        expected = ('afrinic', 'arin', 'apnic', 'jpnic', 'idnic', 'krnic',
+                    'lacnic', 'registro.br', 'ripe')
         self.assertEqual(whoisit._bootstrap.get_rir_endpoint_names(), expected)
 
         # Clean up

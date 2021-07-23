@@ -36,7 +36,10 @@ class Bootstrap:
         'arin': 'https://rdap.arin.net/registry/',
         'apnic': 'https://rdap.apnic.net/',
         'jpnic': 'https://jpnic.rdap.apnic.net/',
+        'idnic': 'https://idnic.rdap.apnic.net/',
+        'krnic': 'https://krnic.rdap.apnic.net/',
         'lacnic': 'https://rdap.lacnic.net/rdap/',
+        'registro.br': 'https://rdap.registro.br/',
         'ripe': 'https://rdap.db.ripe.net/',
     }
     # Map of entity prefix and postfixes to RIRs, used to guess entity RIR
@@ -45,7 +48,10 @@ class Bootstrap:
         'ARIN': 'arin',
         'AP': 'apnic',
         'JPNIC': 'jpnic',
+        'KR': 'krnic',
+        'ID': 'idnic',
         'LACNIC': 'lacnic',
+        'BR': 'registro.br', # registro.br currently does not use entity prefixes
         'RIPE': 'ripe',
     }
 

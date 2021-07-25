@@ -107,9 +107,9 @@ results = whoisit.entity('AS5089-MNT', rir='ripe')
 
 ### Weaken SSL ciphers
 
-Some RDAP servers do not have particularly secure SSL implementations public as RDAP
-returns read-only and public information it may be acceptable for you to want to
-downgrade the security of your `whoisit` requests to successfully return data.
+Some RDAP servers do not have particularly secure SSL implementations. As RDAP returns
+read-only and public information it may be acceptable for you to want to downgrade the
+security of your `whoisit` requests to successfully return data.
 
 You can use the `allow_insecure_ssl=True` argument to your queries to enable this.
 

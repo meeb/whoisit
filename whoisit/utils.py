@@ -8,7 +8,7 @@ log = get_logger('utils')
 
 
 user_agent = 'whoisit'
-insecure_ssl_ciphers = ':HIGH:!DH:!aNULL'
+insecure_ssl_ciphers = 'ALL:@SECLEVEL=1'
 
 
 def http_request(url, method='GET', allow_insecure_ssl=False,

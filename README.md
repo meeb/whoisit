@@ -497,4 +497,4 @@ $ python3 some-script-that-uses-whoisit.py
 
 # Contributing
 
-All properly formatted and sensible pull requests, issues and comments are
+All properly formatted and sensible pull requests, issues and comments are welcome.

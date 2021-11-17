@@ -1,3 +1,4 @@
+import requests
 import unittest
 import json
 from pathlib import Path
@@ -19,7 +20,8 @@ class QueryTestCase(unittest.TestCase):
 
     def test_adding_query_url_params(self):
         url = 'https://example.com/'
-        q = whoisit.query.Query('GET', url)
+        s = requests.Session()
+        q = whoisit.query.Query(s, 'GET', url)
         params = {'test': 'test'}
         expected = 'https://example.com/?test=test'
         self.assertEqual(q.add_url_params(url, params), expected)

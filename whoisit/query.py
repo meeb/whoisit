@@ -157,7 +157,8 @@ class Query:
         to both requests and the requested URL if required.
     '''
 
-    def __init__(self, method, url, allow_insecure_ssl=False, **kwargs):
+    def __init__(self, session, method, url, allow_insecure_ssl=False, **kwargs):
+        self.session = session
         self.method = method.strip().upper()
         self.allow_insecure_ssl = bool(allow_insecure_ssl)
         if kwargs:
@@ -178,8 +179,7 @@ class Query:
 
     def request(self, *args, **kwargs):
         # args and kwargs here are passed directly to requests.request(...)
-        response = http_request(url=self.url, method=self.method,
-            allow_insecure_ssl=self.allow_insecure_ssl, *args, **kwargs)
+        response = self.session.request(url=self.url, method=self.method, *args, **kwargs)
         if response.status_code == 404:
             raise ResourceDoesNotExist(f'RDAP {self.method} request to {self.url} '
                                        f'returned a 404 error, the resource does '

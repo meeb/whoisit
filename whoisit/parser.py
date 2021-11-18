@@ -17,12 +17,12 @@ def clean(s):
 
 
 class Parser:
-    '''
+    """
         A Parser extracts the most useful information from an RDAP response for each
         response type (ip, domain etc.) and returns it as a flat dictionary. This
         parent class extracts generic information available to all entity types where
         available.
-    '''
+    """
 
     def __init__(self, bootstrap, raw_data):
         self.bootstrap = bootstrap
@@ -200,9 +200,9 @@ class Parser:
 
 
 class ParseAutnum(Parser):
-    '''
+    """
         Additional data extractors for autnum objects.
-    '''
+    """
 
     def parse(self):
         response_type = self.parsed['type']
@@ -221,9 +221,9 @@ class ParseAutnum(Parser):
 
 
 class ParseDomain(Parser):
-    '''
+    """
         Additional data extractors for domain objects.
-    '''
+    """
 
     def parse(self):
         response_type = self.parsed['type']
@@ -253,9 +253,9 @@ class ParseDomain(Parser):
 
 
 class ParseIPNetwork(Parser):
-    '''
+    """
         Additional data extractors for ip network objects.
-    '''
+    """
 
     def parse(self):
         response_type = self.parsed['type']
@@ -306,9 +306,9 @@ class ParseIPNetwork(Parser):
 
 
 class ParseEntity(Parser):
-    '''
+    """
         Additional data extractors for entity objects.
-    '''
+    """
 
     def parse(self):
         response_type = self.parsed['type']

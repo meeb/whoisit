@@ -2,10 +2,9 @@ import json
 import requests
 from time import time
 from urllib.parse import urlsplit
-from urllib3.util.retry import Retry
 from ipaddress import IPv4Network, IPv4Address, IPv6Network, IPv6Address
 from .logger import get_logger
-from .utils import http_request, is_subnet_of
+from .utils import http_request, is_subnet_of, create_session
 from .errors import BootstrapError, UnsupportedError
 
 
@@ -57,13 +56,11 @@ class Bootstrap:
         'TW': 'twnic',
     }
 
-    # These statuses should trigger a retry, with back-off
-    RETRY_STATUSES = [429]
-
-    # Retry a request no more than this many times
-    RETRY = 5
-
-    def __init__(self):
+    def __init__(self, session=None):
+        if not session:
+            self.session = create_session()
+        else:
+            self.session = session
         self.bootstrap_parsers = {
             'asn': self.parse_asn_data,
             'dns': self.parse_dns_data,
@@ -81,19 +78,6 @@ class Bootstrap:
         self._data = {}
         self._parsed_data = {}
         self.clear_bootstrapping()
-        self.session = self.configure_session()
-
-    def configure_session(self):
-        """Configure requests session behavior."""
-        session = requests.session()
-        retry = Retry(total=self.RETRY,
-                      status_forcelist=self.RETRY_STATUSES,
-                      backoff_factor=1)
-        retry_adapter = requests.adapters.HTTPAdapter(max_retries=retry, 
-                                                      pool_connections=10, 
-                                                      pool_maxsize=10)
-        session.mount('https://', retry_adapter)
-        return session
 
     def is_bootstrapped(self):
         return self._is_bootstrapped
@@ -110,7 +94,6 @@ class Bootstrap:
         if self.is_bootstrapped():
             return True
         items_loaded = set()
-        self.session = self.configure_session()
         for name, url in self.BOOTSTRAP_URLS.items():
             response = http_request(self.session, url)
             if response.status_code != 200:
@@ -168,7 +151,6 @@ class Bootstrap:
         if items_loaded == self._expected_items:
             self._bootstrap_timestamp = int(timestamp)
             self._is_bootstrapped = True
-            self.session = self.configure_session()
             self.parse_bootstrap_data()
             return True
         else:
@@ -378,10 +360,10 @@ class Bootstrap:
         return tuple(self.RIR_RDAP_ENDPOINTS.keys())
 
     def get_rir_name_by_endpoint_url(self, url):
-        '''
+        """
             A reverse lookup that maps endpoint URLs like https://rdap.arin.net/whatever
             to a name like 'arin'.
-        '''
+        """
         url_parts = urlsplit(url)
         try:
             return self.rir_endpoints_by_domain[url_parts.netloc]

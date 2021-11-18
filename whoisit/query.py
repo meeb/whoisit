@@ -151,11 +151,11 @@ class QueryBuilder:
 
 
 class Query:
-    '''
+    """
         Make an HTTP request to an RDAP endpoint as a query. This is slightly more
         elaborate than a single function just to allow kwargs to be arbitrarily passed
         to both requests and the requested URL if required.
-    '''
+    """
 
     def __init__(self, session, method, url, allow_insecure_ssl=False, **kwargs):
         self.session = session
@@ -179,7 +179,8 @@ class Query:
 
     def request(self, *args, **kwargs):
         # args and kwargs here are passed directly to requests.request(...)
-        response = self.session.request(url=self.url, method=self.method, *args, **kwargs)
+        response = http_request(self.session, url=self.url, method=self.method,
+                                allow_insecure_ssl=self.allow_insecure_ssl, *args, **kwargs)
         if response.status_code == 404:
             raise ResourceDoesNotExist(f'RDAP {self.method} request to {self.url} '
                                        f'returned a 404 error, the resource does '

@@ -18,7 +18,7 @@ save_bootstrap_data = _bootstrap.save_bootstrap_data
 load_bootstrap_data = _bootstrap.load_bootstrap_data
 bootstrap_is_older_than = _bootstrap.bootstrap_is_older_than
 
-session = requests.Session()
+session = _bootstrap.session
 
 _query_builder = QueryBuilder(_bootstrap)
 build_query = _query_builder.build

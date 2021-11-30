@@ -10,7 +10,7 @@ log = get_logger('utils')
 user_agent = 'whoisit/{version}'
 insecure_ssl_ciphers = 'ALL:@SECLEVEL=1'
 http_retry_statuses = [429]     # HTTP status codes to trigger a retry wih backoff
-http_max_retries = 5            # Maximum number of HTTP requests to retry before failing
+http_max_retries = 3            # Maximum number of HTTP requests to retry before failing
 http_pool_connections = 10      # Maximum number of HTTP pooled connections
 http_pool_maxsize = 10          # Maximum HTTP pool connection size
 

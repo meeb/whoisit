@@ -209,3 +209,26 @@ class BootstrapTestCase(unittest.TestCase):
 
         # Clean up
         whoisit.clear_bootstrapping()
+
+    def test_iana_overrides(self):
+
+        # Test iana_overrides are a dict
+        from whoisit.overrides import iana_overrides
+        self.assertIsInstance(iana_overrides, dict)
+
+        # Test bootstrapping with overrides disabled
+        whoisit.clear_bootstrapping()
+        whoisit.load_bootstrap_data(self.bootstrap_data)
+        self.assertFalse(whoisit._bootstrap.is_using_overrides())
+        with self.assertRaises(whoisit.errors.UnsupportedError):
+            # .de has no RDAP entry in IANA data currently, this should error
+            whoisit._bootstrap.get_dns_endpoints('de')
+
+        # Test bootstrapping with overrides enabled
+        whoisit.clear_bootstrapping()
+        whoisit.load_bootstrap_data(self.bootstrap_data, overrides=True)
+        self.assertTrue(whoisit._bootstrap.is_using_overrides())
+        # .de has endpoint overrides
+        override_endpoints, match = whoisit._bootstrap.get_dns_endpoints('de')
+        self.assertEqual(override_endpoints[0], 'https://rdap.denic.de/')
+        self.assertFalse(match)

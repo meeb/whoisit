@@ -24,15 +24,18 @@ class Parser:
         available.
     """
 
-    def __init__(self, bootstrap, raw_data):
+    def __init__(self, bootstrap, raw_data, using_overrides=False):
         self.bootstrap = bootstrap
         self.raw_data = raw_data
         self.parsed = {}
+        self.using_overrides = bool(using_overrides)
         self.extract_handle()
         # As a basic check every object must have at least a handle set
         if not self.parsed['handle']:
-            raise ParseError(f'Failed to parse any meaningful data to find a handle in '
-                             f'raw data: {self.raw_data}')
+            # Permit overridden endpoints to not return a handle
+            if not self.using_overrides:
+                raise ParseError(f'Failed to parse any meaningful data to find a '
+                                 f'handle in raw data: {self.raw_data}')
         self.extract_parent_handle()
         self.extract_name()
         self.extract_whois_server()
@@ -148,7 +151,8 @@ class Parser:
         for link in self.raw_data.get('links', []):
             if link.get('rel', '').strip().lower() == 'self':
                 self.parsed['url'] = clean(link.get('href', ''))
-        self.parsed['rir'] = ''
+        else:
+            self.parsed['rir'] = ''
         if self.parsed['url']:
             try:
                 self.parsed['rir'] = self.bootstrap.get_rir_name_by_endpoint_url(
@@ -349,5 +353,6 @@ def parse(bootstrap, data_type, raw_data):
         raise ParseError(f'No parser for response_type: {response_type}')
     log.debug(f'Parsing request type {data_type} {getsizeof(raw_data)} byte dict '
               f'with parser: {response_type} / {parser_class}')
-    p = parser_class(bootstrap, raw_data)
+    p = parser_class(bootstrap, raw_data,
+                     using_overrides=bootstrap.is_using_overrides())
     return p.parse()

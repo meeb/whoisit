@@ -5,6 +5,7 @@ from urllib.parse import urlsplit
 from ipaddress import IPv4Network, IPv4Address, IPv6Network, IPv6Address
 from .logger import get_logger
 from .utils import http_request, is_subnet_of, create_session
+from .overrides import iana_overrides
 from .errors import BootstrapError, UnsupportedError
 
 
@@ -77,22 +78,28 @@ class Bootstrap:
         self._expected_items = set(self.BOOTSTRAP_URLS.keys())
         self._data = {}
         self._parsed_data = {}
+        self._use_iana_overrides = False
         self.clear_bootstrapping()
+
+    def is_using_overrides(self):
+        return self._use_iana_overrides
 
     def is_bootstrapped(self):
         return self._is_bootstrapped
-    
+
     def clear_bootstrapping(self):
         self._data = {}
         self._parsed_data = {}
         for k in self.BOOTSTRAP_URLS.keys():
             self._data[k] = {}
         self._is_bootstrapped = False
+        self._use_iana_overrides = False
         log.debug('Cleared bootstrap data')
 
-    def bootstrap(self):
+    def bootstrap(self, overrides=False):
         if self.is_bootstrapped():
             return True
+        self._use_iana_overrides = bool(overrides)
         items_loaded = set()
         for name, url in self.BOOTSTRAP_URLS.items():
             response = http_request(self.session, url)
@@ -127,12 +134,13 @@ class Bootstrap:
             rtn[name] = data
         return json.dumps(rtn)
 
-    def load_bootstrap_data(self, data):
+    def load_bootstrap_data(self, data, overrides=False):
         if self.is_bootstrapped():
             raise BootstrapError('Already bootstrapped, cannot load more data')
         if not isinstance(data, str):
             raise BootstrapError(f'Unable to load bootstrap data, data must be a '
                                  f'string, got: {type(data)}')
+        self._use_iana_overrides = bool(overrides)
         try:
             data = json.loads(data)
         except Exception as e:
@@ -265,12 +273,19 @@ class Bootstrap:
                 return endpoints, True
         log.debug(f'Failed to map ASN "{asn}" to an endpoint, using a fallback')
         return self.get_fallback_endpoints(), False
-    
+
     def get_dns_endpoints(self, tld):
         if not self.is_bootstrapped():
             raise BootstrapError('No bootstrap data is loaded')
         if not isinstance(tld, str):
             raise BootstrapError('tld must be an str')
+        if self._use_iana_overrides:
+            domain_overrides = iana_overrides.get('domain', {})
+            override_endpoints = domain_overrides.get(tld, None)
+            if override_endpoints:
+                log.debug(f'Mapped TLD "{tld}" to override endpoints: '
+                          f'{override_endpoints}')
+                return override_endpoints, False
         endpoints = self._parsed_data['dns'].get(tld, None)
         if endpoints:
             log.debug(f'Mapped TLD "{tld}" to endpoints: {endpoints}')

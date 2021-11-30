@@ -191,6 +191,26 @@ else:
 whoisit.asn(12345)
 ```
 
+Some services, most notably TLDs, do have RDAP servers which may not be set properly
+in the IANA bootstrap data. `whoisit` maintains a record of these and can patch the
+IANA data to allow more TLDs to be queried. You can enable this with the
+`override=True` parameter when loading bootstrap data:
+
+```python
+whoisit.bootstrap(override=True)
+```
+
+or
+
+```python
+whoisit.load_bootstrap_data(bootstrap_info, override=True)
+```
+
+**Important**: when using the overrides you may recieve non-standard data, data that
+is not in the same format as officially listed IANA data and you may not recieve a copy
+of any required terms of service or terms of use. You will have to manually verify data
+returned by overridden endpoints.
+
 
 ## Response data
 

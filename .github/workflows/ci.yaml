@@ -1,4 +1,4 @@
-name: Run Django tests for whoisit
+name: Run tests for whoisit
 on:
   push:
     branches:
@@ -23,5 +23,5 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-      - name: Run Django tests
+      - name: Run whoisit tests
         run: make test

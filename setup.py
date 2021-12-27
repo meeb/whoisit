@@ -1,9 +1,7 @@
 import os
 import sys
 from setuptools import setup, find_packages
-
-
-version = '2.4.0'
+from whoisit.version import version
 
 
 with open('README.md', 'rt') as f:

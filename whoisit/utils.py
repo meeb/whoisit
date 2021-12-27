@@ -9,6 +9,7 @@ from .version import version
 log = get_logger('utils')
 user_agent = 'whoisit/{version}'
 insecure_ssl_ciphers = 'ALL:@SECLEVEL=1'
+http_timeout = 10               # Maximum time in seconds to allow for an HTTP request
 http_retry_statuses = [429]     # HTTP status codes to trigger a retry wih backoff
 http_max_retries = 3            # Maximum number of HTTP requests to retry before failing
 http_pool_connections = 10      # Maximum number of HTTP pooled connections
@@ -48,8 +49,9 @@ def http_request(session, url, method='GET', allow_insecure_ssl=False,
                     insecure_ssl_ciphers
             except AttributeError:
                 pass
-        return session.request(method, url, headers=headers, data=data, *args,
-                               **kwargs)
+        if 'timeout' not in kwargs:
+            kwargs['timeout'] = http_timeout
+        return session.request(method, url, headers=headers, data=data, *args, **kwargs)
     except Exception as e:
         raise QueryError(f'Failed to make a {method} request to {url}: {e}') from e
     finally:

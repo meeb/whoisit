@@ -70,6 +70,8 @@ class Parser:
                 continue
             elif entry_field == 'fn':
                 name = clean(entry_label)
+            elif entry_field == 'org':
+                name = clean(entry_label)
             elif entry_field == 'email':
                 email = clean(entry_label)
         return (name, email) if name or email else False
@@ -164,12 +166,12 @@ class Parser:
         self.parsed['entities'] = {}
         for entity in self.raw_data.get('entities', []):
             handle = clean(entity.get('handle', '')).upper()
-            if not handle:
-                continue
             url = ''
             for link in entity.get('links', []):
                 if link.get('rel', '').strip().lower() == 'self':
                     url = clean(link.get('href', ''))
+            if not url:
+                url = entity.get('url', '')
             rir = ''
             if url:
                 try:

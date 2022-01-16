@@ -260,12 +260,11 @@ class ParseDomain(Parser):
 
     def extract_domain_dnssec(self):
         """
-        secureDNS.delegationSigned boolean indicates active dnssec
+            SecureDNS.delegationSigned boolean indicates active dnssec.
         """
         self.parsed['dnssec'] = False
-        if self.raw_data.get('secureDNS', None):
-            if self.raw_data['secureDNS'].get('delegationSigned', None):
-                self.parsed['dnssec'] = True
+        if self.raw_data.get('secureDNS', {}).get('delegationSigned', None):
+            self.parsed['dnssec'] = True
 
 
 class ParseIPNetwork(Parser):

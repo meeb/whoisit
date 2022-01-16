@@ -117,6 +117,7 @@ class ParserTestCase(unittest.TestCase):
         self.assertEqual(parsed['terms_of_service_url'], 'https://www.verisign.com/domain-names/registration-data-access-protocol/terms-service/index.xhtml')
         self.assertEqual(parsed['whois_server'], '')
         self.assertEqual(parsed['copyright_notice'], '')
+        self.assertEqual(parsed['dnssec'], True)
         self.assertEqual(parsed['nameservers'], [
             'NS1.GOOGLE.COM',
             'NS2.GOOGLE.COM',

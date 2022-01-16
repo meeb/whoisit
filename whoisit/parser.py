@@ -239,6 +239,7 @@ class ParseDomain(Parser):
         self.extract_domain_name()
         self.extract_domain_nameservers()
         self.extract_domain_status()
+        self.extract_domain_dnssec()
         return self.parsed
 
     def extract_domain_name(self):
@@ -256,6 +257,15 @@ class ParseDomain(Parser):
         self.parsed['status'] = []
         for status in self.raw_data.get('status', []):
             self.parsed['status'].append(clean(status))
+
+    def extract_domain_dnssec(self):
+        """
+        secureDNS.delegationSigned boolean indicates active dnssec
+        """
+        self.parsed['dnssec'] = False
+        if self.raw_data.get('secureDNS', None):
+            if self.raw_data['secureDNS'].get('delegationSigned', None):
+                self.parsed['dnssec'] = True
 
 
 class ParseIPNetwork(Parser):

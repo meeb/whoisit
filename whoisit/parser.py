@@ -162,9 +162,13 @@ class Parser:
             except BootstrapError:
                 pass
 
-    def extract_entities(self):
-        self.parsed['entities'] = {}
-        for entity in self.raw_data.get('entities', []):
+    def extract_entities(self, entities=None):
+        self.parsed.setdefault('entities', {})
+
+        if not entities:
+            entities = self.raw_data.get('entities', [])
+
+        for entity in entities:
             handle = clean(entity.get('handle', '')).upper()
             url = ''
             for link in entity.get('links', []):
@@ -186,23 +190,30 @@ class Parser:
             if vcard:
                 name, email = vcard
             for role in entity.get('roles', []):
-                entity = {}
+                parsed_entity = {}
                 if handle:
-                    entity['handle'] = handle
+                    parsed_entity['handle'] = handle
                 if url:
-                    entity['url'] = url
+                    parsed_entity['url'] = url
                 if entity_type:
-                    entity['type'] = entity_type
+                    parsed_entity['type'] = entity_type
                 if whois_server:
-                    entity['whois_server'] = whois_server
+                    parsed_entity['whois_server'] = whois_server
                 if name:
-                    entity['name'] = name
+                    parsed_entity['name'] = name
                 if email:
-                    entity['email'] = email
+                    parsed_entity['email'] = email
                 if rir:
-                    entity['rir'] = rir
-                if entity:
-                    self.parsed['entities'].setdefault(role, []).append(entity)
+                    parsed_entity['rir'] = rir
+                if parsed_entity:
+                    self.parsed['entities'].setdefault(role, [])
+
+                    # ignore duplicate entity per role
+                    if parsed_entity not in self.parsed['entities'].get(role, []):
+                        self.parsed['entities'][role].append(parsed_entity)
+
+            if entity.get('entities'):
+                self.extract_entities(entities=entity.get('entities'))
 
 
 class ParseAutnum(Parser):

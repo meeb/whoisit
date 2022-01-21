@@ -187,6 +187,38 @@ class ParserTestCase(unittest.TestCase):
             ]
         )
 
+    # themarquetry.com
+        with open(BASE_DIR / 'data_rdap_response_domain3.json') as f:
+            test_data = json.loads(f.read())
+        parsed = whoisit.parser.parse(whoisit._bootstrap, 'domain', test_data)
+        self.assertEqual(parsed['type'], 'domain')
+        self.assertEqual(parsed['name'], 'THEMARQUETRY.COM')
+        self.assertEqual(parsed['handle'], '2598322308_DOMAIN_COM-VRSN')
+        self.assertEqual(parsed['rir'], '')
+        self.assertEqual(parsed['nameservers'], [
+            'NS1.DNS-PARKING.COM',
+            'NS2.DNS-PARKING.COM'
+        ])
+        self.assertEqual(parsed['status'], ['client transfer prohibited'])
+        self.assertEqual(parsed['entities']['registrar'],
+            [
+                {
+                    'handle': '1647',
+                    'type': 'entity',
+                    'name': 'Hosting Concepts B.V. d/b/a Registrar.eu',
+                }
+            ]
+        )
+        self.assertEqual(parsed['entities']['abuse'],
+            [
+                {
+                    'type': 'entity',
+                    'email': 'abuse@registrar.eu'
+                }
+            ]
+        )
+
+
     def test_ip_response_parser(self):
 
         # ipv4 address

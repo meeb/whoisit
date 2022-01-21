@@ -187,7 +187,7 @@ class ParserTestCase(unittest.TestCase):
             ]
         )
 
-    # themarquetry.com
+        # themarquetry.com
         with open(BASE_DIR / 'data_rdap_response_domain3.json') as f:
             test_data = json.loads(f.read())
         parsed = whoisit.parser.parse(whoisit._bootstrap, 'domain', test_data)
@@ -217,7 +217,6 @@ class ParserTestCase(unittest.TestCase):
                 }
             ]
         )
-
 
     def test_ip_response_parser(self):
 
@@ -352,13 +351,22 @@ class ParserTestCase(unittest.TestCase):
         self.assertEqual(parsed['entities']['abuse'],
             [
                 {
-                    'email': 'arin-contact@google.com',
-                    'handle': 'ZG39-ARIN',
-                    'name': 'Google LLC',
-                    'rir': 'arin',
+                    'handle': 'ABUSE5250-ARIN',
+                    'url': 'https://rdap.arin.net/registry/entity/ABUSE5250-ARIN',
                     'type': 'entity',
+                    'whois_server': 'whois.arin.net',
+                    'name': 'Abuse',
+                    'email': 'network-abuse@google.com',
+                    'rir': 'arin'
+                },
+                {
+                    'handle': 'ZG39-ARIN',
                     'url': 'https://rdap.arin.net/registry/entity/ZG39-ARIN',
-                    'whois_server': 'whois.arin.net'
+                    'type': 'entity',
+                    'whois_server': 'whois.arin.net',
+                    'name': 'Google LLC',
+                    'email': 'arin-contact@google.com',
+                    'rir': 'arin'
                 }
             ]
         )

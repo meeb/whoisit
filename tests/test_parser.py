@@ -253,6 +253,17 @@ class ParserTestCase(unittest.TestCase):
             ]
         )
 
+        # ipv4 address 2
+        with open(BASE_DIR / 'data_rdap_response_ip_v4_2.json') as f:
+            test_data = json.loads(f.read())
+        parsed = whoisit.parser.parse(whoisit._bootstrap, 'ip', test_data)
+        self.assertEqual(parsed['type'], 'ip network')
+        self.assertEqual(parsed['name'], 'SWITCH-LAN')
+        self.assertEqual(parsed['rir'], 'ripe')
+        self.assertEqual(parsed['url'], 'https://rdap.db.ripe.net/ip/130.59.31.80')
+        self.assertEqual(parsed['whois_server'], 'whois.ripe.net')
+        self.assertEqual(parsed['network'], IPv4Network('130.59.0.0/16'))
+
         # ipv4 network
         with open(BASE_DIR / 'data_rdap_response_cidr_v4.json') as f:
             test_data = json.loads(f.read())

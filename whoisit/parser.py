@@ -1,5 +1,5 @@
 from sys import getsizeof
-from ipaddress import ip_address, IPv4Network, IPv6Network
+from ipaddress import ip_address, summarize_address_range, IPv4Network, IPv6Network
 from dateutil.parser import parse as dateutil_parse
 from .errors import BootstrapError, ParseError
 from .logger import get_logger
@@ -308,25 +308,32 @@ class ParseIPNetwork(Parser):
 
     def extract_network(self):
         self.parsed['network'] = None
-        cidr = self.raw_data.get('cidr0_cidrs', [])
-        try:
-            cidr_parts = cidr[0]
-        except IndexError:
-            return
-        length = cidr_parts.get('length', '')
-        v4prefix = cidr_parts.get('v4prefix', '')
-        v6prefix = cidr_parts.get('v6prefix', '')
-        if length:
-            if v4prefix:
-                try:
-                    self.parsed['network'] = IPv4Network(f'{v4prefix}/{length}')
-                except (TypeError, ValueError):
-                    return
-            elif v6prefix:
-                try:
-                    self.parsed['network'] = IPv6Network(f'{v6prefix}/{length}')
-                except (TypeError, ValueError):
-                    return
+
+        cidr = self.raw_data.get('cidr0_cidrs', None)
+        if cidr:
+            try:
+                cidr_parts = cidr[0]
+            except IndexError:
+                return
+            length = cidr_parts.get('length', '')
+            v4prefix = cidr_parts.get('v4prefix', '')
+            v6prefix = cidr_parts.get('v6prefix', '')
+            if length:
+                if v4prefix:
+                    try:
+                        self.parsed['network'] = IPv4Network(f'{v4prefix}/{length}')
+                    except (TypeError, ValueError):
+                        return
+                elif v6prefix:
+                    try:
+                        self.parsed['network'] = IPv6Network(f'{v6prefix}/{length}')
+                    except (TypeError, ValueError):
+                        return
+        else:
+            start_address = self.raw_data.get('startAddress', None)
+            end_address = self.raw_data.get('endAddress', None)
+            if start_address and end_address:
+                self.parsed['network'] = list(summarize_address_range(ip_address(start_address), ip_address(end_address))).pop()
 
 
 class ParseEntity(Parser):

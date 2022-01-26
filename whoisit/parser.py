@@ -308,7 +308,6 @@ class ParseIPNetwork(Parser):
 
     def extract_network(self):
         self.parsed['network'] = None
-
         cidr = self.raw_data.get('cidr0_cidrs', None)
         if cidr:
             try:
@@ -333,7 +332,12 @@ class ParseIPNetwork(Parser):
             start_address = self.raw_data.get('startAddress', None)
             end_address = self.raw_data.get('endAddress', None)
             if start_address and end_address:
-                self.parsed['network'] = list(summarize_address_range(ip_address(start_address), ip_address(end_address))).pop()
+                try:
+                    networks = summarize_address_range(ip_address(start_address),
+                                                       ip_address(end_address))
+                    self.parsed['network'] = list(networks)[0]
+                except IndexError:
+                    return
 
 
 class ParseEntity(Parser):

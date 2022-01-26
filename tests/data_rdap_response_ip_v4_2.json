@@ -1,0 +1,78 @@
+{
+    "handle" : "130.59.0.0 - 130.59.255.255",
+    "startAddress" : "130.59.0.0",
+    "endAddress" : "130.59.255.255",
+    "ipVersion" : "v4",
+    "name" : "SWITCH-LAN",
+    "type" : "LEGACY",
+    "country" : "CH",
+    "parentHandle" : "0.0.0.0 - 255.255.255.255",
+    "entities" : [ {
+      "handle" : "ORG-SG2-RIPE",
+      "roles" : [ "registrant" ],
+      "objectClassName" : "entity"
+    }, {
+      "handle" : "RIPE-NCC-LEGACY-MNT",
+      "roles" : [ "registrant" ],
+      "objectClassName" : "entity"
+    }, {
+      "handle" : "SNOC1-RIPE",
+      "roles" : [ "technical", "administrative" ],
+      "objectClassName" : "entity"
+    }, {
+      "handle" : "SWITCH-MNT",
+      "roles" : [ "registrant" ],
+      "objectClassName" : "entity"
+    }, {
+      "handle" : "AR31930-RIPE",
+      "vcardArray" : [ "vcard", [ [ "version", { }, "text", "4.0" ], [ "fn", { }, "text", "Abuse-C Role" ], [ "kind", { }, "text", "group" ], [ "adr", {
+        "label" : "SWITCH\nWerdstrasse 2\nPostfach\n8021 Zurich\nSwitzerland"
+      }, "text", [ "", "", "", "", "", "", "" ] ], [ "email", {
+        "type" : "email"
+      }, "text", "abuse@switch.ch" ], [ "email", {
+        "type" : "abuse"
+      }, "text", "abuse@switch.ch" ] ] ],
+      "roles" : [ "abuse" ],
+      "entities" : [ {
+        "handle" : "SWITCH-MNT",
+        "roles" : [ "registrant" ],
+        "objectClassName" : "entity"
+      } ],
+      "objectClassName" : "entity"
+    } ],
+    "remarks" : [ {
+      "description" : [ "Zurich, Switzerland" ]
+    } ],
+    "links" : [ {
+      "value" : "https://rdap.db.ripe.net/ip/130.59.31.80",
+      "rel" : "self",
+      "href" : "https://rdap.db.ripe.net/ip/130.59.31.80"
+    }, {
+      "value" : "http://www.ripe.net/data-tools/support/documentation/terms",
+      "rel" : "copyright",
+      "href" : "http://www.ripe.net/data-tools/support/documentation/terms"
+    } ],
+    "events" : [ {
+      "eventAction" : "last changed",
+      "eventDate" : "2021-10-19T07:12:42Z"
+    } ],
+    "rdapConformance" : [ "rdap_level_0" ],
+    "notices" : [ {
+      "title" : "Filtered",
+      "description" : [ "This output has been filtered." ]
+    }, {
+      "title" : "Source",
+      "description" : [ "Objects returned came from source", "RIPE" ]
+    }, {
+      "title" : "Terms and Conditions",
+      "description" : [ "This is the RIPE Database query service. The objects are in RDAP format." ],
+      "links" : [ {
+        "value" : "https://rdap.db.ripe.net/ip/130.59.31.80",
+        "rel" : "terms-of-service",
+        "href" : "http://www.ripe.net/db/support/db-terms-conditions.pdf",
+        "type" : "application/pdf"
+      } ]
+    } ],
+    "port43" : "whois.ripe.net",
+    "objectClassName" : "ip network"
+  }

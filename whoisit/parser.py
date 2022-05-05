@@ -24,9 +24,10 @@ class Parser:
         available.
     """
 
-    def __init__(self, bootstrap, raw_data, using_overrides=False):
+    def __init__(self, bootstrap, raw_data, query, using_overrides=False):
         self.bootstrap = bootstrap
         self.raw_data = raw_data
+        self.query = query
         self.parsed = {}
         self.using_overrides = bool(using_overrides)
         self.extract_handle()
@@ -309,25 +310,40 @@ class ParseIPNetwork(Parser):
     def extract_network(self):
         self.parsed['network'] = None
         cidr = self.raw_data.get('cidr0_cidrs', None)
-        if cidr:
+        if isinstance(cidr, list):
             try:
-                cidr_parts = cidr[0]
-            except IndexError:
-                return
-            length = cidr_parts.get('length', '')
-            v4prefix = cidr_parts.get('v4prefix', '')
-            v6prefix = cidr_parts.get('v6prefix', '')
-            if length:
-                if v4prefix:
-                    try:
-                        self.parsed['network'] = IPv4Network(f'{v4prefix}/{length}')
-                    except (TypeError, ValueError):
-                        return
-                elif v6prefix:
-                    try:
-                        self.parsed['network'] = IPv6Network(f'{v6prefix}/{length}')
-                    except (TypeError, ValueError):
-                        return
+                query_ip = ip_address(self.query.strip())
+            except (ValueError, TypeError):
+                query_ip = False
+            for cidr_parts in cidr:
+                length = cidr_parts.get('length', '')
+                v4prefix = cidr_parts.get('v4prefix', '')
+                v6prefix = cidr_parts.get('v6prefix', '')
+                if length:
+                    if v4prefix:
+                        try:
+                            parsed_network = IPv4Network(f'{v4prefix}/{length}')
+                            if query_ip and query_ip.version == parsed_network.version:
+                                if query_ip in parsed_network:
+                                    self.parsed['network'] = parsed_network
+                                    break
+                            else:
+                                self.parsed['network'] = parsed_network
+                                break
+                        except (TypeError, ValueError):
+                            return
+                    elif v6prefix:
+                        try:
+                            parsed_network = IPv6Network(f'{v6prefix}/{length}')
+                            if query_ip and query_ip.version == parsed_network.version:
+                                if query_ip in parsed_network:
+                                    self.parsed['network'] = parsed_network
+                                    break
+                            else:
+                                self.parsed['network'] = parsed_network
+                                break
+                        except (TypeError, ValueError):
+                            return
         else:
             start_address = self.raw_data.get('startAddress', None)
             end_address = self.raw_data.get('endAddress', None)
@@ -376,7 +392,7 @@ parser_map = {
 }
 
 
-def parse(bootstrap, data_type, raw_data):
+def parse(bootstrap, data_type, query, raw_data):
     # Find a parser for the response type, falling back to the request / data type
     response_type = raw_data.get('objectClassName', data_type)
     parser_class = parser_map.get(response_type, None)
@@ -384,6 +400,6 @@ def parse(bootstrap, data_type, raw_data):
         raise ParseError(f'No parser for response_type: {response_type}')
     log.debug(f'Parsing request type {data_type} {getsizeof(raw_data)} byte dict '
               f'with parser: {response_type} / {parser_class}')
-    p = parser_class(bootstrap, raw_data,
+    p = parser_class(bootstrap, raw_data, query,
                      using_overrides=bootstrap.is_using_overrides())
     return p.parse()

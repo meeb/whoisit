@@ -37,7 +37,7 @@ def asn(as_number, rir=None, raw=False, allow_insecure_ssl=False, session=None):
         query_type='asn', query_value=as_number, rir=rir)
     q = Query(session, method, url, allow_insecure_ssl)
     response = q.request()
-    return response if raw else parse(_bootstrap, 'autnum', response)
+    return response if raw else parse(_bootstrap, 'autnum', as_number, response)
 
 
 def domain(domain_name, raw=False, allow_insecure_ssl=False, session=None):
@@ -47,7 +47,7 @@ def domain(domain_name, raw=False, allow_insecure_ssl=False, session=None):
         query_type='domain', query_value=domain_name)
     q = Query(session, method, url, allow_insecure_ssl)
     response = q.request()
-    return response if raw else parse(_bootstrap, 'domain', response)
+    return response if raw else parse(_bootstrap, 'domain', domain_name, response)
 
 
 def ip(ip_address_or_network, rir=None, raw=False, allow_insecure_ssl=False, session=None):
@@ -57,7 +57,7 @@ def ip(ip_address_or_network, rir=None, raw=False, allow_insecure_ssl=False, ses
         query_type='ip', query_value=ip_address_or_network, rir=rir)
     q = Query(session, method, url, allow_insecure_ssl)
     response = q.request()
-    return response if raw else parse(_bootstrap, 'ip', response)
+    return response if raw else parse(_bootstrap, 'ip', ip_address_or_network, response)
 
 
 def entity(entity_handle, rir=None, raw=False, allow_insecure_ssl=False, session=None):
@@ -67,4 +67,4 @@ def entity(entity_handle, rir=None, raw=False, allow_insecure_ssl=False, session
         query_type='entity', query_value=entity_handle, rir=rir)
     q = Query(session, method, url, allow_insecure_ssl)
     response = q.request()
-    return response if raw else parse(_bootstrap, 'entity', response)
+    return response if raw else parse(_bootstrap, 'entity', entity_handle, response)

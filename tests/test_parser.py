@@ -21,21 +21,21 @@ class ParserTestCase(unittest.TestCase):
 
     def test_parser_interface(self):
         with self.assertRaises(whoisit.errors.ParseError):
-            whoisit.parser.parse(whoisit._bootstrap, 'invalid', {})
+            whoisit.parser.parse(whoisit._bootstrap, 'invalid', '', {})
         fake_response = {'handle': 'TEST', 'name': 'test'}
         fake_response['objectClassName'] = 'autnum'
-        whoisit.parser.parse(whoisit._bootstrap, 'autnum', fake_response)
+        whoisit.parser.parse(whoisit._bootstrap, 'autnum', '', fake_response)
         fake_response['objectClassName'] = 'domain'
-        whoisit.parser.parse(whoisit._bootstrap, 'domain', fake_response)
+        whoisit.parser.parse(whoisit._bootstrap, 'domain', '', fake_response)
         fake_response['objectClassName'] = 'ip network'
-        whoisit.parser.parse(whoisit._bootstrap, 'ip', fake_response)
+        whoisit.parser.parse(whoisit._bootstrap, 'ip', '', fake_response)
         fake_response['objectClassName'] = 'entity'
-        whoisit.parser.parse(whoisit._bootstrap, 'entity', fake_response)
+        whoisit.parser.parse(whoisit._bootstrap, 'entity', '', fake_response)
 
     def test_autnum_response_parser(self):
         with open(BASE_DIR / 'data_rdap_response_asn.json') as f:
             test_data = json.loads(f.read())
-        parsed = whoisit.parser.parse(whoisit._bootstrap, 'autnum', test_data)
+        parsed = whoisit.parser.parse(whoisit._bootstrap, 'autnum', '13335', test_data)
         self.assertEqual(parsed['type'], 'autnum')
         self.assertEqual(parsed['handle'], 'AS13335')
         self.assertEqual(parsed['name'], 'CLOUDFLARENET')
@@ -105,7 +105,7 @@ class ParserTestCase(unittest.TestCase):
         # google.com
         with open(BASE_DIR / 'data_rdap_response_domain1.json') as f:
             test_data = json.loads(f.read())
-        parsed = whoisit.parser.parse(whoisit._bootstrap, 'domain', test_data)
+        parsed = whoisit.parser.parse(whoisit._bootstrap, 'domain', 'GOOGLE.COM', test_data)
         self.assertEqual(parsed['type'], 'domain')
         self.assertEqual(parsed['name'], 'GOOGLE.COM')
         self.assertEqual(parsed['handle'], '2138514_DOMAIN_COM-VRSN')
@@ -145,7 +145,7 @@ class ParserTestCase(unittest.TestCase):
         # norway.no
         with open(BASE_DIR / 'data_rdap_response_domain2.json') as f:
             test_data = json.loads(f.read())
-        parsed = whoisit.parser.parse(whoisit._bootstrap, 'domain', test_data)
+        parsed = whoisit.parser.parse(whoisit._bootstrap, 'domain', 'norway.no', test_data)
         self.assertEqual(parsed['type'], 'domain')
         self.assertEqual(parsed['name'], 'norway.no')
         self.assertEqual(parsed['handle'], 'NOR34044D-NORID')
@@ -190,7 +190,7 @@ class ParserTestCase(unittest.TestCase):
         # themarquetry.com
         with open(BASE_DIR / 'data_rdap_response_domain3.json') as f:
             test_data = json.loads(f.read())
-        parsed = whoisit.parser.parse(whoisit._bootstrap, 'domain', test_data)
+        parsed = whoisit.parser.parse(whoisit._bootstrap, 'domain', 'THEMARQUETRY.COM', test_data)
         self.assertEqual(parsed['type'], 'domain')
         self.assertEqual(parsed['name'], 'THEMARQUETRY.COM')
         self.assertEqual(parsed['handle'], '2598322308_DOMAIN_COM-VRSN')
@@ -223,7 +223,7 @@ class ParserTestCase(unittest.TestCase):
         # ipv4 address
         with open(BASE_DIR / 'data_rdap_response_ip_v4.json') as f:
             test_data = json.loads(f.read())
-        parsed = whoisit.parser.parse(whoisit._bootstrap, 'ip', test_data)
+        parsed = whoisit.parser.parse(whoisit._bootstrap, 'ip', '1.1.1.1', test_data)
         self.assertEqual(parsed['type'], 'ip network')
         self.assertEqual(parsed['name'], 'APNIC-LABS')
         self.assertEqual(parsed['handle'], '1.1.1.0 - 1.1.1.255')
@@ -256,7 +256,7 @@ class ParserTestCase(unittest.TestCase):
         # ipv4 address 2
         with open(BASE_DIR / 'data_rdap_response_ip_v4_2.json') as f:
             test_data = json.loads(f.read())
-        parsed = whoisit.parser.parse(whoisit._bootstrap, 'ip', test_data)
+        parsed = whoisit.parser.parse(whoisit._bootstrap, 'ip', '130.59.31.80', test_data)
         self.assertEqual(parsed['type'], 'ip network')
         self.assertEqual(parsed['name'], 'SWITCH-LAN')
         self.assertEqual(parsed['rir'], 'ripe')
@@ -264,10 +264,21 @@ class ParserTestCase(unittest.TestCase):
         self.assertEqual(parsed['whois_server'], 'whois.ripe.net')
         self.assertEqual(parsed['network'], IPv4Network('130.59.0.0/16'))
 
+        # ipv4 address 3
+        with open(BASE_DIR / 'data_rdap_response_ip_v4_3.json') as f:
+            test_data = json.loads(f.read())
+        parsed = whoisit.parser.parse(whoisit._bootstrap, 'ip', '13.104.0.0', test_data)
+        self.assertEqual(parsed['type'], 'ip network')
+        self.assertEqual(parsed['name'], 'MSFT')
+        self.assertEqual(parsed['rir'], 'arin')
+        self.assertEqual(parsed['url'], 'https://rdap.arin.net/registry/ip/13.64.0.0')
+        self.assertEqual(parsed['whois_server'], 'whois.arin.net')
+        self.assertEqual(parsed['network'], IPv4Network('13.104.0.0/14'))
+
         # ipv4 network
         with open(BASE_DIR / 'data_rdap_response_cidr_v4.json') as f:
             test_data = json.loads(f.read())
-        parsed = whoisit.parser.parse(whoisit._bootstrap, 'ip', test_data)
+        parsed = whoisit.parser.parse(whoisit._bootstrap, 'ip', '1.1.1.0/24', test_data)
         self.assertEqual(parsed['type'], 'ip network')
         self.assertEqual(parsed['name'], 'APNIC-LABS')
         self.assertEqual(parsed['handle'], '1.1.1.0 - 1.1.1.255')
@@ -304,7 +315,7 @@ class ParserTestCase(unittest.TestCase):
         # ipv6 address
         with open(BASE_DIR / 'data_rdap_response_ip_v6.json') as f:
             test_data = json.loads(f.read())
-        parsed = whoisit.parser.parse(whoisit._bootstrap, 'ip', test_data)
+        parsed = whoisit.parser.parse(whoisit._bootstrap, 'ip', '2001:4860::', test_data)
         self.assertEqual(parsed['type'], 'ip network')
         self.assertEqual(parsed['name'], 'GOOGLE-IPV6')
         self.assertEqual(parsed['handle'], 'NET6-2001-4860-1')
@@ -384,7 +395,7 @@ class ParserTestCase(unittest.TestCase):
         # ipv6 network
         with open(BASE_DIR / 'data_rdap_response_cidr_v6.json') as f:
             test_data = json.loads(f.read())
-        parsed = whoisit.parser.parse(whoisit._bootstrap, 'ip', test_data)
+        parsed = whoisit.parser.parse(whoisit._bootstrap, 'ip', '2001:4860::', test_data)
         self.assertEqual(parsed['type'], 'ip network')
         self.assertEqual(parsed['name'], 'GOOGLE-IPV6')
         self.assertEqual(parsed['handle'], 'NET6-2001-4860-1')
@@ -417,7 +428,7 @@ class ParserTestCase(unittest.TestCase):
     def test_entity_response_parser(self):
         with open(BASE_DIR / 'data_rdap_response_entity.json') as f:
             test_data = json.loads(f.read())
-        parsed = whoisit.parser.parse(whoisit._bootstrap, 'ip', test_data)
+        parsed = whoisit.parser.parse(whoisit._bootstrap, 'ip', 'GOVI', test_data)
         self.assertEqual(parsed['type'], 'entity')
         self.assertEqual(parsed['name'], 'Govital Internet Inc.')
         self.assertEqual(parsed['email'], '')

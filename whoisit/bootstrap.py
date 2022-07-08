@@ -22,8 +22,9 @@ class Bootstrap:
         'ipv6': 'https://data.iana.org/rdap/ipv6.json',
         'object': 'https://data.iana.org/rdap/object-tags.json',
     }
-    # We're only going to access RDAP servers over HTTPS
-    PERMITTED_RDAP_PROTOCOLS = ('https',)
+    # RDAP by default must be over HTTPS, but can be toggled to allow HTTP
+    SECURE_RDAP_PROTOCOLS = ('https',)
+    INSECURE_RDAP_PROTOCOLS = ('http', 'https')
     # Servers to fall back to in the event of failing to resolve the correct server
     DEFAULT_RDAP_FALLBACKS = (
         'https://rdap.arin.net/registry/',
@@ -73,6 +74,7 @@ class Bootstrap:
         for name, url in self.RIR_RDAP_ENDPOINTS.items():
             url_parts = urlsplit(url)
             self.rir_endpoints_by_domain[url_parts.netloc] = name
+        self._allow_insecure = False
         self._is_bootstrapped = False
         self._bootstrap_timestamp = 0
         self._expected_items = set(self.BOOTSTRAP_URLS.keys())
@@ -83,6 +85,9 @@ class Bootstrap:
 
     def is_using_overrides(self):
         return self._use_iana_overrides
+
+    def is_allowing_insecure_endpoints(self):
+        return self._allow_insecure
 
     def is_bootstrapped(self):
         return self._is_bootstrapped
@@ -96,10 +101,11 @@ class Bootstrap:
         self._use_iana_overrides = False
         log.debug('Cleared bootstrap data')
 
-    def bootstrap(self, overrides=False):
+    def bootstrap(self, overrides=False, allow_insecure=False):
         if self.is_bootstrapped():
             return True
         self._use_iana_overrides = bool(overrides)
+        self._allow_insecure = bool(allow_insecure)
         items_loaded = set()
         for name, url in self.BOOTSTRAP_URLS.items():
             response = http_request(self.session, url)
@@ -134,13 +140,14 @@ class Bootstrap:
             rtn[name] = data
         return json.dumps(rtn)
 
-    def load_bootstrap_data(self, data, overrides=False):
+    def load_bootstrap_data(self, data, overrides=False, allow_insecure=False):
         if self.is_bootstrapped():
             raise BootstrapError('Already bootstrapped, cannot load more data')
         if not isinstance(data, str):
             raise BootstrapError(f'Unable to load bootstrap data, data must be a '
                                  f'string, got: {type(data)}')
         self._use_iana_overrides = bool(overrides)
+        self._allow_insecure = bool(allow_insecure)
         try:
             data = json.loads(data)
         except Exception as e:
@@ -196,21 +203,33 @@ class Bootstrap:
         return True
 
     def validate_rdap_urls(self, urls):
+        allowed_schemes = (self.INSECURE_RDAP_PROTOCOLS if self._allow_insecure
+                           else self.SECURE_RDAP_PROTOCOLS)
+        insecure_scheme = False
         validated_urls = []
         for url in urls:
             url = str(url).strip()
             url_parts = urlsplit(url)
-            if url_parts.scheme.lower() in self.PERMITTED_RDAP_PROTOCOLS:
+            url_scheme = url_parts.scheme.lower()
+            if url_scheme in allowed_schemes:
                 validated_urls.append(url)
+                insecure_scheme = url_scheme in self.INSECURE_RDAP_PROTOCOLS
         if not validated_urls:
-            raise BootstrapError(f'No valid RDAP service URLs could be parsed '
-                                    f'from: {urls}')
+            if insecure_scheme:
+                insecure_str = (' (insecure scheme, try '
+                                'whoisit.bootstrap(allow_insecure=True))')
+            else:
+                insecure_str = ''
+            log.debug(f'No valid RDAP service URLs could be parsed '
+                      f'from: {urls}{insecure_str}')
         return validated_urls
 
     def parse_asn_data(self, services):
         parsed = {}
         for selector, urls in services:
             validated_urls = self.validate_rdap_urls(urls)
+            if not validated_urls:
+                continue
             for asnrange in selector:
                 parts = asnrange.split('-')
                 num_parts = len(parts)
@@ -230,6 +249,8 @@ class Bootstrap:
         parsed = {}
         for selector, urls in services:
             validated_urls = self.validate_rdap_urls(urls)
+            if not validated_urls:
+                continue
             for tld in selector:
                 tld = tld.strip()
                 parsed[tld] = validated_urls
@@ -239,6 +260,8 @@ class Bootstrap:
         parsed = {}
         for selector, urls in services:
             validated_urls = self.validate_rdap_urls(urls)
+            if not validated_urls:
+                continue
             for prefix in selector:
                 network = IPv4Network(prefix, strict=True)
                 parsed[network] = validated_urls
@@ -248,6 +271,8 @@ class Bootstrap:
         parsed = {}
         for selector, urls in services:
             validated_urls = self.validate_rdap_urls(urls)
+            if not validated_urls:
+                continue
             for prefix in selector:
                 network = IPv6Network(prefix, strict=True)
                 parsed[network] = validated_urls

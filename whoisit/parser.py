@@ -102,7 +102,7 @@ class Parser:
                 links = notice.get('links', [])
                 try:
                     link = links[0]
-                except IndexError:
+                except (IndexError, KeyError):
                     continue
                 self.parsed['terms_of_service_url'] = clean(
                     link.get('href', '')).strip()

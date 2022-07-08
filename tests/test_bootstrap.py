@@ -232,3 +232,22 @@ class BootstrapTestCase(unittest.TestCase):
         override_endpoints, match = whoisit._bootstrap.get_dns_endpoints('de')
         self.assertEqual(override_endpoints[0], 'https://rdap.denic.de/')
         self.assertFalse(match)
+
+    def test_insecure_scheme_endpoints(self):
+
+        # Test secure HTTPS endpoints, the default
+        whoisit.clear_bootstrapping()
+        whoisit.load_bootstrap_data(self.bootstrap_data, allow_insecure=False)
+        self.assertFalse(whoisit._bootstrap.is_allowing_insecure_endpoints())
+        with self.assertRaises(whoisit.errors.UnsupportedError):
+            # .uz only has an insecure HTTP RDAP entry in IANA data
+            whoisit._bootstrap.get_dns_endpoints('uz')
+
+        # Test bootstrapping with insecure endpoints allowed
+        whoisit.clear_bootstrapping()
+        whoisit.load_bootstrap_data(self.bootstrap_data, allow_insecure=True)
+        self.assertTrue(whoisit._bootstrap.is_allowing_insecure_endpoints())
+        # .uz should now have a valid RDAP endpoint over HTTP
+        override_endpoints, match = whoisit._bootstrap.get_dns_endpoints('uz')
+        self.assertEqual(override_endpoints[0], 'http://cctld.uz:9000/')
+        self.assertTrue(match)

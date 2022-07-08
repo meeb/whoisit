@@ -212,6 +212,46 @@ of any required terms of service or terms of use. You will have to manually veri
 returned by overridden endpoints.
 
 
+### Insecure (HTTP) RDAP endpoints
+
+Some RDAP servers are only available over HTTP and not HTTPS. This is disabled by
+default. When you bootstrap `whoisit` a `debug` notice will be emitted for any RDAP
+endpoint that is not loaded because it is insecure. For example:
+
+```python
+# Enable debug logging
+import os
+os.environ['DEBUG'] = 'true'
+ # Load and boostrap whoisit
+import whoisit
+# > [datetime] bootstrap [DEBUG] Cleared bootstrap data
+whoisit.bootstrap()
+# > ... debug logs ...
+# > [datetime] bootstrap [DEBUG] No valid RDAP service URLs could be parsed
+#              from: ['http://cctld.uz:9000/'] (insecure scheme,
+#              try whoisit.bootstrap(allow_insecure=True))
+# > ... debug logs ...
+# > [datetime] bootstrap [DEBUG] Bootstrapped
+```
+
+This line informs you that an RDAP endpoint has been skipped because it is only
+available over HTTP. You can opt-in to allow insecure endpoints by calling the
+bootstrap methods `bootstrap()` and `load_bootstrap_data()` with the optional
+`allow_insecure=True` argument. For example:
+
+```python
+# Bootstrap with allowing insecure endpoints
+whoisit.bootstrap(allow_insecure=True)
+```
+
+or
+
+```python
+# Load saved bootstrap data with allowing insecure endpoints
+whoisit.load_bootstrap_data(bootstrap_info, allow_insecure=True)
+```
+
+
 ## Response data
 
 By default `whoisit` returns parsed, summary useful information. This information is
@@ -374,7 +414,7 @@ print(response)
 
 Returns boolean True or False if your `whoisit` instance is bootstrapped or not.
 
-### `whoisit.bootstrap()` -> `bool`
+### `whoisit.bootstrap(overrides=bool, allow_insecure=bool)` -> `bool`
 
 Bootstraps your `whoisit` instance with remote IANA bootstrap information. Returns
 True or raises a `whoisit.errors.BootstrapError` exception if it fails. This method
@@ -389,7 +429,7 @@ Clears any stored bootstrap information. Always returns boolean True.
 Returns a string of JSON serialised bootstrap information if any is loaded. If no
 bootstrap information loaded a `whoisit.errors.BootstrapError` will be raised.
 
-### `whoisit.load_bootstrap_data(data=str)` -> `bool`
+### `whoisit.load_bootstrap_data(data=str, overrides=bool, allow_insecure=bool)` -> `bool`
 
 Loads a string of JSON serialised bootstrap data as returned by `save_bootstrap_data()`.
 Returns True if the data is loaded or raises a `whoisit.errors.BootstrapError` if
@@ -507,10 +547,10 @@ $ make test
 
 `whoisit` will check for a `DEBUG` environment variable and if set, will output debug
 logs that detail the internals for the bootstrapping, requests and parsing operations.
-If you want to enable debug logging, set `DEBUG=1`. For example:
+If you want to enable debug logging, set `DEBUG=true` (or `1` or `y` etc.). For example:
 
 ```bash
-$ export DEBUG=1
+$ export DEBUG=true
 $ python3 some-script-that-uses-whoisit.py
 ```
 

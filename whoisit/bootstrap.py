@@ -317,7 +317,8 @@ class Bootstrap:
             return endpoints, True
         # Domains have no fallback endpoints
         raise UnsupportedError(f'TLD "{tld}" has no known RDAP endpoint '
-                               f'and is unsupported')
+                               f'and is unsupported. It may be supported by '
+                               f'overrides, try using whoisit.bootstrap(overrides=True)')
 
     def get_ipv4_endpoints(self, ipv4):
         if not self.is_bootstrapped():

@@ -14,6 +14,9 @@ iana_overrides = {
         # 2022-01-15 - .ch has an RDAP endpoint it's just not listed
         'ch': ['https://rdap.nic.ch/'],
 
+        # 2022-07-11 - .uk has an RDAP endpoint it's just not listed
+        'uk': ['https://rdap.nominet.uk/uk/']
+
     }
 
 }

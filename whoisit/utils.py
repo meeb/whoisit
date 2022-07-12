@@ -30,11 +30,13 @@ def create_session():
 
 
 def http_request(session, url, method='GET', allow_insecure_ssl=False,
-                 headers={}, data={}, *args, **kwargs):
+                 headers=None, data=None, *args, **kwargs):
     """
         Simple wrapper over requests. Allows for optionally downgrading SSL
         ciphers if required.
     """
+    headers = headers or {}
+    data = data or {}
     methods = ('GET',)
     if method not in methods:
         raise UnsupportedError(f'HTTP methods supported are: {methods}, got: {method}')

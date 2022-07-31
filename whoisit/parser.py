@@ -27,7 +27,7 @@ class Parser:
     def __init__(self, bootstrap, raw_data, query, using_overrides=False):
         self.bootstrap = bootstrap
         self.raw_data = raw_data
-        self.query = query
+        self.query = str(query)
         self.parsed = {}
         self.using_overrides = bool(using_overrides)
         self.extract_handle()

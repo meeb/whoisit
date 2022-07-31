@@ -37,7 +37,7 @@ setup(
         'Programming Language :: Python :: 3',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
-    keywords = ('whoisit', 'whois', 'rdap', 'ip', 'network', 'cidr', 'prefix', 'domain',
+    keywords = ['whoisit', 'whois', 'rdap', 'ip', 'network', 'cidr', 'prefix', 'domain',
                 'asn', 'autnum', 'tld', 'entity', 'handle', 'arin', 'afrinic', 'apnic',
-                'ripe', 'lacnic')
+                'ripe', 'lacnic']
 )

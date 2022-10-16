@@ -5,7 +5,7 @@ from ipaddress import (ip_address, ip_network, IPv4Address, IPv4Network, IPv6Add
                        IPv6Network)
 from .utils import http_request, contains_only_chars
 from .logger import get_logger
-from .errors import QueryError, ResourceDoesNotExist
+from .errors import QueryError, ResourceDoesNotExist, UnsupportedError
 
 
 log = get_logger('query')
@@ -91,8 +91,14 @@ class QueryBuilder:
         if len(parts) < 2:
             raise QueryError(f'Failed to extract TLD from domain "{value}"')
         domain = '.'.join(parts[:-1])
-        tld = parts[-1]
-        endpoints, exact_match = self.bootstrap.get_dns_endpoints(tld)
+        try:
+            # First check for SLDs
+            tld = '.'.join(parts[-2:])
+            endpoints, exact_match = self.bootstrap.get_dns_endpoints(tld)
+        except UnsupportedError:
+            # If no SLD match, try the TLD
+            tld = parts[-1]
+            endpoints, exact_match = self.bootstrap.get_dns_endpoints(tld)
         endpoint = random.choice(endpoints)
         if not exact_match:
             log.debug(f'Failed to match domain: {value} to an RDAP service, '

@@ -14,6 +14,11 @@ iana_overrides = {
         # 2022-01-15 - .ch has an RDAP endpoint it's just not listed
         'ch': ['https://rdap.nic.ch/'],
 
+        # 2022-10-17 - .gl and .gl SLDs have RDAP endpoints they're just not listed
+        'gl': ['https://rdap.centralnic.com/gl/'],
+        'co.gl': ['https://rdap.centralnic.com/co.gl/'],
+        'net.gl': ['https://rdap.centralnic.com/net.gl/']
+
     }
 
 }

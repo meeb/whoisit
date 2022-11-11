@@ -191,6 +191,10 @@ class Query:
             raise ResourceDoesNotExist(f'RDAP {self.method} request to {self.url} '
                                        f'returned a 404 error, the resource does '
                                        f'not exist')
+        elif response.status_code == 429:
+            raise RateLimitedError(f'RDAP {self.method} request to {self.url} '
+                                   f'returned a 429 error, the resource has been '
+                                   f'rate limited')
         elif response.status_code != 200:
             raise QueryError(f'RDAP {self.method} request to {self.url} returned a '
                              f'non-200 status code of {response.status_code}')

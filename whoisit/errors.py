@@ -32,3 +32,9 @@ class ResourceDoesNotExist(WhoisItError):
     """
         Raised when querying a resource which doesn't exist.
     """
+
+
+class RateLimitedError(WhoisItError):
+    """
+        Raised when querying a resource and getting a rate limited response.
+    """

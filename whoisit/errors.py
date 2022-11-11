@@ -38,3 +38,9 @@ class RateLimitedError(WhoisItError):
     """
         Raised when querying a resource and getting a rate limited response.
     """
+
+
+class RemoteServerError(WhoisItError):
+    """
+        Raised when querying a resource and getting a remote server error response.
+    """

@@ -5,7 +5,8 @@ from ipaddress import (ip_address, ip_network, IPv4Address, IPv4Network, IPv6Add
                        IPv6Network)
 from .utils import http_request, contains_only_chars
 from .logger import get_logger
-from .errors import QueryError, ResourceDoesNotExist, UnsupportedError
+from .errors import (QueryError, ResourceDoesNotExist, UnsupportedError,
+                     RateLimitedError, RemoteServerError)
 
 
 log = get_logger('query')
@@ -195,6 +196,10 @@ class Query:
             raise RateLimitedError(f'RDAP {self.method} request to {self.url} '
                                    f'returned a 429 error, the resource has been '
                                    f'rate limited')
+        elif response.status_code == 500:
+            raise RemoteServerError(f'RDAP {self.method} request to {self.url} '
+                                   f'returned a 500 error, the resource returned '
+                                   f'a remote server error')
         elif response.status_code != 200:
             raise QueryError(f'RDAP {self.method} request to {self.url} returned a '
                              f'non-200 status code of {response.status_code}')

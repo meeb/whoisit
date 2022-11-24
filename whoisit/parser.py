@@ -5,7 +5,8 @@ from ipaddress import (
     IPv4Network,
     IPv6Network
 )
-from typing import Optional, TypedDict
+from typing import Optional
+from typing_extensions import TypedDict
 from dateutil.parser import parse as dateutil_parse
 from .errors import BootstrapError, ParseError
 from .logger import get_logger

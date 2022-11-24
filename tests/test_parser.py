@@ -69,6 +69,7 @@ class ParserTestCase(unittest.TestCase):
                     'whois_server': 'whois.arin.net',
                     'name': 'Abuse',
                     'email': 'abuse@cloudflare.com',
+                    'tel': '+1-650-319-8930',
                     'rir': 'arin'
                 }
             ]
@@ -82,6 +83,7 @@ class ParserTestCase(unittest.TestCase):
                     'whois_server': 'whois.arin.net',
                     'name': 'NOC',
                     'email': 'noc@cloudflare.com',
+                    'tel': '+1-650-319-8930',
                     'rir': 'arin'
                 }
             ]
@@ -95,6 +97,7 @@ class ParserTestCase(unittest.TestCase):
                     'whois_server': 'whois.arin.net',
                     'name': 'Admin',
                     'email': 'rir@cloudflare.com',
+                    'tel': '+1-650-319-8930',
                     'rir': 'arin'
                 }
             ]
@@ -213,6 +216,7 @@ class ParserTestCase(unittest.TestCase):
             [
                 {
                     'type': 'entity',
+                    'name': '',
                     'email': 'abuse@registrar.eu'
                 }
             ]
@@ -248,6 +252,7 @@ class ParserTestCase(unittest.TestCase):
                     'type': 'entity',
                     'name': 'APNIC RESEARCH',
                     'email': 'research@apnic.net',
+                    'tel': '+61-7-3858-3199',
                     'rir': 'apnic'
                 }
             ]
@@ -307,6 +312,7 @@ class ParserTestCase(unittest.TestCase):
                     'type': 'entity',
                     'name': 'APNIC RESEARCH',
                     'email': 'research@apnic.net',
+                    'tel': '+61-7-3858-3199',
                     'rir': 'apnic'
                 }
             ]
@@ -353,6 +359,7 @@ class ParserTestCase(unittest.TestCase):
                     'rir': 'arin',
                     'type': 'entity',
                     'url': 'https://rdap.arin.net/registry/entity/ZG39-ARIN',
+                    'tel': '+1-650-253-0000',
                     'whois_server': 'whois.arin.net'
                 }
             ]
@@ -366,6 +373,7 @@ class ParserTestCase(unittest.TestCase):
                     'rir': 'arin',
                     'type': 'entity',
                     'url': 'https://rdap.arin.net/registry/entity/ZG39-ARIN',
+                    'tel': '+1-650-253-0000',
                     'whois_server': 'whois.arin.net'
                 }
             ]
@@ -379,6 +387,7 @@ class ParserTestCase(unittest.TestCase):
                     'whois_server': 'whois.arin.net',
                     'name': 'Abuse',
                     'email': 'network-abuse@google.com',
+                    'tel': '+1-650-253-0000',
                     'rir': 'arin'
                 },
                 {
@@ -388,6 +397,7 @@ class ParserTestCase(unittest.TestCase):
                     'whois_server': 'whois.arin.net',
                     'name': 'Google LLC',
                     'email': 'arin-contact@google.com',
+                    'tel': '+1-650-253-0000',
                     'rir': 'arin'
                 }
             ]
@@ -431,7 +441,6 @@ class ParserTestCase(unittest.TestCase):
         parsed = whoisit.parser.parse(whoisit._bootstrap, 'ip', 'GOVI', test_data)
         self.assertEqual(parsed['type'], 'entity')
         self.assertEqual(parsed['name'], 'Govital Internet Inc.')
-        self.assertEqual(parsed['email'], '')
         self.assertEqual(parsed['handle'], 'GOVI')
         self.assertEqual(parsed['parent_handle'], '')
         self.assertEqual(parsed['rir'], 'arin')
@@ -452,6 +461,7 @@ class ParserTestCase(unittest.TestCase):
                     'rir': 'arin',
                     'type': 'entity',
                     'url': 'https://rdap.arin.net/registry/entity/GTS7-ARIN',
+                    'tel': '+1-519-254-5115',
                     'whois_server': 'whois.arin.net'
                 }
             ]

@@ -1,9 +1,15 @@
 from sys import getsizeof
-from ipaddress import ip_address, summarize_address_range, IPv4Network, IPv6Network
+from ipaddress import (
+    ip_address,
+    summarize_address_range,
+    IPv4Network,
+    IPv6Network
+)
+from typing import Optional
+from typing_extensions import TypedDict
 from dateutil.parser import parse as dateutil_parse
 from .errors import BootstrapError, ParseError
 from .logger import get_logger
-
 
 log = get_logger('parser')
 
@@ -14,6 +20,12 @@ def clean(s):
     if not isinstance(s, str):
         s = str(s)
     return s.strip()
+
+
+class VCardArrayDataDict(TypedDict, total=False):
+    name: str
+    email: str
+    tel: str
 
 
 class Parser:
@@ -35,8 +47,10 @@ class Parser:
         if not self.parsed['handle']:
             # Permit overridden endpoints to not return a handle
             if not self.using_overrides:
-                raise ParseError(f'Failed to parse any meaningful data to find a '
-                                 f'handle in raw data: {self.raw_data}')
+                raise ParseError(
+                    f'Failed to parse any meaningful data to find a '
+                    f'handle in raw data: {self.raw_data}'
+                )
         self.extract_parent_handle()
         self.extract_name()
         self.extract_whois_server()
@@ -48,34 +62,38 @@ class Parser:
         self.extract_entities()
 
     def parse(self):
-        raise NotImplemented('parse must be implemented')
+        raise NotImplementedError('parse must be implemented')
 
-    def parse_vcard_array(self, vcard):
+    def parse_vcard_array(self, vcard) -> Optional[VCardArrayDataDict]:
         '''
-            Extract useful summary information from a vcard array. This only extracts
-            the email address and name.
+            Extract useful summary information from a VCard array.
         '''
         if not isinstance(vcard, list):
-            return False
+            return None
         if len(vcard) != 2:
-            return False
+            return None
         card_field, card_data = vcard
         if card_field != 'vcard':
-            return False
-        name, email = '', ''
+            return None
+        v_card_array_data_dict = VCardArrayDataDict()
+
         for field in card_data:
             if len(field) != 4:
                 continue
             entry_field, entry_data, entry_type, entry_label = field
+
             if entry_type != 'text':
                 continue
             elif entry_field == 'fn':
-                name = clean(entry_label)
+                v_card_array_data_dict["name"] = clean(entry_label)
             elif entry_field == 'org':
-                name = clean(entry_label)
+                v_card_array_data_dict["name"] = clean(entry_label)
             elif entry_field == 'email':
-                email = clean(entry_label)
-        return (name, email) if name or email else False
+                v_card_array_data_dict["email"] = clean(entry_label)
+            elif entry_field == 'tel':
+                v_card_array_data_dict["tel"] = clean(entry_label)
+
+        return v_card_array_data_dict or None
 
     def extract_handle(self):
         self.parsed['handle'] = clean(self.raw_data.get('handle', '')).upper()
@@ -98,7 +116,9 @@ class Parser:
         self.parsed['copyright_notice'] = ''
         for notice in self.raw_data.get('notices', []):
             title = clean(notice.get('title', '')).lower()
-            if title in ('terms of service', 'terms of use', 'terms and conditions'):
+            if title in (
+                    'terms of service', 'terms of use', 'terms and conditions'
+            ):
                 links = notice.get('links', [])
                 try:
                     link = links[0]
@@ -128,7 +148,6 @@ class Parser:
             elif title == 'description':
                 # Multiple remarks, add only the description
                 self.parsed['description'] = description
-
 
     def extract_dates(self):
         self.parsed['last_changed_date'] = None
@@ -186,10 +205,7 @@ class Parser:
             entity_type = clean(entity.get('objectClassName', ''))
             whois_server = clean(entity.get('port43', ''))
             # Most common use cases care about the name and email address
-            name, email = '', ''
             vcard = self.parse_vcard_array(entity.get('vcardArray', []))
-            if vcard:
-                name, email = vcard
             for role in entity.get('roles', []):
                 parsed_entity = {}
                 if handle:
@@ -200,12 +216,10 @@ class Parser:
                     parsed_entity['type'] = entity_type
                 if whois_server:
                     parsed_entity['whois_server'] = whois_server
-                if name:
-                    parsed_entity['name'] = name
-                if email:
-                    parsed_entity['email'] = email
                 if rir:
                     parsed_entity['rir'] = rir
+                if vcard:
+                    parsed_entity.update(vcard)
                 if parsed_entity:
                     self.parsed['entities'].setdefault(role, [])
                     # ignore duplicate entity per role
@@ -370,17 +384,11 @@ class ParseEntity(Parser):
         return self.parsed
 
     def extract_root_vcard(self):
-        self.parsed['name'] = ''
-        self.parsed['email'] = ''
         root_vcard = self.raw_data.get('vcardArray', [])
         if root_vcard:
             parsed = self.parse_vcard_array(root_vcard)
             if parsed:
-                name, email = parsed
-                if name:
-                    self.parsed['name'] = name
-                if email:
-                    self.parsed['email'] = email
+                self.parsed.update(parsed)
 
 
 # These map the objectClassName values returned in RDAP responses

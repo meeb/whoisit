@@ -4,7 +4,7 @@ from time import time
 from urllib.parse import urlsplit
 from ipaddress import IPv4Network, IPv4Address, IPv6Network, IPv6Address
 from .logger import get_logger
-from .utils import http_request, is_subnet_of, create_session
+from .utils import http_request, is_subnet_of, create_session, get_session
 from .overrides import iana_overrides
 from .errors import BootstrapError, UnsupportedError
 
@@ -58,11 +58,8 @@ class Bootstrap:
         'TW': 'twnic',
     }
 
-    def __init__(self, session=None):
-        if not session:
-            self.session = create_session()
-        else:
-            self.session = session
+    def __init__(self, session=None, allow_insecure_ssl=False):
+        self.session = get_session(session, allow_insecure_ssl=allow_insecure_ssl)
         self.bootstrap_parsers = {
             'asn': self.parse_asn_data,
             'dns': self.parse_dns_data,

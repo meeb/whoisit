@@ -3,15 +3,14 @@ from .bootstrap import Bootstrap
 from .query import QueryBuilder, Query
 from .parser import parse
 from .logger import get_logger
-from .utils import create_session
+from .utils import create_session, get_session
 from .version import version
 
 
 # Private methods
 
 
-_default_session = create_session()
-_bootstrap = Bootstrap(_default_session)
+_bootstrap = Bootstrap()
 _query_builder = QueryBuilder(_bootstrap)
 
 
@@ -31,40 +30,36 @@ build_query = _query_builder.build
 
 
 def asn(as_number, rir=None, raw=False, allow_insecure_ssl=False, session=None):
-    if not session:
-        session = _default_session
+    session = get_session(session, allow_insecure_ssl=allow_insecure_ssl)
     method, url, exact_match = build_query(
         query_type='asn', query_value=as_number, rir=rir)
-    q = Query(session, method, url, allow_insecure_ssl)
+    q = Query(session, method, url)
     response = q.request()
     return response if raw else parse(_bootstrap, 'autnum', as_number, response)
 
 
 def domain(domain_name, raw=False, allow_insecure_ssl=False, session=None):
-    if not session:
-        session = _default_session
+    session = get_session(session, allow_insecure_ssl=allow_insecure_ssl)
     method, url, exact_match = build_query(
         query_type='domain', query_value=domain_name)
-    q = Query(session, method, url, allow_insecure_ssl)
+    q = Query(session, method, url)
     response = q.request()
     return response if raw else parse(_bootstrap, 'domain', domain_name, response)
 
 
 def ip(ip_address_or_network, rir=None, raw=False, allow_insecure_ssl=False, session=None):
-    if not session:
-        session = _default_session
+    session = get_session(session, allow_insecure_ssl=allow_insecure_ssl)
     method, url, exact_match = build_query(
         query_type='ip', query_value=ip_address_or_network, rir=rir)
-    q = Query(session, method, url, allow_insecure_ssl)
+    q = Query(session, method, url)
     response = q.request()
     return response if raw else parse(_bootstrap, 'ip', ip_address_or_network, response)
 
 
 def entity(entity_handle, rir=None, raw=False, allow_insecure_ssl=False, session=None):
-    if not session:
-        session = _default_session
+    session = get_session(session, allow_insecure_ssl=allow_insecure_ssl)
     method, url, exact_match = build_query(
         query_type='entity', query_value=entity_handle, rir=rir)
-    q = Query(session, method, url, allow_insecure_ssl)
+    q = Query(session, method, url)
     response = q.request()
     return response if raw else parse(_bootstrap, 'entity', entity_handle, response)

@@ -1,5 +1,9 @@
 import os
-from urllib3.util import retry, create_urllib3_context
+from urllib3.util import retry
+try:
+    from urllib3.util import create_urllib3_context
+except ImportError:
+    from urllib3.util.ssl_ import create_urllib3_context
 from urllib3.poolmanager import PoolManager
 import requests
 from .errors import QueryError, UnsupportedError

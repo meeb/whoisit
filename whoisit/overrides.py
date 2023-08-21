@@ -21,7 +21,10 @@ iana_overrides = {
         'edu.gl': ['https://rdap.centralnic.com/edu.gl/'],
         'gov.gl': ['https://rdap.centralnic.com/gov.gl/'],
         'net.gl': ['https://rdap.centralnic.com/net.gl/'],
-        'org.gl': ['https://rdap.centralnic.com/org.gl/']
+        'org.gl': ['https://rdap.centralnic.com/org.gl/'],
+
+        # 2023-08-21 - .li has an RDAP endpoint it's just not listed
+        'li': ['https://rdap.nic.li/'],
 
     }
 

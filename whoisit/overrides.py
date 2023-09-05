@@ -26,6 +26,8 @@ iana_overrides = {
         'net.gl': ['https://rdap.centralnic.com/net.gl/'],
         'org.gl': ['https://rdap.centralnic.com/org.gl/'],
 
+        # 2023-09-05 - .nl has an RDAP endpoint it's just not listed
+        'nl': ['https://rdap.sidn.nl/'],
     }
 
 }

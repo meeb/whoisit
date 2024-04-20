@@ -246,6 +246,14 @@ class ParseAutnum(Parser):
         self.parsed['asn_range'] = None
         start_asn_range = self.raw_data.get('startAutnum', 0)
         end_asn_range = self.raw_data.get('endAutnum', 0)
+        try:
+            start_asn_range = int(start_asn_range)
+        except (ValueError, TypeError):
+            start_asn_range = 0
+        try:
+            end_asn_range = int(end_asn_range)
+        except (ValueError, TypeError):
+            end_asn_range = 0
         if start_asn_range > 0 and end_asn_range > 0:
             self.parsed['asn_range'] = [start_asn_range, end_asn_range]
 

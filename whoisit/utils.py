@@ -105,3 +105,11 @@ def contains_only_chars(s, chars=default_chars):
         if c not in chars:
             return False
     return True
+
+
+def recursive_merge(d1, d2):
+    for k, v in d2.items():
+        if k in d1 and isinstance(d1[k], dict) and isinstance(v, dict):
+            recursive_merge(d1[k], v)
+        elif v:
+            d1[k] = v

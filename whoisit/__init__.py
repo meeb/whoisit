@@ -3,7 +3,7 @@ from .bootstrap import Bootstrap
 from .query import QueryBuilder, Query
 from .parser import parse
 from .logger import get_logger
-from .utils import create_session, get_session
+from .utils import create_session, get_session, recursive_merge
 from .version import version
 
 
@@ -58,9 +58,10 @@ def domain(domain_name, raw=False, allow_insecure_ssl=False, session=None):
                 relresponse = relq.request()
                 break
     if relresponse:
-        return parse(_bootstrap, 'domain', domain_name, relresponse)
-    else:
-        return parse(_bootstrap, 'domain', domain_name, response)
+        # Overlay the related response over the original response
+        recursive_merge(response, relresponse)
+    return parse(_bootstrap, 'domain', domain_name, response)
+
 
 def ip(ip_address_or_network, rir=None, raw=False, allow_insecure_ssl=False, session=None):
     session = get_session(session, allow_insecure_ssl=allow_insecure_ssl)

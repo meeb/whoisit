@@ -158,15 +158,15 @@ class Parser:
             if action == 'last changed':
                 last_changed_date = event.get('eventDate', '')
                 if last_changed_date:
-                    self.parsed['last_changed_date'] = dateutil_parse(last_changed_date)
+                    self.parsed['last_changed_date'] = dateutil_parse(last_changed_date, fuzzy=True)
             elif action == 'registration':
                 registration_date = event.get('eventDate', '')
                 if registration_date:
-                    self.parsed['registration_date'] = dateutil_parse(registration_date)
+                    self.parsed['registration_date'] = dateutil_parse(registration_date, fuzzy=True)
             elif action == 'expiration':
                 expiration_date = event.get('eventDate', '')
                 if expiration_date:
-                    self.parsed['expiration_date'] = dateutil_parse(expiration_date)
+                    self.parsed['expiration_date'] = dateutil_parse(expiration_date, fuzzy=True)
 
     def extract_self_link(self):
         self.parsed['url'] = ''

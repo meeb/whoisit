@@ -29,7 +29,7 @@ iana_overrides = {
         # 2023-09-05 - .nl has an RDAP endpoint it's just not listed
         'nl': ['https://rdap.sidn.nl/'],
 
-        # 2023-12-13 - the Identity Digital RDAP server appears to support these ccTLDs
+        # 2024-04-30 - the Identity Digital RDAP server appears to support these ccTLDs
         'ac': ['https://rdap.identitydigital.services/rdap/'],
         'ag': ['https://rdap.identitydigital.services/rdap/'],
         'bz': ['https://rdap.identitydigital.services/rdap/'],

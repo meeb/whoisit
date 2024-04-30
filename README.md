@@ -73,7 +73,7 @@ unparsed and large RDAP JSON data by adding the `raw=True` argument to the reque
 example:
 
 ```python
-results = whoisit.domain('example.com', raw=True)
+results = whoisit.domain('example.com', raw=True, follow_related=True)
 # 'results' is now the full, raw response from the RDAP service
 ```
 
@@ -104,6 +104,11 @@ results = whoisit.entity('AS5089-MNT')
 # This will work OK because the entity is registered at RIPE
 results = whoisit.entity('AS5089-MNT', rir='ripe')
 ```
+
+By default for domain lookups `whoisit` will attempt to make sub-requests to any listed
+related or registered child RDAP endpoints. You can disable this by setting
+`follow_related=False`.
+
 
 ### Weaken SSL ciphers
 

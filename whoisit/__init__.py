@@ -38,7 +38,7 @@ def asn(as_number, rir=None, raw=False, allow_insecure_ssl=False, session=None):
     return response if raw else parse(_bootstrap, 'autnum', as_number, response)
 
 
-def domain(domain_name, raw=False, allow_insecure_ssl=False, session=None):
+def domain(domain_name, raw=False, allow_insecure_ssl=False, session=None, follow_related=True):
     session = get_session(session, allow_insecure_ssl=allow_insecure_ssl)
     method, url, exact_match = build_query(
         query_type='domain', query_value=domain_name)
@@ -46,20 +46,21 @@ def domain(domain_name, raw=False, allow_insecure_ssl=False, session=None):
     response = q.request()
     if raw:
         return response
-    # Attempt to follow the 'related' or 'registration' links if the TLD has
-    # an upstream RDAP endpoint that may have more information
-    relresponse = None
-    for link in response.get('links', []):
-        rel = link.get('rel', '')
-        if rel in ('related', 'registration'):
-            relhref = link.get('href', '')
-            if relhref:
-                relq = Query(session, method, relhref)
-                relresponse = relq.request()
-                break
-    if relresponse:
-        # Overlay the related response over the original response
-        recursive_merge(response, relresponse)
+    if follow_related:
+        # Attempt to follow the 'related' or 'registration' links if the TLD has
+        # an upstream RDAP endpoint that may have more information
+        relresponse = None
+        for link in response.get('links', []):
+            rel = link.get('rel', '')
+            if rel in ('related', 'registration'):
+                relhref = link.get('href', '')
+                if relhref:
+                    relq = Query(session, method, relhref)
+                    relresponse = relq.request()
+                    break
+        if relresponse:
+            # Overlay the related response over the original response
+            recursive_merge(response, relresponse)
     return parse(_bootstrap, 'domain', domain_name, response)
 
 

@@ -30,17 +30,17 @@ iana_overrides = {
         'nl': ['https://rdap.sidn.nl/'],
 
         # 2023-12-13 - the Identity Digital RDAP server appears to support these ccTLDs
-        'ac': ['https://rdap.identitydigital.services/'],
-        'ag': ['https://rdap.identitydigital.services/'],
-        'bz': ['https://rdap.identitydigital.services/'],
-        'io': ['https://rdap.identitydigital.services/'],
-        'lc': ['https://rdap.identitydigital.services/'],
-        'me': ['https://rdap.identitydigital.services/'],
-        'mn': ['https://rdap.identitydigital.services/'],
-        'pr': ['https://rdap.identitydigital.services/'],
-        'sc': ['https://rdap.identitydigital.services/'],
-        'sh': ['https://rdap.identitydigital.services/'],
-        'vc': ['https://rdap.identitydigital.services/'],
+        'ac': ['https://rdap.identitydigital.services/rdap/'],
+        'ag': ['https://rdap.identitydigital.services/rdap/'],
+        'bz': ['https://rdap.identitydigital.services/rdap/'],
+        'io': ['https://rdap.identitydigital.services/rdap/'],
+        'lc': ['https://rdap.identitydigital.services/rdap/'],
+        'me': ['https://rdap.identitydigital.services/rdap/'],
+        'mn': ['https://rdap.identitydigital.services/rdap/'],
+        'pr': ['https://rdap.identitydigital.services/rdap/'],
+        'sc': ['https://rdap.identitydigital.services/rdap/'],
+        'sh': ['https://rdap.identitydigital.services/rdap/'],
+        'vc': ['https://rdap.identitydigital.services/rdap/'],
     }
 
 }

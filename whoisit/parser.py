@@ -189,6 +189,8 @@ class Parser:
             entities = self.raw_data.get('entities', [])
 
         for entity in entities:
+            if not isinstance(entity, dict):
+                continue
             handle = clean(entity.get('handle', '')).upper()
             url = ''
             for link in entity.get('links', []):

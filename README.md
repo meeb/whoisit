@@ -317,6 +317,7 @@ response = {
 ```python
 # Domain response data includes all shared general response fields above and also:
 response = {
+    'unicode_name': str,     # Domain name in unicode if available
     'nameservers': list,     # List of name servers for the domain as strings
     'status': list,          # List of the domain states as strings
 }

@@ -276,6 +276,7 @@ class ParseDomain(Parser):
 
     def extract_domain_name(self):
         self.parsed['name'] = clean(self.raw_data.get('ldhName', ''))
+        self.parsed['unicode_name'] = clean(self.raw_data.get('unicodeName', ''))
 
     def extract_domain_nameservers(self):
         self.parsed['nameservers'] = []

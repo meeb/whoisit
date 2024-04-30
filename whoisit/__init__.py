@@ -54,7 +54,6 @@ def domain(domain_name, raw=False, allow_insecure_ssl=False, session=None):
         if rel in ('related', 'registration'):
             relhref = link.get('href', '')
             if relhref:
-                print(f'MAKING SUBREQUEST TO {relhref}')
                 relq = Query(session, method, relhref)
                 relresponse = relq.request()
                 break

@@ -73,7 +73,7 @@ unparsed and large RDAP JSON data by adding the `raw=True` argument to the reque
 example:
 
 ```python
-results = whoisit.domain('example.com', raw=True, follow_related=True)
+results = whoisit.domain('example.com', raw=True)
 # 'results' is now the full, raw response from the RDAP service
 ```
 
@@ -105,10 +105,6 @@ results = whoisit.entity('AS5089-MNT')
 results = whoisit.entity('AS5089-MNT', rir='ripe')
 ```
 
-By default for domain lookups `whoisit` will attempt to make sub-requests to any listed
-related or registered child RDAP endpoints. You can disable this by setting
-`follow_related=False`.
-
 
 ### Weaken SSL ciphers
 
@@ -133,6 +129,38 @@ Note that with `allow_insecure_ssl=True` the upstream RDAP server certificate is
 still validated, it just permits weaker SSL ciphers during the handshake. You should
 only use `allow_insecure_ssl=True` if your request fails with an SSL cipher or
 handshake error first.
+
+
+### Domain lookup subrequests
+
+Many RDAP endpoints for domains supply a related RDAP server run by a registry which
+may contain more information about the domain. `whoisit` by default will attempt to
+make a subrequest to the related RDAP endpoint if available to obtain more detailed
+results. Occasionally, the related RDAP endpoints may fail or return data in an
+invalid format. You can disable related RDAP endpoint subrequests by passing the
+`follow_related=False` argument to `whoisit.domain(...)`. For example (as of 2024-04-30):
+
+```python
+results = whoisit.domain('example.com', follow_related=False)
+```
+
+If you encounter a parsing error when using related RDAP endpoint data you can also
+skip the parsing by using `raw=True` but continue to use related RDAP data. `whoisit`
+will attempt to handle the RDAP data returned but there will be occasions when RDAP
+results change beyond what `whoisit` can parse. When using raw data you will need to
+parse the data yourself.
+
+You can also write a fallback:
+
+```python
+try:
+    results = whoisit.domain('example.com')
+    # Assume an error parsing the related RDAP data occurs here
+except Exception as e:
+    print(f'Failed to look up domain, trying fallback: {e}')
+    results = whoisit.domain('example.com', follow_related=False)
+    # Likely to succeed if the related RDAP data was the issue
+```
 
 
 ## Bootstrapping

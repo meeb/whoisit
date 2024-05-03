@@ -41,6 +41,9 @@ iana_overrides = {
         'sc': ['https://rdap.identitydigital.services/rdap/'],
         'sh': ['https://rdap.identitydigital.services/rdap/'],
         'vc': ['https://rdap.identitydigital.services/rdap/'],
+
+        # 2024-05-03 - .co has an RDAP endpoint it's just not listed
+        'co': ['https://rdap.nic.co/'],
     }
 
 }

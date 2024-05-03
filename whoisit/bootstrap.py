@@ -33,6 +33,7 @@ class Bootstrap:
     )
     # Map of RIR RDAP endpoints
     RIR_RDAP_ENDPOINTS = {
+        'afnic': 'https://rdap.nic.fr/',
         'afrinic': 'https://rdap.afrinic.net/rdap/',
         'arin': 'https://rdap.arin.net/registry/',
         'apnic': 'https://rdap.apnic.net/',

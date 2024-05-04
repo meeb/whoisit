@@ -47,6 +47,7 @@ class Bootstrap:
     }
     # Map of entity prefix and postfixes to RIRs, used to guess entity RIR
     RIR_ENTITY_PREFIXES = {
+        'AFNIC': 'afnic',
         'AFRINIC': 'afrinic',
         'ARIN': 'arin',
         'AP': 'apnic',

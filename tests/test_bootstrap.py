@@ -16,7 +16,7 @@ class BootstrapTestCase(unittest.TestCase):
         whoisit.clear_bootstrapping()
         with open(BASE_DIR / 'data_bootstrap.json', 'rt') as f:
             self.bootstrap_data = f.read()
-    
+
     def tearDown(self):
         whoisit.clear_bootstrapping()
 
@@ -203,7 +203,7 @@ class BootstrapTestCase(unittest.TestCase):
             self.assertEqual(whoisit._bootstrap.get_rir_endpoint(name), endpoint)
 
         # Check the RIR names are valid
-        expected = ('afrinic', 'arin', 'apnic', 'jpnic', 'idnic', 'krnic',
+        expected = ('afnic', 'afrinic', 'arin', 'apnic', 'jpnic', 'idnic', 'krnic',
                     'lacnic', 'registro.br', 'ripe', 'twnic')
         self.assertEqual(whoisit._bootstrap.get_rir_endpoint_names(), expected)
 

@@ -1,49 +1,67 @@
-import os
 from urllib3.util import retry
+
 try:
     from urllib3.util import create_urllib3_context
 except ImportError:
     from urllib3.util.ssl_ import create_urllib3_context
-from urllib3.poolmanager import PoolManager
+
+import httpx
 import requests
+from urllib3.poolmanager import PoolManager
+
 from .errors import QueryError, UnsupportedError
 from .logger import get_logger
 from .version import version
 
-
 log = get_logger('utils')
 user_agent = 'whoisit/{version}'
 insecure_ssl_ciphers = 'ALL:@SECLEVEL=1'
-http_timeout = 10               # Maximum time in seconds to allow for an HTTP request
-http_retry_statuses = [429]     # HTTP status codes to trigger a retry wih backoff
-http_max_retries = 3            # Maximum number of HTTP requests to retry before failing
-http_pool_connections = 10      # Maximum number of HTTP pooled connections
-http_pool_maxsize = 10          # Maximum HTTP pool connection size
+http_timeout = 10                    # Maximum time in seconds to allow for an HTTP request
+http_retry_statuses = [429]          # HTTP status codes to trigger a retry wih backoff
+http_max_retries = 3                 # Maximum number of HTTP requests to retry before failing
+http_pool_connections = 10           # Maximum number of HTTP pooled connections
+http_pool_maxsize = 10               # Maximum HTTP pool connection size
+async_http_max_connections = 100     # Maximum number of HTTP connections allowed for async client
+async_max_keepalive_connections = 20 # Allow the connection pool to maintain keep-alive connections below this point
 _default_session = {'secure': None, 'insecure': False}
 
 
-def get_session(session=None, allow_insecure_ssl=False):
+def get_session_or_async_client(session_or_async_client=None, allow_insecure_ssl=False, is_async=False):
     """
         Creates and caches the default sessions, one for secure (default) SSL
         and one for SSL with an insecure cipher suite.
     """
     global _default_session
-    if session:
+    if session_or_async_client:
         if allow_insecure_ssl:
             if not _default_session['insecure']:
-                _default_session['insecure'] = session
+                _default_session['insecure'] = session_or_async_client
             return _default_session['insecure']
         else:
             if not _default_session['secure']:
-                _default_session['secure'] = session
+                _default_session['secure'] = session_or_async_client
             return _default_session['secure']
     else:
         if allow_insecure_ssl:
-            _default_session['insecure'] = create_session(allow_insecure_ssl=allow_insecure_ssl)
+            if is_async:
+                _default_session['insecure'] = create_async_client(allow_insecure_ssl=allow_insecure_ssl)
+            else:
+                _default_session['insecure'] = create_session(allow_insecure_ssl=allow_insecure_ssl)
             return _default_session['insecure']
         else:
-            _default_session['secure'] = create_session()
+            if is_async:
+                _default_session['secure'] = create_async_client(allow_insecure_ssl=allow_insecure_ssl)
+            else:
+                _default_session['secure'] = create_session(allow_insecure_ssl=allow_insecure_ssl)
             return _default_session['secure']
+
+
+def get_session(session=None, allow_insecure_ssl=False) -> requests.Session:
+    return get_session_or_async_client(session, allow_insecure_ssl, is_async=False)
+
+
+def get_async_client(client=None, allow_insecure_ssl=False) -> httpx.AsyncClient:
+    return get_session_or_async_client(client, allow_insecure_ssl, is_async=True)
 
 
 class InsecureSSLAdapter(requests.adapters.HTTPAdapter):
@@ -70,6 +88,15 @@ def create_session(allow_insecure_ssl=False):
         session.mount('https://', InsecureSSLAdapter())
     return session
 
+def create_async_client(allow_insecure_ssl=False):
+    limits = httpx.Limits(max_connections=async_http_max_connections, max_keepalive_connections=async_max_keepalive_connections)
+    retries = httpx.AsyncHTTPTransport(retries=1, limits=limits)
+    headers = {"User-Agent": user_agent.format(version=version)}
+    # todo change this simple verify ssl to allow old ssl as
+    # mentioned in https://github.com/meeb/whoisit/issues/17
+    client = httpx.AsyncClient(transport=retries, verify=allow_insecure_ssl, headers=headers, follow_redirects=True)
+    return client
+
 
 def http_request(session, url, method='GET', headers=None, data=None, *args, **kwargs):
     """
@@ -87,6 +114,26 @@ def http_request(session, url, method='GET', headers=None, data=None, *args, **k
         if 'timeout' not in kwargs:
             kwargs['timeout'] = http_timeout
         return session.request(method, url, headers=headers, data=data, *args, **kwargs)
+    except Exception as e:
+        raise QueryError(f'Failed to make a {method} request to {url}: {e}') from e
+
+
+async def http_request_async(client: httpx.AsyncClient, url, method='GET', headers=None, data=None, *args, **kwargs):
+    """
+        Simple wrapper over requests. Allows for optionally downgrading SSL
+        ciphers if required.
+    """
+    headers = headers or {}
+    data = data or {}
+    methods = ('GET',)
+    if method not in methods:
+        raise UnsupportedError(f'HTTP methods supported are: {methods}, got: {method}')
+
+    log.debug(f'Making async HTTP {method} request to {url}')
+    try:
+        if 'timeout' not in kwargs:
+            kwargs['timeout'] = http_timeout
+        return await client.request(method, url, headers=headers, data=data, *args, **kwargs)
     except Exception as e:
         raise QueryError(f'Failed to make a {method} request to {url}: {e}') from e
 

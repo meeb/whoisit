@@ -1,13 +1,31 @@
 import random
-from urllib.parse import (urlsplit, urlunsplit, parse_qs, urljoin, urlencode, quote,
-                          unquote)
-from ipaddress import (ip_address, ip_network, IPv4Address, IPv4Network, IPv6Address,
-                       IPv6Network)
-from .utils import http_request, contains_only_chars
-from .logger import get_logger
-from .errors import (QueryError, ResourceDoesNotExist, UnsupportedError,
-                     RateLimitedError, RemoteServerError)
+from ipaddress import (
+    IPv4Address,
+    IPv4Network,
+    IPv6Address,
+    IPv6Network,
+    ip_address,
+    ip_network,
+)
+from urllib.parse import (
+    parse_qs,
+    quote,
+    unquote,
+    urlencode,
+    urljoin,
+    urlsplit,
+    urlunsplit,
+)
 
+from .errors import (
+    QueryError,
+    RateLimitedError,
+    RemoteServerError,
+    ResourceDoesNotExist,
+    UnsupportedError,
+)
+from .logger import get_logger
+from .utils import contains_only_chars, http_request, http_request_async
 
 log = get_logger('query')
 
@@ -157,15 +175,14 @@ class QueryBuilder:
         return self.construct_url(endpoint, query_name, value), True
 
 
-class Query:
+class BaseQuery:
     """
         Make an HTTP request to an RDAP endpoint as a query. This is slightly more
         elaborate than a single function just to allow kwargs to be arbitrarily passed
         to both requests and the requested URL if required.
     """
 
-    def __init__(self, session, method, url, **kwargs):
-        self.session = session
+    def __init__(self, method, url, **kwargs):
         self.method = method.strip().upper()
         if kwargs:
             # kwargs are appended to the URL, such as test=123 becomes url?test=123
@@ -183,9 +200,7 @@ class Query:
         qs_str = urlencode(qs)
         return urlunsplit((parts.scheme, parts.netloc, parts.path, qs_str, ''))
 
-    def request(self, *args, **kwargs):
-        # args and kwargs here are passed directly to requests.request(...)
-        response = http_request(self.session, url=self.url, method=self.method, *args, **kwargs)
+    def _process_response(self, response):
         if response.status_code == 404:
             raise ResourceDoesNotExist(f'RDAP {self.method} request to {self.url} '
                                        f'returned a 404 error, the resource does '
@@ -205,3 +220,35 @@ class Query:
             return response.json()
         except (TypeError, ValueError) as e:
             raise QueryError(f'Failed to parse RDAP Query response as JSON: {e}') from e
+
+class Query(BaseQuery):
+    """
+        Make an HTTP request to an RDAP endpoint as a query. This is slightly more
+        elaborate than a single function just to allow kwargs to be arbitrarily passed
+        to both requests and the requested URL if required.
+    """
+
+    def __init__(self, session, method, url, **kwargs):
+        super().__init__(method, url, **kwargs)
+        self.session = session
+
+    def request(self, *args, **kwargs):
+        # args and kwargs here are passed directly to requests.request(...)
+        response = http_request(self.session, url=self.url, method=self.method, *args, **kwargs)
+        return self._process_response(response)
+
+class QueryAsync(BaseQuery):
+    """
+        Make an Async HTTP request to an RDAP endpoint as a query. This is slightly more
+        elaborate than a single function just to allow kwargs to be arbitrarily passed
+        to both requests and the requested URL if required.
+    """
+
+    def __init__(self, client, method, url, **kwargs):
+        super().__init__(method, url, **kwargs)
+        self.client = client
+
+    async def request(self, *args, **kwargs):
+        # args and kwargs here are passed directly to httpx.request(...)
+        response = await http_request_async(self.client, url=self.url, method=self.method, *args, **kwargs)
+        return self._process_response(response)

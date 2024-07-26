@@ -1,18 +1,23 @@
 import json
-import requests
+from ipaddress import IPv4Address, IPv4Network, IPv6Address, IPv6Network
 from time import time
 from urllib.parse import urlsplit
-from ipaddress import IPv4Network, IPv4Address, IPv6Network, IPv6Address
-from .logger import get_logger
-from .utils import http_request, is_subnet_of, create_session, get_session
-from .overrides import iana_overrides
-from .errors import BootstrapError, UnsupportedError
 
+from .errors import BootstrapError, UnsupportedError
+from .logger import get_logger
+from .overrides import iana_overrides
+from .utils import (
+    get_async_client,
+    get_session,
+    http_request,
+    http_request_async,
+    is_subnet_of,
+)
 
 log = get_logger('bootstrap')
 
 
-class Bootstrap:
+class BaseBootstrap:
 
     # Where we get bootstrap data from
     BOOTSTRAP_URLS = {
@@ -60,8 +65,7 @@ class Bootstrap:
         'TW': 'twnic',
     }
 
-    def __init__(self, session=None, allow_insecure_ssl=False):
-        self.session = get_session(session, allow_insecure_ssl=allow_insecure_ssl)
+    def __init__(self):
         self.bootstrap_parsers = {
             'asn': self.parse_asn_data,
             'dns': self.parse_dns_data,
@@ -100,14 +104,15 @@ class Bootstrap:
         self._use_iana_overrides = False
         log.debug('Cleared bootstrap data')
 
-    def bootstrap(self, overrides=False, allow_insecure=False):
+    def _bootstrap(self, overrides=False, allow_insecure=False):
         if self.is_bootstrapped():
             return True
         self._use_iana_overrides = bool(overrides)
         self._allow_insecure = bool(allow_insecure)
         items_loaded = set()
         for name, url in self.BOOTSTRAP_URLS.items():
-            response = http_request(self.session, url)
+            response = yield url
+            yield
             if response.status_code != 200:
                 raise BootstrapError(f'Failed to download bootstrap URL: {url}, got '
                                      f'non-200 response code: {response.status_code}')
@@ -409,3 +414,35 @@ class Bootstrap:
             return self.rir_endpoints_by_domain[url_parts.netloc]
         except KeyError:
             raise BootstrapError(f'Unknown endpoint URL: {url}')
+
+
+class Bootstrap(BaseBootstrap):
+    def __init__(self, session=None, allow_insecure_ssl=False, do_super_init=True):
+        if do_super_init:
+            BaseBootstrap.__init__(self)
+        self.session = get_session(session, allow_insecure_ssl=allow_insecure_ssl)
+
+    def bootstrap(self, overrides=False, allow_insecure=False):
+        gen = self._bootstrap(overrides, allow_insecure)
+        for url in gen:
+            response = http_request(self.session, url)
+            gen.send(response)
+
+
+class BootstrapAsync(BaseBootstrap):
+    def __init__(self, client=None, allow_insecure_ssl=False, do_super_init=True):
+        if do_super_init:
+            BaseBootstrap.__init__(self)
+        self.client = get_async_client(client, allow_insecure_ssl)
+
+    async def bootstrap_async(self, overrides=False, allow_insecure=False):
+        gen = self._bootstrap(overrides, allow_insecure)
+        for url in gen:
+            response = await http_request_async(self.client, url)
+            gen.send(response)
+
+
+class _BootstrapMainModule(Bootstrap, BootstrapAsync):
+    def __init__(self) -> None:
+        Bootstrap.__init__(self, do_super_init=True)
+        BootstrapAsync.__init__(self, do_super_init=False)

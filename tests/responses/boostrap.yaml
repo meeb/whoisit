@@ -1,0 +1,1323 @@
+responses:
+- response:
+    auto_calculate_content_length: false
+    body: "{\n  \"description\": \"RDAP bootstrap file for Autonomous System Number\
+      \ allocations\",\n  \"publication\": \"2024-04-10T20:00:01Z\",\n  \"services\"\
+      : [\n    [\n      [\n        \"36864-37887\",\n        \"327680-328703\",\n\
+      \        \"328704-329727\"\n      ],\n      [\n        \"https://rdap.afrinic.net/rdap/\"\
+      ,\n        \"http://rdap.afrinic.net/rdap/\"\n      ]\n    ],\n    [\n     \
+      \ [\n        \"4608-4865\",\n        \"7467-7722\",\n        \"9216-10239\"\
+      ,\n        \"17408-18431\",\n        \"23552-24575\",\n        \"37888-38911\"\
+      ,\n        \"45056-46079\",\n        \"55296-56319\",\n        \"58368-59391\"\
+      ,\n        \"63488-63999\",\n        \"64000-64098\",\n        \"64297-64395\"\
+      ,\n        \"131072-132095\",\n        \"132096-133119\",\n        \"133120-133631\"\
+      ,\n        \"133632-134556\",\n        \"134557-135580\",\n        \"135581-136505\"\
+      ,\n        \"136506-137529\",\n        \"137530-138553\",\n        \"138554-139577\"\
+      ,\n        \"139578-140601\",\n        \"140602-141625\",\n        \"141626-142649\"\
+      ,\n        \"142650-143673\",\n        \"143674-144697\",\n        \"144698-145721\"\
+      ,\n        \"145722-146745\",\n        \"146746-147769\",\n        \"147770-148793\"\
+      ,\n        \"148794-149817\",\n        \"149818-150841\",\n        \"150842-151865\"\
+      ,\n        \"151866-152889\",\n        \"152890-153913\"\n      ],\n      [\n\
+      \        \"https://rdap.apnic.net/\"\n      ]\n    ],\n    [\n      [\n    \
+      \    \"1-1876\",\n        \"1902-2042\",\n        \"2044-2046\",\n        \"\
+      2048-2106\",\n        \"2137-2584\",\n        \"2615-2772\",\n        \"2823-2829\"\
+      ,\n        \"2880-3153\",\n        \"3354-4607\",\n        \"4866-5376\",\n\
+      \        \"5632-6655\",\n        \"6912-7466\",\n        \"7723-8191\",\n  \
+      \      \"10240-12287\",\n        \"13312-15359\",\n        \"16384-17407\",\n\
+      \        \"18432-20479\",\n        \"21504-23455\",\n        \"23457-23551\"\
+      ,\n        \"25600-26623\",\n        \"26624-27647\",\n        \"29696-30719\"\
+      ,\n        \"31744-32767\",\n        \"32768-33791\",\n        \"35840-36863\"\
+      ,\n        \"39936-40959\",\n        \"46080-47103\",\n        \"53248-54271\"\
+      ,\n        \"54272-55295\",\n        \"62464-63487\",\n        \"64198-64296\"\
+      ,\n        \"393216-394239\",\n        \"394240-395164\",\n        \"395165-396188\"\
+      ,\n        \"396189-397212\",\n        \"397213-398236\",\n        \"398237-399260\"\
+      ,\n        \"399261-400284\",\n        \"400285-401308\",\n        \"401309-402332\"\
+      \n      ],\n      [\n        \"https://rdap.arin.net/registry/\",\n        \"\
+      http://rdap.arin.net/registry/\"\n      ]\n    ],\n    [\n      [\n        \"\
+      1877-1901\",\n        \"2043\",\n        \"2047\",\n        \"2107-2136\",\n\
+      \        \"2585-2614\",\n        \"2773-2822\",\n        \"2830-2879\",\n  \
+      \      \"3154-3353\",\n        \"5377-5631\",\n        \"6656-6911\",\n    \
+      \    \"8192-9215\",\n        \"12288-13311\",\n        \"15360-16383\",\n  \
+      \      \"20480-21503\",\n        \"24576-25599\",\n        \"28672-29695\",\n\
+      \        \"30720-31743\",\n        \"33792-34815\",\n        \"34816-35839\"\
+      ,\n        \"38912-39935\",\n        \"40960-41983\",\n        \"41984-43007\"\
+      ,\n        \"43008-44031\",\n        \"44032-45055\",\n        \"47104-48127\"\
+      ,\n        \"48128-49151\",\n        \"49152-50175\",\n        \"50176-51199\"\
+      ,\n        \"51200-52223\",\n        \"56320-57343\",\n        \"57344-58367\"\
+      ,\n        \"59392-60415\",\n        \"60416-61439\",\n        \"61952-62463\"\
+      ,\n        \"64396-64495\",\n        \"196608-197631\",\n        \"197632-198655\"\
+      ,\n        \"198656-199679\",\n        \"199680-200191\",\n        \"200192-201215\"\
+      ,\n        \"201216-202239\",\n        \"202240-203263\",\n        \"203264-204287\"\
+      ,\n        \"204288-205211\",\n        \"205212-206235\",\n        \"206236-207259\"\
+      ,\n        \"207260-208283\",\n        \"208284-209307\",\n        \"209308-210331\"\
+      ,\n        \"210332-211355\",\n        \"211356-212379\",\n        \"212380-213403\"\
+      ,\n        \"213404-214427\",\n        \"214428-215451\",\n        \"215452-216475\"\
+      \n      ],\n      [\n        \"https://rdap.db.ripe.net/\"\n      ]\n    ],\n\
+      \    [\n      [\n        \"27648-28671\",\n        \"52224-53247\",\n      \
+      \  \"61440-61951\",\n        \"64099-64197\",\n        \"262144-263167\",\n\
+      \        \"263168-263679\",\n        \"263680-264604\",\n        \"264605-265628\"\
+      ,\n        \"265629-266652\",\n        \"266653-267676\",\n        \"267677-268700\"\
+      ,\n        \"268701-269724\",\n        \"269725-270748\",\n        \"270749-271772\"\
+      ,\n        \"271773-272796\",\n        \"272797-273820\",\n        \"273821-274844\"\
+      \n      ],\n      [\n        \"https://rdap.lacnic.net/rdap/\"\n      ]\n  \
+      \  ]\n  ],\n  \"version\": \"1.0\"\n}"
+    content_type: text/plain
+    headers:
+      Accept-Ranges: bytes
+      Access-Control-Allow-Origin: '*'
+      Age: '42163'
+      Cache-Control: max-age=86400
+      Etag: '"1057-615c37be90b59-gzip"'
+      Expires: Sat, 27 Jul 2024 14:57:31 GMT
+      Last-Modified: Wed, 10 Apr 2024 20:00:01 GMT
+      Referrer-Policy: origin-when-cross-origin
+      Strict-Transport-Security: max-age=48211200; preload
+      Vary: Accept-Encoding
+      X-Cache: HIT
+      X-Frame-Options: SAMEORIGIN
+    method: GET
+    status: 200
+    url: https://data.iana.org/rdap/asn.json
+- response:
+    auto_calculate_content_length: false
+    body: "{\n  \"description\": \"RDAP bootstrap file for Domain Name System registrations\"\
+      ,\n  \"publication\": \"2024-07-25T00:00:01Z\",\n  \"services\": [\n    [\n\
+      \      [\n        \"kg\"\n      ],\n      [\n        \"http://rdap.cctld.kg/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"music\"\n      ],\n      [\n  \
+      \      \"http://rdap.centralnic.com/music/\"\n      ]\n    ],\n    [\n     \
+      \ [\n        \"cpa\"\n      ],\n      [\n        \"http://rdap.nic.cpa/\"\n\
+      \      ]\n    ],\n    [\n      [\n        \"merckmsd\"\n      ],\n      [\n\
+      \        \"http://rdap.nic.merckmsd/\"\n      ]\n    ],\n    [\n      [\n  \
+      \      \"msd\"\n      ],\n      [\n        \"http://rdap.nic.msd/\"\n      ]\n\
+      \    ],\n    [\n      [\n        \"xn--p1acf\"\n      ],\n      [\n        \"\
+      https://api.rdap.nic.xn--p1acf/\"\n      ]\n    ],\n    [\n      [\n       \
+      \ \"moscow\"\n      ],\n      [\n        \"https://flexireg.net/moscow/rdap/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"xn--80adxhks\"\n      ],\n    \
+      \  [\n        \"https://flexireg.net/xn--80adxhks/rdap/\"\n      ]\n    ],\n\
+      \    [\n      [\n        \"samsung\",\n        \"xn--cg4bki\"\n      ],\n  \
+      \    [\n        \"https://nic.samsung:8443/rdap/\"\n      ]\n    ],\n    [\n\
+      \      [\n        \"tvs\"\n      ],\n      [\n        \"https://rdap.afilias-srs.net/rdap/tvs/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"ca\"\n      ],\n      [\n     \
+      \   \"https://rdap.ca.fury.ca/rdap/\"\n      ]\n    ],\n    [\n      [\n   \
+      \     \"uz\"\n      ],\n      [\n        \"https://rdap.cctld.uz/\"\n      ]\n\
+      \    ],\n    [\n      [\n        \"allfinanz\"\n      ],\n      [\n        \"\
+      https://rdap.centralnic.com/allfinanz/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"art\"\n      ],\n      [\n        \"https://rdap.centralnic.com/art/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"audio\"\n      ],\n      [\n  \
+      \      \"https://rdap.centralnic.com/audio/\"\n      ]\n    ],\n    [\n    \
+      \  [\n        \"auto\"\n      ],\n      [\n        \"https://rdap.centralnic.com/auto/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"autos\"\n      ],\n      [\n  \
+      \      \"https://rdap.centralnic.com/autos/\"\n      ]\n    ],\n    [\n    \
+      \  [\n        \"baby\"\n      ],\n      [\n        \"https://rdap.centralnic.com/baby/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"basketball\"\n      ],\n      [\n\
+      \        \"https://rdap.centralnic.com/basketball/\"\n      ]\n    ],\n    [\n\
+      \      [\n        \"beauty\"\n      ],\n      [\n        \"https://rdap.centralnic.com/beauty/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"best\"\n      ],\n      [\n   \
+      \     \"https://rdap.centralnic.com/best/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"blog\"\n      ],\n      [\n        \"https://rdap.centralnic.com/blog/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"bmw\"\n      ],\n      [\n    \
+      \    \"https://rdap.centralnic.com/bmw/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"boats\"\n      ],\n      [\n        \"https://rdap.centralnic.com/boats/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"bond\"\n      ],\n      [\n   \
+      \     \"https://rdap.centralnic.com/bond/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"box\"\n      ],\n      [\n        \"https://rdap.centralnic.com/box/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"build\"\n      ],\n      [\n  \
+      \      \"https://rdap.centralnic.com/build/\"\n      ]\n    ],\n    [\n    \
+      \  [\n        \"cam\"\n      ],\n      [\n        \"https://rdap.centralnic.com/cam/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"car\"\n      ],\n      [\n    \
+      \    \"https://rdap.centralnic.com/car/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"cars\"\n      ],\n      [\n        \"https://rdap.centralnic.com/cars/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"case\"\n      ],\n      [\n   \
+      \     \"https://rdap.centralnic.com/case/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"ceo\"\n      ],\n      [\n        \"https://rdap.centralnic.com/ceo/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"cfd\"\n      ],\n      [\n    \
+      \    \"https://rdap.centralnic.com/cfd/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"christmas\"\n      ],\n      [\n        \"https://rdap.centralnic.com/christmas/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"college\"\n      ],\n      [\n\
+      \        \"https://rdap.centralnic.com/college/\"\n      ]\n    ],\n    [\n\
+      \      [\n        \"cyou\"\n      ],\n      [\n        \"https://rdap.centralnic.com/cyou/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"dealer\"\n      ],\n      [\n \
+      \       \"https://rdap.centralnic.com/dealer/\"\n      ]\n    ],\n    [\n  \
+      \    [\n        \"deloitte\"\n      ],\n      [\n        \"https://rdap.centralnic.com/deloitte/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"dhl\"\n      ],\n      [\n    \
+      \    \"https://rdap.centralnic.com/dhl/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"diet\"\n      ],\n      [\n        \"https://rdap.centralnic.com/diet/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"dvag\"\n      ],\n      [\n   \
+      \     \"https://rdap.centralnic.com/dvag/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"fans\"\n      ],\n      [\n        \"https://rdap.centralnic.com/fans/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"feedback\"\n      ],\n      [\n\
+      \        \"https://rdap.centralnic.com/feedback/\"\n      ]\n    ],\n    [\n\
+      \      [\n        \"flowers\"\n      ],\n      [\n        \"https://rdap.centralnic.com/flowers/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"fm\"\n      ],\n      [\n     \
+      \   \"https://rdap.centralnic.com/fm/\"\n      ]\n    ],\n    [\n      [\n \
+      \       \"fo\"\n      ],\n      [\n        \"https://rdap.centralnic.com/fo/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"forum\"\n      ],\n      [\n  \
+      \      \"https://rdap.centralnic.com/forum/\"\n      ]\n    ],\n    [\n    \
+      \  [\n        \"fresenius\"\n      ],\n      [\n        \"https://rdap.centralnic.com/fresenius/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"frl\"\n      ],\n      [\n    \
+      \    \"https://rdap.centralnic.com/frl/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"fun\"\n      ],\n      [\n        \"https://rdap.centralnic.com/fun/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"game\"\n      ],\n      [\n   \
+      \     \"https://rdap.centralnic.com/game/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"gd\"\n      ],\n      [\n        \"https://rdap.centralnic.com/gd/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"gent\"\n      ],\n      [\n   \
+      \     \"https://rdap.centralnic.com/gent/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"guitars\"\n      ],\n      [\n        \"https://rdap.centralnic.com/guitars/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"hair\"\n      ],\n      [\n   \
+      \     \"https://rdap.centralnic.com/hair/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"help\"\n      ],\n      [\n        \"https://rdap.centralnic.com/help/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"homes\"\n      ],\n      [\n  \
+      \      \"https://rdap.centralnic.com/homes/\"\n      ]\n    ],\n    [\n    \
+      \  [\n        \"host\"\n      ],\n      [\n        \"https://rdap.centralnic.com/host/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"hosting\"\n      ],\n      [\n\
+      \        \"https://rdap.centralnic.com/hosting/\"\n      ]\n    ],\n    [\n\
+      \      [\n        \"icu\"\n      ],\n      [\n        \"https://rdap.centralnic.com/icu/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"inc\"\n      ],\n      [\n    \
+      \    \"https://rdap.centralnic.com/inc/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"kfh\"\n      ],\n      [\n        \"https://rdap.centralnic.com/kfh/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"kpn\"\n      ],\n      [\n    \
+      \    \"https://rdap.centralnic.com/kpn/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"kred\"\n      ],\n      [\n        \"https://rdap.centralnic.com/kred/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"lat\"\n      ],\n      [\n    \
+      \    \"https://rdap.centralnic.com/lat/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"lidl\"\n      ],\n      [\n        \"https://rdap.centralnic.com/lidl/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"llp\"\n      ],\n      [\n    \
+      \    \"https://rdap.centralnic.com/llp/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"lol\"\n      ],\n      [\n        \"https://rdap.centralnic.com/lol/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"london\"\n      ],\n      [\n \
+      \       \"https://rdap.centralnic.com/london/\"\n      ]\n    ],\n    [\n  \
+      \    [\n        \"lpl\"\n      ],\n      [\n        \"https://rdap.centralnic.com/lpl/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"lplfinancial\"\n      ],\n    \
+      \  [\n        \"https://rdap.centralnic.com/lplfinancial/\"\n      ]\n    ],\n\
+      \    [\n      [\n        \"luxury\"\n      ],\n      [\n        \"https://rdap.centralnic.com/luxury/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"makeup\"\n      ],\n      [\n \
+      \       \"https://rdap.centralnic.com/makeup/\"\n      ]\n    ],\n    [\n  \
+      \    [\n        \"mini\"\n      ],\n      [\n        \"https://rdap.centralnic.com/mini/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"mom\"\n      ],\n      [\n    \
+      \    \"https://rdap.centralnic.com/mom/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"monster\"\n      ],\n      [\n        \"https://rdap.centralnic.com/monster/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"motorcycles\"\n      ],\n     \
+      \ [\n        \"https://rdap.centralnic.com/motorcycles/\"\n      ]\n    ],\n\
+      \    [\n      [\n        \"nokia\"\n      ],\n      [\n        \"https://rdap.centralnic.com/nokia/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"online\"\n      ],\n      [\n \
+      \       \"https://rdap.centralnic.com/online/\"\n      ]\n    ],\n    [\n  \
+      \    [\n        \"ooo\"\n      ],\n      [\n        \"https://rdap.centralnic.com/ooo/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"pics\"\n      ],\n      [\n   \
+      \     \"https://rdap.centralnic.com/pics/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"pid\"\n      ],\n      [\n        \"https://rdap.centralnic.com/pid/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"pohl\"\n      ],\n      [\n   \
+      \     \"https://rdap.centralnic.com/pohl/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"press\"\n      ],\n      [\n        \"https://rdap.centralnic.com/press/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"protection\"\n      ],\n      [\n\
+      \        \"https://rdap.centralnic.com/protection/\"\n      ]\n    ],\n    [\n\
+      \      [\n        \"pw\"\n      ],\n      [\n        \"https://rdap.centralnic.com/pw/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"qpon\"\n      ],\n      [\n   \
+      \     \"https://rdap.centralnic.com/qpon/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"quest\"\n      ],\n      [\n        \"https://rdap.centralnic.com/quest/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"reit\"\n      ],\n      [\n   \
+      \     \"https://rdap.centralnic.com/reit/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"rent\"\n      ],\n      [\n        \"https://rdap.centralnic.com/rent/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"rugby\"\n      ],\n      [\n  \
+      \      \"https://rdap.centralnic.com/rugby/\"\n      ]\n    ],\n    [\n    \
+      \  [\n        \"ruhr\"\n      ],\n      [\n        \"https://rdap.centralnic.com/ruhr/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"saarland\"\n      ],\n      [\n\
+      \        \"https://rdap.centralnic.com/saarland/\"\n      ]\n    ],\n    [\n\
+      \      [\n        \"sbs\"\n      ],\n      [\n        \"https://rdap.centralnic.com/sbs/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"schwarz\"\n      ],\n      [\n\
+      \        \"https://rdap.centralnic.com/schwarz/\"\n      ]\n    ],\n    [\n\
+      \      [\n        \"security\"\n      ],\n      [\n        \"https://rdap.centralnic.com/security/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"sfr\"\n      ],\n      [\n    \
+      \    \"https://rdap.centralnic.com/sfr/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"site\"\n      ],\n      [\n        \"https://rdap.centralnic.com/site/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"skin\"\n      ],\n      [\n   \
+      \     \"https://rdap.centralnic.com/skin/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"smart\"\n      ],\n      [\n        \"https://rdap.centralnic.com/smart/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"space\"\n      ],\n      [\n  \
+      \      \"https://rdap.centralnic.com/space/\"\n      ]\n    ],\n    [\n    \
+      \  [\n        \"stc\"\n      ],\n      [\n        \"https://rdap.centralnic.com/stc/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"stcgroup\"\n      ],\n      [\n\
+      \        \"https://rdap.centralnic.com/stcgroup/\"\n      ]\n    ],\n    [\n\
+      \      [\n        \"storage\"\n      ],\n      [\n        \"https://rdap.centralnic.com/storage/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"store\"\n      ],\n      [\n  \
+      \      \"https://rdap.centralnic.com/store/\"\n      ]\n    ],\n    [\n    \
+      \  [\n        \"tech\"\n      ],\n      [\n        \"https://rdap.centralnic.com/tech/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"theatre\"\n      ],\n      [\n\
+      \        \"https://rdap.centralnic.com/theatre/\"\n      ]\n    ],\n    [\n\
+      \      [\n        \"tickets\"\n      ],\n      [\n        \"https://rdap.centralnic.com/tickets/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"tui\"\n      ],\n      [\n    \
+      \    \"https://rdap.centralnic.com/tui/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"uno\"\n      ],\n      [\n        \"https://rdap.centralnic.com/uno/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"vg\"\n      ],\n      [\n     \
+      \   \"https://rdap.centralnic.com/vg/\"\n      ]\n    ],\n    [\n      [\n \
+      \       \"viva\"\n      ],\n      [\n        \"https://rdap.centralnic.com/viva/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"website\"\n      ],\n      [\n\
+      \        \"https://rdap.centralnic.com/website/\"\n      ]\n    ],\n    [\n\
+      \      [\n        \"wme\"\n      ],\n      [\n        \"https://rdap.centralnic.com/wme/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"xn--4gbrim\"\n      ],\n      [\n\
+      \        \"https://rdap.centralnic.com/xn--4gbrim/\"\n      ]\n    ],\n    [\n\
+      \      [\n        \"xn--ngbe9e0a\"\n      ],\n      [\n        \"https://rdap.centralnic.com/xn--ngbe9e0a/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"xn--vermgensberater-ctb\"\n   \
+      \   ],\n      [\n        \"https://rdap.centralnic.com/xn--vermgensberater-ctb/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"xn--vermgensberatung-pwb\"\n  \
+      \    ],\n      [\n        \"https://rdap.centralnic.com/xn--vermgensberatung-pwb/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"xyz\"\n      ],\n      [\n    \
+      \    \"https://rdap.centralnic.com/xyz/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"yachts\"\n      ],\n      [\n        \"https://rdap.centralnic.com/yachts/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"zuerich\"\n      ],\n      [\n\
+      \        \"https://rdap.centralnic.com/zuerich/\"\n      ]\n    ],\n    [\n\
+      \      [\n        \"xn--55qw42g\",\n        \"xn--zfr164b\"\n      ],\n    \
+      \  [\n        \"https://rdap.conac.cn/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"crown\"\n      ],\n      [\n        \"https://rdap.crown.fury.ca/rdap/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"xn--5tzm5g\"\n      ],\n      [\n\
+      \        \"https://rdap.donuts.co/rdap/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"eco\"\n      ],\n      [\n        \"https://rdap.eco.fury.ca/rdap/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"fi\"\n      ],\n      [\n     \
+      \   \"https://rdap.fi/rdap/rdap/\"\n      ]\n    ],\n    [\n      [\n      \
+      \  \"bridgestone\",\n        \"brother\",\n        \"canon\",\n        \"datsun\"\
+      ,\n        \"dnp\",\n        \"epson\",\n        \"firestone\",\n        \"\
+      fujitsu\",\n        \"ggee\",\n        \"gmo\",\n        \"goldpoint\",\n  \
+      \      \"goo\",\n        \"hisamitsu\",\n        \"hitachi\",\n        \"honda\"\
+      ,\n        \"hyundai\",\n        \"infiniti\",\n        \"jcb\",\n        \"\
+      kddi\",\n        \"kia\",\n        \"komatsu\",\n        \"kyoto\",\n      \
+      \  \"lexus\",\n        \"lotte\",\n        \"mitsubishi\",\n        \"nagoya\"\
+      ,\n        \"nec\",\n        \"nhk\",\n        \"nico\",\n        \"nissan\"\
+      ,\n        \"okinawa\",\n        \"otsuka\",\n        \"panasonic\",\n     \
+      \   \"playstation\",\n        \"ricoh\",\n        \"ryukyu\",\n        \"sharp\"\
+      ,\n        \"shop\",\n        \"softbank\",\n        \"sony\",\n        \"suzuki\"\
+      ,\n        \"tokyo\",\n        \"toray\",\n        \"toshiba\",\n        \"\
+      toyota\",\n        \"yodobashi\",\n        \"yokohama\"\n      ],\n      [\n\
+      \        \"https://rdap.gmoregistry.net/rdap/\"\n      ]\n    ],\n    [\n  \
+      \    [\n        \"bom\",\n        \"final\",\n        \"globo\",\n        \"\
+      rio\",\n        \"uol\"\n      ],\n      [\n        \"https://rdap.gtlds.nic.br/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"ua\"\n      ],\n      [\n     \
+      \   \"https://rdap.hostmaster.ua/\"\n      ]\n    ],\n    [\n      [\n     \
+      \   \"int\"\n      ],\n      [\n        \"https://rdap.iana.org/\"\n      ]\n\
+      \    ],\n    [\n      [\n        \"abb\",\n        \"abbott\",\n        \"academy\"\
+      ,\n        \"accenture\",\n        \"accountants\",\n        \"actor\",\n  \
+      \      \"aeg\",\n        \"aero\",\n        \"agakhan\",\n        \"agency\"\
+      ,\n        \"airforce\",\n        \"akdn\",\n        \"alibaba\",\n        \"\
+      alipay\",\n        \"allstate\",\n        \"aol\",\n        \"apartments\",\n\
+      \        \"apple\",\n        \"archi\",\n        \"army\",\n        \"arte\"\
+      ,\n        \"asda\",\n        \"asia\",\n        \"associates\",\n        \"\
+      attorney\",\n        \"auction\",\n        \"audi\",\n        \"band\",\n  \
+      \      \"barclaycard\",\n        \"barclays\",\n        \"barefoot\",\n    \
+      \    \"bargains\",\n        \"bbt\",\n        \"bcg\",\n        \"beats\",\n\
+      \        \"bestbuy\",\n        \"bet\",\n        \"bike\",\n        \"bingo\"\
+      ,\n        \"bio\",\n        \"black\",\n        \"blockbuster\",\n        \"\
+      bloomberg\",\n        \"blue\",\n        \"bm\",\n        \"bms\",\n       \
+      \ \"bnpparibas\",\n        \"boehringer\",\n        \"bofa\",\n        \"bosch\"\
+      ,\n        \"boutique\",\n        \"bradesco\",\n        \"broker\",\n     \
+      \   \"builders\",\n        \"business\",\n        \"cab\",\n        \"cafe\"\
+      ,\n        \"camera\",\n        \"camp\",\n        \"capital\",\n        \"\
+      cards\",\n        \"care\",\n        \"careers\",\n        \"cash\",\n     \
+      \   \"casino\",\n        \"catering\",\n        \"center\",\n        \"cern\"\
+      ,\n        \"cfa\",\n        \"chanel\",\n        \"chat\",\n        \"cheap\"\
+      ,\n        \"church\",\n        \"cipriani\",\n        \"citadel\",\n      \
+      \  \"city\",\n        \"claims\",\n        \"cleaning\",\n        \"clinic\"\
+      ,\n        \"clinique\",\n        \"clothing\",\n        \"clubmed\",\n    \
+      \    \"coach\",\n        \"codes\",\n        \"coffee\",\n        \"community\"\
+      ,\n        \"company\",\n        \"computer\",\n        \"condos\",\n      \
+      \  \"construction\",\n        \"consulting\",\n        \"contact\",\n      \
+      \  \"contractors\",\n        \"cool\",\n        \"coupons\",\n        \"credit\"\
+      ,\n        \"creditcard\",\n        \"crs\",\n        \"cruise\",\n        \"\
+      cruises\",\n        \"dabur\",\n        \"dance\",\n        \"data\",\n    \
+      \    \"dating\",\n        \"deals\",\n        \"degree\",\n        \"delivery\"\
+      ,\n        \"delta\",\n        \"democrat\",\n        \"dental\",\n        \"\
+      dentist\",\n        \"diamonds\",\n        \"digital\",\n        \"direct\"\
+      ,\n        \"directory\",\n        \"discount\",\n        \"dish\",\n      \
+      \  \"doctor\",\n        \"dog\",\n        \"domains\",\n        \"dot\",\n \
+      \       \"dtv\",\n        \"dunlop\",\n        \"dvr\",\n        \"edeka\",\n\
+      \        \"education\",\n        \"email\",\n        \"emerck\",\n        \"\
+      energy\",\n        \"engineer\",\n        \"engineering\",\n        \"enterprises\"\
+      ,\n        \"equipment\",\n        \"ericsson\",\n        \"estate\",\n    \
+      \    \"events\",\n        \"exchange\",\n        \"expert\",\n        \"exposed\"\
+      ,\n        \"express\",\n        \"extraspace\",\n        \"fage\",\n      \
+      \  \"fail\",\n        \"family\",\n        \"fan\",\n        \"farm\",\n   \
+      \     \"fedex\",\n        \"ferrari\",\n        \"fidelity\",\n        \"fido\"\
+      ,\n        \"finance\",\n        \"financial\",\n        \"fish\",\n       \
+      \ \"fitness\",\n        \"flights\",\n        \"florist\",\n        \"football\"\
+      ,\n        \"forex\",\n        \"forsale\",\n        \"frogans\",\n        \"\
+      fund\",\n        \"furniture\",\n        \"futbol\",\n        \"fyi\",\n   \
+      \     \"gallery\",\n        \"gallo\",\n        \"gallup\",\n        \"games\"\
+      ,\n        \"genting\",\n        \"george\",\n        \"gifts\",\n        \"\
+      glass\",\n        \"global\",\n        \"gmbh\",\n        \"gold\",\n      \
+      \  \"golf\",\n        \"goodyear\",\n        \"graphics\",\n        \"gratis\"\
+      ,\n        \"green\",\n        \"gripe\",\n        \"grocery\",\n        \"\
+      group\",\n        \"guide\",\n        \"guru\",\n        \"haus\",\n       \
+      \ \"hdfc\",\n        \"hdfcbank\",\n        \"healthcare\",\n        \"helsinki\"\
+      ,\n        \"hermes\",\n        \"hkt\",\n        \"hockey\",\n        \"holdings\"\
+      ,\n        \"holiday\",\n        \"homedepot\",\n        \"hospital\",\n   \
+      \     \"house\",\n        \"hughes\",\n        \"ice\",\n        \"imamat\"\
+      ,\n        \"immo\",\n        \"immobilien\",\n        \"industries\",\n   \
+      \     \"info\",\n        \"institute\",\n        \"insure\",\n        \"international\"\
+      ,\n        \"investments\",\n        \"irish\",\n        \"ismaili\",\n    \
+      \    \"ist\",\n        \"istanbul\",\n        \"itv\",\n        \"jaguar\",\n\
+      \        \"java\",\n        \"jeep\",\n        \"jetzt\",\n        \"jewelry\"\
+      ,\n        \"jio\",\n        \"jll\",\n        \"juniper\",\n        \"kaufen\"\
+      ,\n        \"kerryhotels\",\n        \"kerrylogistics\",\n        \"kerryproperties\"\
+      ,\n        \"kids\",\n        \"kim\",\n        \"kitchen\",\n        \"kosher\"\
+      ,\n        \"kuokgroup\",\n        \"lamborghini\",\n        \"lamer\",\n  \
+      \      \"land\",\n        \"landrover\",\n        \"lasalle\",\n        \"latino\"\
+      ,\n        \"lawyer\",\n        \"lds\",\n        \"lease\",\n        \"lefrak\"\
+      ,\n        \"legal\",\n        \"lgbt\",\n        \"life\",\n        \"lighting\"\
+      ,\n        \"limited\",\n        \"limo\",\n        \"lipsy\",\n        \"live\"\
+      ,\n        \"llc\",\n        \"loans\",\n        \"locker\",\n        \"lotto\"\
+      ,\n        \"ltd\",\n        \"ltda\",\n        \"lundbeck\",\n        \"maif\"\
+      ,\n        \"maison\",\n        \"management\",\n        \"market\",\n     \
+      \   \"marketing\",\n        \"markets\",\n        \"marriott\",\n        \"\
+      mba\",\n        \"mckinsey\",\n        \"media\",\n        \"memorial\",\n \
+      \       \"mit\",\n        \"mobi\",\n        \"mobile\",\n        \"moda\",\n\
+      \        \"money\",\n        \"mormon\",\n        \"mortgage\",\n        \"\
+      movie\",\n        \"nab\",\n        \"navy\",\n        \"network\",\n      \
+      \  \"news\",\n        \"next\",\n        \"nextdirect\",\n        \"nikon\"\
+      ,\n        \"ninja\",\n        \"nowtv\",\n        \"nra\",\n        \"obi\"\
+      ,\n        \"ollo\",\n        \"onl\",\n        \"oracle\",\n        \"orange\"\
+      ,\n        \"organic\",\n        \"origins\",\n        \"ott\",\n        \"\
+      partners\",\n        \"parts\",\n        \"pccw\",\n        \"pet\",\n     \
+      \   \"phone\",\n        \"photography\",\n        \"photos\",\n        \"pictet\"\
+      ,\n        \"pictures\",\n        \"pink\",\n        \"pizza\",\n        \"\
+      place\",\n        \"plumbing\",\n        \"plus\",\n        \"pnc\",\n     \
+      \   \"poker\",\n        \"post\",\n        \"pro\",\n        \"productions\"\
+      ,\n        \"progressive\",\n        \"promo\",\n        \"properties\",\n \
+      \       \"pub\",\n        \"pwc\",\n        \"recipes\",\n        \"red\",\n\
+      \        \"redumbrella\",\n        \"rehab\",\n        \"reise\",\n        \"\
+      reisen\",\n        \"reliance\",\n        \"rentals\",\n        \"repair\",\n\
+      \        \"report\",\n        \"republican\",\n        \"restaurant\",\n   \
+      \     \"reviews\",\n        \"rexroth\",\n        \"rich\",\n        \"richardli\"\
+      ,\n        \"ril\",\n        \"rip\",\n        \"rocks\",\n        \"rogers\"\
+      ,\n        \"run\",\n        \"sale\",\n        \"salon\",\n        \"samsclub\"\
+      ,\n        \"sanofi\",\n        \"sarl\",\n        \"saxo\",\n        \"sbi\"\
+      ,\n        \"scholarships\",\n        \"school\",\n        \"schule\",\n   \
+      \     \"services\",\n        \"sew\",\n        \"shangrila\",\n        \"shiksha\"\
+      ,\n        \"shoes\",\n        \"shopping\",\n        \"show\",\n        \"\
+      sina\",\n        \"singles\",\n        \"ski\",\n        \"sling\",\n      \
+      \  \"soccer\",\n        \"social\",\n        \"software\",\n        \"solar\"\
+      ,\n        \"solutions\",\n        \"spa\",\n        \"srl\",\n        \"stada\"\
+      ,\n        \"star\",\n        \"statebank\",\n        \"stockholm\",\n     \
+      \   \"studio\",\n        \"style\",\n        \"supplies\",\n        \"supply\"\
+      ,\n        \"support\",\n        \"surgery\",\n        \"systems\",\n      \
+      \  \"taobao\",\n        \"tatamotors\",\n        \"tax\",\n        \"taxi\"\
+      ,\n        \"team\",\n        \"technology\",\n        \"temasek\",\n      \
+      \  \"tennis\",\n        \"thd\",\n        \"theater\",\n        \"tiaa\",\n\
+      \        \"tienda\",\n        \"tips\",\n        \"tires\",\n        \"tmall\"\
+      ,\n        \"today\",\n        \"tools\",\n        \"tours\",\n        \"town\"\
+      ,\n        \"toys\",\n        \"trading\",\n        \"training\",\n        \"\
+      travel\",\n        \"travelers\",\n        \"travelersinsurance\",\n       \
+      \ \"trv\",\n        \"ubank\",\n        \"ubs\",\n        \"university\",\n\
+      \        \"ups\",\n        \"vacations\",\n        \"vanguard\",\n        \"\
+      vegas\",\n        \"ventures\",\n        \"vet\",\n        \"viajes\",\n   \
+      \     \"video\",\n        \"vig\",\n        \"viking\",\n        \"villas\"\
+      ,\n        \"vin\",\n        \"vision\",\n        \"volvo\",\n        \"vote\"\
+      ,\n        \"voto\",\n        \"voyage\",\n        \"walmart\",\n        \"\
+      watch\",\n        \"watches\",\n        \"weibo\",\n        \"weir\",\n    \
+      \    \"wine\",\n        \"wolterskluwer\",\n        \"works\",\n        \"world\"\
+      ,\n        \"wtf\",\n        \"xin\",\n        \"xn--6frz82g\",\n        \"\
+      xn--9krt00a\",\n        \"xn--b4w605ferd\",\n        \"xn--czrs0t\",\n     \
+      \   \"xn--fjq720a\",\n        \"xn--fzys8d69uvgm\",\n        \"xn--unup4y\"\
+      ,\n        \"xn--vhquv\",\n        \"zara\",\n        \"zone\"\n      ],\n \
+      \     [\n        \"https://rdap.identitydigital.services/rdap/\"\n      ]\n\
+      \    ],\n    [\n      [\n        \"is\"\n      ],\n      [\n        \"https://rdap.isnic.is/rdap/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"kiwi\"\n      ],\n      [\n   \
+      \     \"https://rdap.kiwi.fury.ca/rdap/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"lb\"\n      ],\n      [\n        \"https://rdap.lbdr.org.lb/\"\n\
+      \      ]\n    ],\n    [\n      [\n        \"mls\"\n      ],\n      [\n     \
+      \   \"https://rdap.mls.fury.ca/rdap/\"\n      ]\n    ],\n    [\n      [\n  \
+      \      \"aaa\"\n      ],\n      [\n        \"https://rdap.nic.aaa/\"\n     \
+      \ ]\n    ],\n    [\n      [\n        \"able\"\n      ],\n      [\n        \"\
+      https://rdap.nic.able/\"\n      ]\n    ],\n    [\n      [\n        \"abogado\"\
+      \n      ],\n      [\n        \"https://rdap.nic.abogado/\"\n      ]\n    ],\n\
+      \    [\n      [\n        \"abudhabi\"\n      ],\n      [\n        \"https://rdap.nic.abudhabi/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"accountant\"\n      ],\n      [\n\
+      \        \"https://rdap.nic.accountant/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"aco\"\n      ],\n      [\n        \"https://rdap.nic.aco/\"\n   \
+      \   ]\n    ],\n    [\n      [\n        \"adult\"\n      ],\n      [\n      \
+      \  \"https://rdap.nic.adult/\"\n      ]\n    ],\n    [\n      [\n        \"\
+      aetna\"\n      ],\n      [\n        \"https://rdap.nic.aetna/\"\n      ]\n \
+      \   ],\n    [\n      [\n        \"afl\"\n      ],\n      [\n        \"https://rdap.nic.afl/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"africa\"\n      ],\n      [\n \
+      \       \"https://rdap.nic.africa/rdap/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"aig\"\n      ],\n      [\n        \"https://rdap.nic.aig/\"\n   \
+      \   ]\n    ],\n    [\n      [\n        \"ally\"\n      ],\n      [\n       \
+      \ \"https://rdap.nic.ally/\"\n      ]\n    ],\n    [\n      [\n        \"alsace\"\
+      \n      ],\n      [\n        \"https://rdap.nic.alsace/\"\n      ]\n    ],\n\
+      \    [\n      [\n        \"alstom\"\n      ],\n      [\n        \"https://rdap.nic.alstom/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"americanexpress\"\n      ],\n \
+      \     [\n        \"https://rdap.nic.americanexpress/\"\n      ]\n    ],\n  \
+      \  [\n      [\n        \"amex\"\n      ],\n      [\n        \"https://rdap.nic.amex/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"amica\"\n      ],\n      [\n  \
+      \      \"https://rdap.nic.amica/\"\n      ]\n    ],\n    [\n      [\n      \
+      \  \"amsterdam\"\n      ],\n      [\n        \"https://rdap.nic.amsterdam/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"analytics\"\n      ],\n      [\n\
+      \        \"https://rdap.nic.analytics/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"anz\"\n      ],\n      [\n        \"https://rdap.nic.anz/\"\n   \
+      \   ]\n    ],\n    [\n      [\n        \"aquarelle\"\n      ],\n      [\n  \
+      \      \"https://rdap.nic.aquarelle/\"\n      ]\n    ],\n    [\n      [\n  \
+      \      \"ar\"\n      ],\n      [\n        \"https://rdap.nic.ar/\"\n      ]\n\
+      \    ],\n    [\n      [\n        \"arab\"\n      ],\n      [\n        \"https://rdap.nic.arab/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"aramco\"\n      ],\n      [\n \
+      \       \"https://rdap.nic.aramco/\"\n      ]\n    ],\n    [\n      [\n    \
+      \    \"athleta\"\n      ],\n      [\n        \"https://rdap.nic.athleta/\"\n\
+      \      ]\n    ],\n    [\n      [\n        \"auspost\"\n      ],\n      [\n \
+      \       \"https://rdap.nic.auspost/\"\n      ]\n    ],\n    [\n      [\n   \
+      \     \"axa\"\n      ],\n      [\n        \"https://rdap.nic.axa/\"\n      ]\n\
+      \    ],\n    [\n      [\n        \"banamex\"\n      ],\n      [\n        \"\
+      https://rdap.nic.banamex/\"\n      ]\n    ],\n    [\n      [\n        \"bank\"\
+      \n      ],\n      [\n        \"https://rdap.nic.bank/\"\n      ]\n    ],\n \
+      \   [\n      [\n        \"barcelona\"\n      ],\n      [\n        \"https://rdap.nic.barcelona/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"baseball\"\n      ],\n      [\n\
+      \        \"https://rdap.nic.baseball/\"\n      ]\n    ],\n    [\n      [\n \
+      \       \"bauhaus\"\n      ],\n      [\n        \"https://rdap.nic.bauhaus/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"bayern\"\n      ],\n      [\n \
+      \       \"https://rdap.nic.bayern/\"\n      ]\n    ],\n    [\n      [\n    \
+      \    \"bcn\"\n      ],\n      [\n        \"https://rdap.nic.bcn/\"\n      ]\n\
+      \    ],\n    [\n      [\n        \"beer\"\n      ],\n      [\n        \"https://rdap.nic.beer/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"berlin\"\n      ],\n      [\n \
+      \       \"https://rdap.nic.berlin/v1/\"\n      ]\n    ],\n    [\n      [\n \
+      \       \"bible\"\n      ],\n      [\n        \"https://rdap.nic.bible/\"\n\
+      \      ]\n    ],\n    [\n      [\n        \"bid\"\n      ],\n      [\n     \
+      \   \"https://rdap.nic.bid/\"\n      ]\n    ],\n    [\n      [\n        \"biz\"\
+      \n      ],\n      [\n        \"https://rdap.nic.biz/\"\n      ]\n    ],\n  \
+      \  [\n      [\n        \"blackfriday\"\n      ],\n      [\n        \"https://rdap.nic.blackfriday/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"booking\"\n      ],\n      [\n\
+      \        \"https://rdap.nic.booking/\"\n      ]\n    ],\n    [\n      [\n  \
+      \      \"bostik\"\n      ],\n      [\n        \"https://rdap.nic.bostik/\"\n\
+      \      ]\n    ],\n    [\n      [\n        \"boston\"\n      ],\n      [\n  \
+      \      \"https://rdap.nic.boston/\"\n      ]\n    ],\n    [\n      [\n     \
+      \   \"brussels\"\n      ],\n      [\n        \"https://rdap.nic.brussels/\"\n\
+      \      ]\n    ],\n    [\n      [\n        \"buzz\"\n      ],\n      [\n    \
+      \    \"https://rdap.nic.buzz/\"\n      ]\n    ],\n    [\n      [\n        \"\
+      bzh\"\n      ],\n      [\n        \"https://rdap.nic.bzh/\"\n      ]\n    ],\n\
+      \    [\n      [\n        \"calvinklein\"\n      ],\n      [\n        \"https://rdap.nic.calvinklein/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"capetown\"\n      ],\n      [\n\
+      \        \"https://rdap.nic.capetown/rdap/\"\n      ]\n    ],\n    [\n     \
+      \ [\n        \"caravan\"\n      ],\n      [\n        \"https://rdap.nic.caravan/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"casa\"\n      ],\n      [\n   \
+      \     \"https://rdap.nic.casa/\"\n      ]\n    ],\n    [\n      [\n        \"\
+      cat\"\n      ],\n      [\n        \"https://rdap.nic.cat/\"\n      ]\n    ],\n\
+      \    [\n      [\n        \"catholic\"\n      ],\n      [\n        \"https://rdap.nic.catholic/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"cba\"\n      ],\n      [\n    \
+      \    \"https://rdap.nic.cba/\"\n      ]\n    ],\n    [\n      [\n        \"\
+      cbn\"\n      ],\n      [\n        \"https://rdap.nic.cbn/\"\n      ]\n    ],\n\
+      \    [\n      [\n        \"cbre\"\n      ],\n      [\n        \"https://rdap.nic.cbre/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"chase\"\n      ],\n      [\n  \
+      \      \"https://rdap.nic.chase/\"\n      ]\n    ],\n    [\n      [\n      \
+      \  \"chintai\"\n      ],\n      [\n        \"https://rdap.nic.chintai/\"\n \
+      \     ]\n    ],\n    [\n      [\n        \"cisco\"\n      ],\n      [\n    \
+      \    \"https://rdap.nic.cisco/\"\n      ]\n    ],\n    [\n      [\n        \"\
+      citi\"\n      ],\n      [\n        \"https://rdap.nic.citi/\"\n      ]\n   \
+      \ ],\n    [\n      [\n        \"club\"\n      ],\n      [\n        \"https://rdap.nic.club/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"commbank\"\n      ],\n      [\n\
+      \        \"https://rdap.nic.commbank/\"\n      ]\n    ],\n    [\n      [\n \
+      \       \"compare\"\n      ],\n      [\n        \"https://rdap.nic.compare/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"cooking\"\n      ],\n      [\n\
+      \        \"https://rdap.nic.cooking/\"\n      ]\n    ],\n    [\n      [\n  \
+      \      \"corsica\"\n      ],\n      [\n        \"https://rdap.nic.corsica/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"coupon\"\n      ],\n      [\n \
+      \       \"https://rdap.nic.coupon/\"\n      ]\n    ],\n    [\n      [\n    \
+      \    \"courses\"\n      ],\n      [\n        \"https://rdap.nic.courses/\"\n\
+      \      ]\n    ],\n    [\n      [\n        \"cr\"\n      ],\n      [\n      \
+      \  \"https://rdap.nic.cr/\"\n      ]\n    ],\n    [\n      [\n        \"cricket\"\
+      \n      ],\n      [\n        \"https://rdap.nic.cricket/\"\n      ]\n    ],\n\
+      \    [\n      [\n        \"cuisinella\"\n      ],\n      [\n        \"https://rdap.nic.cuisinella/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"cv\"\n      ],\n      [\n     \
+      \   \"https://rdap.nic.cv/\"\n      ]\n    ],\n    [\n      [\n        \"cx\"\
+      \n      ],\n      [\n        \"https://rdap.nic.cx/\"\n      ]\n    ],\n   \
+      \ [\n      [\n        \"cz\"\n      ],\n      [\n        \"https://rdap.nic.cz/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"date\"\n      ],\n      [\n   \
+      \     \"https://rdap.nic.date/\"\n      ]\n    ],\n    [\n      [\n        \"\
+      dds\"\n      ],\n      [\n        \"https://rdap.nic.dds/\"\n      ]\n    ],\n\
+      \    [\n      [\n        \"dell\"\n      ],\n      [\n        \"https://rdap.nic.dell/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"design\"\n      ],\n      [\n \
+      \       \"https://rdap.nic.design/\"\n      ]\n    ],\n    [\n      [\n    \
+      \    \"discover\"\n      ],\n      [\n        \"https://rdap.nic.discover/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"download\"\n      ],\n      [\n\
+      \        \"https://rdap.nic.download/\"\n      ]\n    ],\n    [\n      [\n \
+      \       \"dubai\"\n      ],\n      [\n        \"https://rdap.nic.dubai/\"\n\
+      \      ]\n    ],\n    [\n      [\n        \"dupont\"\n      ],\n      [\n  \
+      \      \"https://rdap.nic.dupont/\"\n      ]\n    ],\n    [\n      [\n     \
+      \   \"durban\"\n      ],\n      [\n        \"https://rdap.nic.durban/rdap/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"earth\"\n      ],\n      [\n  \
+      \      \"https://rdap.nic.earth/\"\n      ]\n    ],\n    [\n      [\n      \
+      \  \"erni\"\n      ],\n      [\n        \"https://rdap.nic.erni/\"\n      ]\n\
+      \    ],\n    [\n      [\n        \"eurovision\"\n      ],\n      [\n       \
+      \ \"https://rdap.nic.eurovision/\"\n      ]\n    ],\n    [\n      [\n      \
+      \  \"eus\"\n      ],\n      [\n        \"https://rdap.nic.eus/\"\n      ]\n\
+      \    ],\n    [\n      [\n        \"faith\"\n      ],\n      [\n        \"https://rdap.nic.faith/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"farmers\"\n      ],\n      [\n\
+      \        \"https://rdap.nic.farmers/\"\n      ]\n    ],\n    [\n      [\n  \
+      \      \"fashion\"\n      ],\n      [\n        \"https://rdap.nic.fashion/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"ferrero\"\n      ],\n      [\n\
+      \        \"https://rdap.nic.ferrero/\"\n      ]\n    ],\n    [\n      [\n  \
+      \      \"film\"\n      ],\n      [\n        \"https://rdap.nic.film/\"\n   \
+      \   ]\n    ],\n    [\n      [\n        \"firmdale\"\n      ],\n      [\n   \
+      \     \"https://rdap.nic.firmdale/\"\n      ]\n    ],\n    [\n      [\n    \
+      \    \"fishing\"\n      ],\n      [\n        \"https://rdap.nic.fishing/\"\n\
+      \      ]\n    ],\n    [\n      [\n        \"fit\"\n      ],\n      [\n     \
+      \   \"https://rdap.nic.fit/\"\n      ]\n    ],\n    [\n      [\n        \"flickr\"\
+      \n      ],\n      [\n        \"https://rdap.nic.flickr/\"\n      ]\n    ],\n\
+      \    [\n      [\n        \"flir\"\n      ],\n      [\n        \"https://rdap.nic.flir/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"ford\"\n      ],\n      [\n   \
+      \     \"https://rdap.nic.ford/\"\n      ]\n    ],\n    [\n      [\n        \"\
+      fox\"\n      ],\n      [\n        \"https://rdap.nic.fox/\"\n      ]\n    ],\n\
+      \    [\n      [\n        \"fr\"\n      ],\n      [\n        \"https://rdap.nic.fr/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"frontier\"\n      ],\n      [\n\
+      \        \"https://rdap.nic.frontier/\"\n      ]\n    ],\n    [\n      [\n \
+      \       \"ftr\"\n      ],\n      [\n        \"https://rdap.nic.ftr/\"\n    \
+      \  ]\n    ],\n    [\n      [\n        \"gal\"\n      ],\n      [\n        \"\
+      https://rdap.nic.gal/\"\n      ]\n    ],\n    [\n      [\n        \"gap\"\n\
+      \      ],\n      [\n        \"https://rdap.nic.gap/\"\n      ]\n    ],\n   \
+      \ [\n      [\n        \"garden\"\n      ],\n      [\n        \"https://rdap.nic.garden/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"gay\"\n      ],\n      [\n    \
+      \    \"https://rdap.nic.gay/\"\n      ]\n    ],\n    [\n      [\n        \"\
+      gdn\"\n      ],\n      [\n        \"https://rdap.nic.gdn/\"\n      ]\n    ],\n\
+      \    [\n      [\n        \"gea\"\n      ],\n      [\n        \"https://rdap.nic.gea/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"gmx\"\n      ],\n      [\n    \
+      \    \"https://rdap.nic.gmx/\"\n      ]\n    ],\n    [\n      [\n        \"\
+      godaddy\"\n      ],\n      [\n        \"https://rdap.nic.godaddy/\"\n      ]\n\
+      \    ],\n    [\n      [\n        \"grainger\"\n      ],\n      [\n        \"\
+      https://rdap.nic.grainger/\"\n      ]\n    ],\n    [\n      [\n        \"gs\"\
+      \n      ],\n      [\n        \"https://rdap.nic.gs/\"\n      ]\n    ],\n   \
+      \ [\n      [\n        \"hamburg\"\n      ],\n      [\n        \"https://rdap.nic.hamburg/v1/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"hbo\"\n      ],\n      [\n    \
+      \    \"https://rdap.nic.hbo/\"\n      ]\n    ],\n    [\n      [\n        \"\
+      health\"\n      ],\n      [\n        \"https://rdap.nic.health/\"\n      ]\n\
+      \    ],\n    [\n      [\n        \"hn\"\n      ],\n      [\n        \"https://rdap.nic.hn/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"homegoods\"\n      ],\n      [\n\
+      \        \"https://rdap.nic.homegoods/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"homesense\"\n      ],\n      [\n        \"https://rdap.nic.homesense/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"horse\"\n      ],\n      [\n  \
+      \      \"https://rdap.nic.horse/\"\n      ]\n    ],\n    [\n      [\n      \
+      \  \"hotels\"\n      ],\n      [\n        \"https://rdap.nic.hotels/\"\n   \
+      \   ]\n    ],\n    [\n      [\n        \"hsbc\"\n      ],\n      [\n       \
+      \ \"https://rdap.nic.hsbc/\"\n      ]\n    ],\n    [\n      [\n        \"hyatt\"\
+      \n      ],\n      [\n        \"https://rdap.nic.hyatt/\"\n      ]\n    ],\n\
+      \    [\n      [\n        \"ibm\"\n      ],\n      [\n        \"https://rdap.nic.ibm/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"ifm\"\n      ],\n      [\n    \
+      \    \"https://rdap.nic.ifm/\"\n      ]\n    ],\n    [\n      [\n        \"\
+      ikano\"\n      ],\n      [\n        \"https://rdap.nic.ikano/v1/\"\n      ]\n\
+      \    ],\n    [\n      [\n        \"ink\"\n      ],\n      [\n        \"https://rdap.nic.ink/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"insurance\"\n      ],\n      [\n\
+      \        \"https://rdap.nic.insurance/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"intuit\"\n      ],\n      [\n        \"https://rdap.nic.intuit/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"ipiranga\"\n      ],\n      [\n\
+      \        \"https://rdap.nic.ipiranga/\"\n      ]\n    ],\n    [\n      [\n \
+      \       \"itau\"\n      ],\n      [\n        \"https://rdap.nic.itau/\"\n  \
+      \    ]\n    ],\n    [\n      [\n        \"jmp\"\n      ],\n      [\n       \
+      \ \"https://rdap.nic.jmp/\"\n      ]\n    ],\n    [\n      [\n        \"jnj\"\
+      \n      ],\n      [\n        \"https://rdap.nic.jnj/\"\n      ]\n    ],\n  \
+      \  [\n      [\n        \"joburg\"\n      ],\n      [\n        \"https://rdap.nic.joburg/rdap/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"jpmorgan\"\n      ],\n      [\n\
+      \        \"https://rdap.nic.jpmorgan/\"\n      ]\n    ],\n    [\n      [\n \
+      \       \"jprs\"\n      ],\n      [\n        \"https://rdap.nic.jprs/rdap/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"kpmg\"\n      ],\n      [\n   \
+      \     \"https://rdap.nic.kpmg/\"\n      ]\n    ],\n    [\n      [\n        \"\
+      krd\"\n      ],\n      [\n        \"https://rdap.nic.krd/\"\n      ]\n    ],\n\
+      \    [\n      [\n        \"lacaixa\"\n      ],\n      [\n        \"https://rdap.nic.lacaixa/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"lancaster\"\n      ],\n      [\n\
+      \        \"https://rdap.nic.lancaster/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"lanxess\"\n      ],\n      [\n        \"https://rdap.nic.lanxess/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"latrobe\"\n      ],\n      [\n\
+      \        \"https://rdap.nic.latrobe/\"\n      ]\n    ],\n    [\n      [\n  \
+      \      \"law\"\n      ],\n      [\n        \"https://rdap.nic.law/\"\n     \
+      \ ]\n    ],\n    [\n      [\n        \"leclerc\"\n      ],\n      [\n      \
+      \  \"https://rdap.nic.leclerc/\"\n      ]\n    ],\n    [\n      [\n        \"\
+      lifeinsurance\"\n      ],\n      [\n        \"https://rdap.nic.lifeinsurance/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"lilly\"\n      ],\n      [\n  \
+      \      \"https://rdap.nic.lilly/\"\n      ]\n    ],\n    [\n      [\n      \
+      \  \"lincoln\"\n      ],\n      [\n        \"https://rdap.nic.lincoln/\"\n \
+      \     ]\n    ],\n    [\n      [\n        \"loan\"\n      ],\n      [\n     \
+      \   \"https://rdap.nic.loan/\"\n      ]\n    ],\n    [\n      [\n        \"\
+      luxe\"\n      ],\n      [\n        \"https://rdap.nic.luxe/\"\n      ]\n   \
+      \ ],\n    [\n      [\n        \"madrid\"\n      ],\n      [\n        \"https://rdap.nic.madrid/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"man\"\n      ],\n      [\n    \
+      \    \"https://rdap.nic.man/\"\n      ]\n    ],\n    [\n      [\n        \"\
+      mango\"\n      ],\n      [\n        \"https://rdap.nic.mango/\"\n      ]\n \
+      \   ],\n    [\n      [\n        \"marshalls\"\n      ],\n      [\n        \"\
+      https://rdap.nic.marshalls/\"\n      ]\n    ],\n    [\n      [\n        \"mattel\"\
+      \n      ],\n      [\n        \"https://rdap.nic.mattel/\"\n      ]\n    ],\n\
+      \    [\n      [\n        \"melbourne\"\n      ],\n      [\n        \"https://rdap.nic.melbourne/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"men\"\n      ],\n      [\n    \
+      \    \"https://rdap.nic.men/\"\n      ]\n    ],\n    [\n      [\n        \"\
+      menu\"\n      ],\n      [\n        \"https://rdap.nic.menu/\"\n      ]\n   \
+      \ ],\n    [\n      [\n        \"miami\"\n      ],\n      [\n        \"https://rdap.nic.miami/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"mint\"\n      ],\n      [\n   \
+      \     \"https://rdap.nic.mint/\"\n      ]\n    ],\n    [\n      [\n        \"\
+      mlb\"\n      ],\n      [\n        \"https://rdap.nic.mlb/\"\n      ]\n    ],\n\
+      \    [\n      [\n        \"mma\"\n      ],\n      [\n        \"https://rdap.nic.mma/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"moe\"\n      ],\n      [\n    \
+      \    \"https://rdap.nic.moe/\"\n      ]\n    ],\n    [\n      [\n        \"\
+      monash\"\n      ],\n      [\n        \"https://rdap.nic.monash/\"\n      ]\n\
+      \    ],\n    [\n      [\n        \"moto\"\n      ],\n      [\n        \"https://rdap.nic.moto/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"ms\"\n      ],\n      [\n     \
+      \   \"https://rdap.nic.ms/\"\n      ]\n    ],\n    [\n      [\n        \"museum\"\
+      \n      ],\n      [\n        \"https://rdap.nic.museum/\"\n      ]\n    ],\n\
+      \    [\n      [\n        \"nba\"\n      ],\n      [\n        \"https://rdap.nic.nba/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"netbank\"\n      ],\n      [\n\
+      \        \"https://rdap.nic.netbank/\"\n      ]\n    ],\n    [\n      [\n  \
+      \      \"netflix\"\n      ],\n      [\n        \"https://rdap.nic.netflix/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"neustar\"\n      ],\n      [\n\
+      \        \"https://rdap.nic.neustar/\"\n      ]\n    ],\n    [\n      [\n  \
+      \      \"nf\"\n      ],\n      [\n        \"https://rdap.nic.nf/\"\n      ]\n\
+      \    ],\n    [\n      [\n        \"nfl\"\n      ],\n      [\n        \"https://rdap.nic.nfl/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"nike\"\n      ],\n      [\n   \
+      \     \"https://rdap.nic.nike/\"\n      ]\n    ],\n    [\n      [\n        \"\
+      nrw\"\n      ],\n      [\n        \"https://rdap.nic.nrw/\"\n      ]\n    ],\n\
+      \    [\n      [\n        \"ntt\"\n      ],\n      [\n        \"https://rdap.nic.ntt/rdap/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"nyc\"\n      ],\n      [\n    \
+      \    \"https://rdap.nic.nyc/\"\n      ]\n    ],\n    [\n      [\n        \"\
+      office\"\n      ],\n      [\n        \"https://rdap.nic.office/\"\n      ]\n\
+      \    ],\n    [\n      [\n        \"olayan\"\n      ],\n      [\n        \"https://rdap.nic.olayan/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"olayangroup\"\n      ],\n     \
+      \ [\n        \"https://rdap.nic.olayangroup/\"\n      ]\n    ],\n    [\n   \
+      \   [\n        \"one\"\n      ],\n      [\n        \"https://rdap.nic.one/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"open\"\n      ],\n      [\n   \
+      \     \"https://rdap.nic.open/\"\n      ]\n    ],\n    [\n      [\n        \"\
+      osaka\"\n      ],\n      [\n        \"https://rdap.nic.osaka/\"\n      ]\n \
+      \   ],\n    [\n      [\n        \"ovh\"\n      ],\n      [\n        \"https://rdap.nic.ovh/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"paris\"\n      ],\n      [\n  \
+      \      \"https://rdap.nic.paris/\"\n      ]\n    ],\n    [\n      [\n      \
+      \  \"party\"\n      ],\n      [\n        \"https://rdap.nic.party/\"\n     \
+      \ ]\n    ],\n    [\n      [\n        \"pfizer\"\n      ],\n      [\n       \
+      \ \"https://rdap.nic.pfizer/\"\n      ]\n    ],\n    [\n      [\n        \"\
+      philips\"\n      ],\n      [\n        \"https://rdap.nic.philips/\"\n      ]\n\
+      \    ],\n    [\n      [\n        \"photo\"\n      ],\n      [\n        \"https://rdap.nic.photo/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"physio\"\n      ],\n      [\n \
+      \       \"https://rdap.nic.physio/\"\n      ]\n    ],\n    [\n      [\n    \
+      \    \"ping\"\n      ],\n      [\n        \"https://rdap.nic.ping/\"\n     \
+      \ ]\n    ],\n    [\n      [\n        \"pm\"\n      ],\n      [\n        \"https://rdap.nic.pm/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"politie\"\n      ],\n      [\n\
+      \        \"https://rdap.nic.politie/\"\n      ]\n    ],\n    [\n      [\n  \
+      \      \"porn\"\n      ],\n      [\n        \"https://rdap.nic.porn/\"\n   \
+      \   ]\n    ],\n    [\n      [\n        \"pramerica\"\n      ],\n      [\n  \
+      \      \"https://rdap.nic.pramerica/\"\n      ]\n    ],\n    [\n      [\n  \
+      \      \"praxi\"\n      ],\n      [\n        \"https://rdap.nic.praxi/\"\n \
+      \     ]\n    ],\n    [\n      [\n        \"pru\"\n      ],\n      [\n      \
+      \  \"https://rdap.nic.pru/\"\n      ]\n    ],\n    [\n      [\n        \"prudential\"\
+      \n      ],\n      [\n        \"https://rdap.nic.prudential/\"\n      ]\n   \
+      \ ],\n    [\n      [\n        \"quebec\"\n      ],\n      [\n        \"https://rdap.nic.quebec/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"racing\"\n      ],\n      [\n \
+      \       \"https://rdap.nic.racing/\"\n      ]\n    ],\n    [\n      [\n    \
+      \    \"radio\"\n      ],\n      [\n        \"https://rdap.nic.radio/\"\n   \
+      \   ]\n    ],\n    [\n      [\n        \"re\"\n      ],\n      [\n        \"\
+      https://rdap.nic.re/\"\n      ]\n    ],\n    [\n      [\n        \"review\"\n\
+      \      ],\n      [\n        \"https://rdap.nic.review/\"\n      ]\n    ],\n\
+      \    [\n      [\n        \"rodeo\"\n      ],\n      [\n        \"https://rdap.nic.rodeo/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"safety\"\n      ],\n      [\n \
+      \       \"https://rdap.nic.safety/\"\n      ]\n    ],\n    [\n      [\n    \
+      \    \"sakura\"\n      ],\n      [\n        \"https://rdap.nic.sakura/rdap/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"sandvik\"\n      ],\n      [\n\
+      \        \"https://rdap.nic.sandvik/\"\n      ]\n    ],\n    [\n      [\n  \
+      \      \"sandvikcoromant\"\n      ],\n      [\n        \"https://rdap.nic.sandvikcoromant/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"sap\"\n      ],\n      [\n    \
+      \    \"https://rdap.nic.sap/\"\n      ]\n    ],\n    [\n      [\n        \"\
+      sas\"\n      ],\n      [\n        \"https://rdap.nic.sas/\"\n      ]\n    ],\n\
+      \    [\n      [\n        \"scb\"\n      ],\n      [\n        \"https://rdap.nic.scb/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"schaeffler\"\n      ],\n      [\n\
+      \        \"https://rdap.nic.schaeffler/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"schmidt\"\n      ],\n      [\n        \"https://rdap.nic.schmidt/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"science\"\n      ],\n      [\n\
+      \        \"https://rdap.nic.science/\"\n      ]\n    ],\n    [\n      [\n  \
+      \      \"scot\"\n      ],\n      [\n        \"https://rdap.nic.scot/\"\n   \
+      \   ]\n    ],\n    [\n      [\n        \"sd\"\n      ],\n      [\n        \"\
+      https://rdap.nic.sd/\"\n      ]\n    ],\n    [\n      [\n        \"seat\"\n\
+      \      ],\n      [\n        \"https://rdap.nic.seat/\"\n      ]\n    ],\n  \
+      \  [\n      [\n        \"seek\"\n      ],\n      [\n        \"https://rdap.nic.seek/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"select\"\n      ],\n      [\n \
+      \       \"https://rdap.nic.select/\"\n      ]\n    ],\n    [\n      [\n    \
+      \    \"seven\"\n      ],\n      [\n        \"https://rdap.nic.seven/\"\n   \
+      \   ]\n    ],\n    [\n      [\n        \"sex\"\n      ],\n      [\n        \"\
+      https://rdap.nic.sex/\"\n      ]\n    ],\n    [\n      [\n        \"skype\"\n\
+      \      ],\n      [\n        \"https://rdap.nic.skype/\"\n      ]\n    ],\n \
+      \   [\n      [\n        \"sncf\"\n      ],\n      [\n        \"https://rdap.nic.sncf/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"song\"\n      ],\n      [\n   \
+      \     \"https://rdap.nic.song/\"\n      ]\n    ],\n    [\n      [\n        \"\
+      sport\"\n      ],\n      [\n        \"https://rdap.nic.sport/\"\n      ]\n \
+      \   ],\n    [\n      [\n        \"ss\"\n      ],\n      [\n        \"https://rdap.nic.ss/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"staples\"\n      ],\n      [\n\
+      \        \"https://rdap.nic.staples/\"\n      ]\n    ],\n    [\n      [\n  \
+      \      \"statefarm\"\n      ],\n      [\n        \"https://rdap.nic.statefarm/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"stream\"\n      ],\n      [\n \
+      \       \"https://rdap.nic.stream/\"\n      ]\n    ],\n    [\n      [\n    \
+      \    \"study\"\n      ],\n      [\n        \"https://rdap.nic.study/\"\n   \
+      \   ]\n    ],\n    [\n      [\n        \"sucks\"\n      ],\n      [\n      \
+      \  \"https://rdap.nic.sucks/\"\n      ]\n    ],\n    [\n      [\n        \"\
+      surf\"\n      ],\n      [\n        \"https://rdap.nic.surf/\"\n      ]\n   \
+      \ ],\n    [\n      [\n        \"swiss\"\n      ],\n      [\n        \"https://rdap.nic.swiss/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"sydney\"\n      ],\n      [\n \
+      \       \"https://rdap.nic.sydney/\"\n      ]\n    ],\n    [\n      [\n    \
+      \    \"tab\"\n      ],\n      [\n        \"https://rdap.nic.tab/\"\n      ]\n\
+      \    ],\n    [\n      [\n        \"taipei\"\n      ],\n      [\n        \"https://rdap.nic.taipei/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"target\"\n      ],\n      [\n \
+      \       \"https://rdap.nic.target/\"\n      ]\n    ],\n    [\n      [\n    \
+      \    \"tattoo\"\n      ],\n      [\n        \"https://rdap.nic.tattoo/\"\n \
+      \     ]\n    ],\n    [\n      [\n        \"tdk\"\n      ],\n      [\n      \
+      \  \"https://rdap.nic.tdk/\"\n      ]\n    ],\n    [\n      [\n        \"tel\"\
+      \n      ],\n      [\n        \"https://rdap.nic.tel/\"\n      ]\n    ],\n  \
+      \  [\n      [\n        \"teva\"\n      ],\n      [\n        \"https://rdap.nic.teva/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"tf\"\n      ],\n      [\n     \
+      \   \"https://rdap.nic.tf/\"\n      ]\n    ],\n    [\n      [\n        \"tjmaxx\"\
+      \n      ],\n      [\n        \"https://rdap.nic.tjmaxx/\"\n      ]\n    ],\n\
+      \    [\n      [\n        \"tjx\"\n      ],\n      [\n        \"https://rdap.nic.tjx/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"tkmaxx\"\n      ],\n      [\n \
+      \       \"https://rdap.nic.tkmaxx/\"\n      ]\n    ],\n    [\n      [\n    \
+      \    \"total\"\n      ],\n      [\n        \"https://rdap.nic.total/\"\n   \
+      \   ]\n    ],\n    [\n      [\n        \"trade\"\n      ],\n      [\n      \
+      \  \"https://rdap.nic.trade/\"\n      ]\n    ],\n    [\n      [\n        \"\
+      tube\"\n      ],\n      [\n        \"https://rdap.nic.tube/\"\n      ]\n   \
+      \ ],\n    [\n      [\n        \"tv\"\n      ],\n      [\n        \"https://rdap.nic.tv/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"versicherung\"\n      ],\n    \
+      \  [\n        \"https://rdap.nic.versicherung/v1/\"\n      ]\n    ],\n    [\n\
+      \      [\n        \"vi\"\n      ],\n      [\n        \"https://rdap.nic.vi/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"vip\"\n      ],\n      [\n    \
+      \    \"https://rdap.nic.vip/\"\n      ]\n    ],\n    [\n      [\n        \"\
+      vivo\"\n      ],\n      [\n        \"https://rdap.nic.vivo/\"\n      ]\n   \
+      \ ],\n    [\n      [\n        \"vlaanderen\"\n      ],\n      [\n        \"\
+      https://rdap.nic.vlaanderen/\"\n      ]\n    ],\n    [\n      [\n        \"\
+      vodka\"\n      ],\n      [\n        \"https://rdap.nic.vodka/\"\n      ]\n \
+      \   ],\n    [\n      [\n        \"voting\"\n      ],\n      [\n        \"https://rdap.nic.voting/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"walter\"\n      ],\n      [\n \
+      \       \"https://rdap.nic.walter/\"\n      ]\n    ],\n    [\n      [\n    \
+      \    \"weather\"\n      ],\n      [\n        \"https://rdap.nic.weather/\"\n\
+      \      ]\n    ],\n    [\n      [\n        \"weatherchannel\"\n      ],\n   \
+      \   [\n        \"https://rdap.nic.weatherchannel/\"\n      ]\n    ],\n    [\n\
+      \      [\n        \"webcam\"\n      ],\n      [\n        \"https://rdap.nic.webcam/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"wedding\"\n      ],\n      [\n\
+      \        \"https://rdap.nic.wedding/\"\n      ]\n    ],\n    [\n      [\n  \
+      \      \"wf\"\n      ],\n      [\n        \"https://rdap.nic.wf/\"\n      ]\n\
+      \    ],\n    [\n      [\n        \"whoswho\"\n      ],\n      [\n        \"\
+      https://rdap.nic.whoswho/\"\n      ]\n    ],\n    [\n      [\n        \"wiki\"\
+      \n      ],\n      [\n        \"https://rdap.nic.wiki/\"\n      ]\n    ],\n \
+      \   [\n      [\n        \"williamhill\"\n      ],\n      [\n        \"https://rdap.nic.williamhill/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"win\"\n      ],\n      [\n    \
+      \    \"https://rdap.nic.win/\"\n      ]\n    ],\n    [\n      [\n        \"\
+      winners\"\n      ],\n      [\n        \"https://rdap.nic.winners/\"\n      ]\n\
+      \    ],\n    [\n      [\n        \"woodside\"\n      ],\n      [\n        \"\
+      https://rdap.nic.woodside/\"\n      ]\n    ],\n    [\n      [\n        \"work\"\
+      \n      ],\n      [\n        \"https://rdap.nic.work/\"\n      ]\n    ],\n \
+      \   [\n      [\n        \"wtc\"\n      ],\n      [\n        \"https://rdap.nic.wtc/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"xerox\"\n      ],\n      [\n  \
+      \      \"https://rdap.nic.xerox/\"\n      ]\n    ],\n    [\n      [\n      \
+      \  \"xn--1ck2e1b\"\n      ],\n      [\n        \"https://rdap.nic.xn--1ck2e1b/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"xn--80aqecdr1a\"\n      ],\n  \
+      \    [\n        \"https://rdap.nic.xn--80aqecdr1a/\"\n      ]\n    ],\n    [\n\
+      \      [\n        \"xn--80asehdb\"\n      ],\n      [\n        \"https://rdap.nic.xn--80asehdb/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"xn--80aswg\"\n      ],\n      [\n\
+      \        \"https://rdap.nic.xn--80aswg/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"xn--bck1b9a5dre4c\"\n      ],\n      [\n        \"https://rdap.nic.xn--bck1b9a5dre4c/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"xn--cck2b3b\"\n      ],\n     \
+      \ [\n        \"https://rdap.nic.xn--cck2b3b/\"\n      ]\n    ],\n    [\n   \
+      \   [\n        \"xn--eckvdtc9d\"\n      ],\n      [\n        \"https://rdap.nic.xn--eckvdtc9d/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"xn--fct429k\"\n      ],\n     \
+      \ [\n        \"https://rdap.nic.xn--fct429k/\"\n      ]\n    ],\n    [\n   \
+      \   [\n        \"xn--g2xx48c\"\n      ],\n      [\n        \"https://rdap.nic.xn--g2xx48c/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"xn--gckr3f0f\"\n      ],\n    \
+      \  [\n        \"https://rdap.nic.xn--gckr3f0f/\"\n      ]\n    ],\n    [\n \
+      \     [\n        \"xn--gk3at1e\"\n      ],\n      [\n        \"https://rdap.nic.xn--gk3at1e/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"xn--jvr189m\"\n      ],\n     \
+      \ [\n        \"https://rdap.nic.xn--jvr189m/\"\n      ]\n    ],\n    [\n   \
+      \   [\n        \"xn--kcrx77d1x4a\"\n      ],\n      [\n        \"https://rdap.nic.xn--kcrx77d1x4a/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"xn--mgba3a3ejt\"\n      ],\n  \
+      \    [\n        \"https://rdap.nic.xn--mgba3a3ejt/\"\n      ]\n    ],\n    [\n\
+      \      [\n        \"xn--mgba7c0bbn0a\"\n      ],\n      [\n        \"https://rdap.nic.xn--mgba7c0bbn0a/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"xn--mgbab2bd\"\n      ],\n    \
+      \  [\n        \"https://rdap.nic.xn--mgbab2bd/\"\n      ]\n    ],\n    [\n \
+      \     [\n        \"xn--mgbca7dzdo\"\n      ],\n      [\n        \"https://rdap.nic.xn--mgbca7dzdo/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"xn--mgbi4ecexp\"\n      ],\n  \
+      \    [\n        \"https://rdap.nic.xn--mgbi4ecexp/\"\n      ]\n    ],\n    [\n\
+      \      [\n        \"xn--ngbc5azd\"\n      ],\n      [\n        \"https://rdap.nic.xn--ngbc5azd/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"xn--ngbrx\"\n      ],\n      [\n\
+      \        \"https://rdap.nic.xn--ngbrx/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"xn--rovu88b\"\n      ],\n      [\n        \"https://rdap.nic.xn--rovu88b/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"xn--tiq49xqyj\"\n      ],\n   \
+      \   [\n        \"https://rdap.nic.xn--tiq49xqyj/\"\n      ]\n    ],\n    [\n\
+      \      [\n        \"xxx\"\n      ],\n      [\n        \"https://rdap.nic.xxx/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"yandex\"\n      ],\n      [\n \
+      \       \"https://rdap.nic.yandex/\"\n      ]\n    ],\n    [\n      [\n    \
+      \    \"yoga\"\n      ],\n      [\n        \"https://rdap.nic.yoga/\"\n     \
+      \ ]\n    ],\n    [\n      [\n        \"yt\"\n      ],\n      [\n        \"https://rdap.nic.yt/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"zero\"\n      ],\n      [\n   \
+      \     \"https://rdap.nic.zero/\"\n      ]\n    ],\n    [\n      [\n        \"\
+      zm\"\n      ],\n      [\n        \"https://rdap.nic.zm/\"\n      ]\n    ],\n\
+      \    [\n      [\n        \"abbvie\"\n      ],\n      [\n        \"https://rdap.nominet.uk/abbvie/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"amazon\"\n      ],\n      [\n \
+      \       \"https://rdap.nominet.uk/amazon/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"audible\"\n      ],\n      [\n        \"https://rdap.nominet.uk/audible/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"author\"\n      ],\n      [\n \
+      \       \"https://rdap.nominet.uk/author/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"aws\"\n      ],\n      [\n        \"https://rdap.nominet.uk/aws/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"azure\"\n      ],\n      [\n  \
+      \      \"https://rdap.nominet.uk/azure/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"bbc\"\n      ],\n      [\n        \"https://rdap.nominet.uk/bbc/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"bbva\"\n      ],\n      [\n   \
+      \     \"https://rdap.nominet.uk/bbva/\"\n      ]\n    ],\n    [\n      [\n \
+      \       \"bentley\"\n      ],\n      [\n        \"https://rdap.nominet.uk/bentley/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"bing\"\n      ],\n      [\n   \
+      \     \"https://rdap.nominet.uk/bing/\"\n      ]\n    ],\n    [\n      [\n \
+      \       \"book\"\n      ],\n      [\n        \"https://rdap.nominet.uk/book/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"bot\"\n      ],\n      [\n    \
+      \    \"https://rdap.nominet.uk/bot/\"\n      ]\n    ],\n    [\n      [\n   \
+      \     \"broadway\"\n      ],\n      [\n        \"https://rdap.nominet.uk/broadway/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"buy\"\n      ],\n      [\n    \
+      \    \"https://rdap.nominet.uk/buy/\"\n      ]\n    ],\n    [\n      [\n   \
+      \     \"call\"\n      ],\n      [\n        \"https://rdap.nominet.uk/call/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"career\"\n      ],\n      [\n \
+      \       \"https://rdap.nominet.uk/career/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"circle\"\n      ],\n      [\n        \"https://rdap.nominet.uk/circle/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"cymru\"\n      ],\n      [\n  \
+      \      \"https://rdap.nominet.uk/cymru/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"deal\"\n      ],\n      [\n        \"https://rdap.nominet.uk/deal/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"desi\"\n      ],\n      [\n   \
+      \     \"https://rdap.nominet.uk/desi/\"\n      ]\n    ],\n    [\n      [\n \
+      \       \"fairwinds\"\n      ],\n      [\n        \"https://rdap.nominet.uk/fairwinds/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"fast\"\n      ],\n      [\n   \
+      \     \"https://rdap.nominet.uk/fast/\"\n      ]\n    ],\n    [\n      [\n \
+      \       \"fire\"\n      ],\n      [\n        \"https://rdap.nominet.uk/fire/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"free\"\n      ],\n      [\n   \
+      \     \"https://rdap.nominet.uk/free/\"\n      ]\n    ],\n    [\n      [\n \
+      \       \"gop\"\n      ],\n      [\n        \"https://rdap.nominet.uk/gop/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"got\"\n      ],\n      [\n    \
+      \    \"https://rdap.nominet.uk/got/\"\n      ]\n    ],\n    [\n      [\n   \
+      \     \"gucci\"\n      ],\n      [\n        \"https://rdap.nominet.uk/gucci/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"hot\"\n      ],\n      [\n    \
+      \    \"https://rdap.nominet.uk/hot/\"\n      ]\n    ],\n    [\n      [\n   \
+      \     \"hotmail\"\n      ],\n      [\n        \"https://rdap.nominet.uk/hotmail/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"ieee\"\n      ],\n      [\n   \
+      \     \"https://rdap.nominet.uk/ieee/\"\n      ]\n    ],\n    [\n      [\n \
+      \       \"imdb\"\n      ],\n      [\n        \"https://rdap.nominet.uk/imdb/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"jobs\"\n      ],\n      [\n   \
+      \     \"https://rdap.nominet.uk/jobs/\"\n      ]\n    ],\n    [\n      [\n \
+      \       \"jot\"\n      ],\n      [\n        \"https://rdap.nominet.uk/jot/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"joy\"\n      ],\n      [\n    \
+      \    \"https://rdap.nominet.uk/joy/\"\n      ]\n    ],\n    [\n      [\n   \
+      \     \"kindle\"\n      ],\n      [\n        \"https://rdap.nominet.uk/kindle/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"like\"\n      ],\n      [\n   \
+      \     \"https://rdap.nominet.uk/like/\"\n      ]\n    ],\n    [\n      [\n \
+      \       \"locus\"\n      ],\n      [\n        \"https://rdap.nominet.uk/locus/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"med\"\n      ],\n      [\n    \
+      \    \"https://rdap.nominet.uk/med/\"\n      ]\n    ],\n    [\n      [\n   \
+      \     \"microsoft\"\n      ],\n      [\n        \"https://rdap.nominet.uk/microsoft/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"moi\"\n      ],\n      [\n    \
+      \    \"https://rdap.nominet.uk/moi/\"\n      ]\n    ],\n    [\n      [\n   \
+      \     \"mtn\"\n      ],\n      [\n        \"https://rdap.nominet.uk/mtn/\"\n\
+      \      ]\n    ],\n    [\n      [\n        \"now\"\n      ],\n      [\n     \
+      \   \"https://rdap.nominet.uk/now/\"\n      ]\n    ],\n    [\n      [\n    \
+      \    \"nowruz\"\n      ],\n      [\n        \"https://rdap.nominet.uk/nowruz/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"pars\"\n      ],\n      [\n   \
+      \     \"https://rdap.nominet.uk/pars/\"\n      ]\n    ],\n    [\n      [\n \
+      \       \"pay\"\n      ],\n      [\n        \"https://rdap.nominet.uk/pay/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"pharmacy\"\n      ],\n      [\n\
+      \        \"https://rdap.nominet.uk/pharmacy/\"\n      ]\n    ],\n    [\n   \
+      \   [\n        \"pin\"\n      ],\n      [\n        \"https://rdap.nominet.uk/pin/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"pioneer\"\n      ],\n      [\n\
+      \        \"https://rdap.nominet.uk/pioneer/\"\n      ]\n    ],\n    [\n    \
+      \  [\n        \"pn\"\n      ],\n      [\n        \"https://rdap.nominet.uk/pn/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"prime\"\n      ],\n      [\n  \
+      \      \"https://rdap.nominet.uk/prime/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"read\"\n      ],\n      [\n        \"https://rdap.nominet.uk/read/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"realestate\"\n      ],\n      [\n\
+      \        \"https://rdap.nominet.uk/realestate/\"\n      ]\n    ],\n    [\n \
+      \     [\n        \"realtor\"\n      ],\n      [\n        \"https://rdap.nominet.uk/realtor/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"room\"\n      ],\n      [\n   \
+      \     \"https://rdap.nominet.uk/room/\"\n      ]\n    ],\n    [\n      [\n \
+      \       \"safe\"\n      ],\n      [\n        \"https://rdap.nominet.uk/safe/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"save\"\n      ],\n      [\n   \
+      \     \"https://rdap.nominet.uk/save/\"\n      ]\n    ],\n    [\n      [\n \
+      \       \"secure\"\n      ],\n      [\n        \"https://rdap.nominet.uk/secure/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"shia\"\n      ],\n      [\n   \
+      \     \"https://rdap.nominet.uk/shia/\"\n      ]\n    ],\n    [\n      [\n \
+      \       \"silk\"\n      ],\n      [\n        \"https://rdap.nominet.uk/silk/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"sky\"\n      ],\n      [\n    \
+      \    \"https://rdap.nominet.uk/sky/\"\n      ]\n    ],\n    [\n      [\n   \
+      \     \"smile\"\n      ],\n      [\n        \"https://rdap.nominet.uk/smile/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"spot\"\n      ],\n      [\n   \
+      \     \"https://rdap.nominet.uk/spot/\"\n      ]\n    ],\n    [\n      [\n \
+      \       \"talk\"\n      ],\n      [\n        \"https://rdap.nominet.uk/talk/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"tci\"\n      ],\n      [\n    \
+      \    \"https://rdap.nominet.uk/tci/\"\n      ]\n    ],\n    [\n      [\n   \
+      \     \"tunes\"\n      ],\n      [\n        \"https://rdap.nominet.uk/tunes/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"tushu\"\n      ],\n      [\n  \
+      \      \"https://rdap.nominet.uk/tushu/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"uk\"\n      ],\n      [\n        \"https://rdap.nominet.uk/uk/\"\n\
+      \      ]\n    ],\n    [\n      [\n        \"virgin\"\n      ],\n      [\n  \
+      \      \"https://rdap.nominet.uk/virgin/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"wales\"\n      ],\n      [\n        \"https://rdap.nominet.uk/wales/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"wanggou\"\n      ],\n      [\n\
+      \        \"https://rdap.nominet.uk/wanggou/\"\n      ]\n    ],\n    [\n    \
+      \  [\n        \"wed\"\n      ],\n      [\n        \"https://rdap.nominet.uk/wed/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"windows\"\n      ],\n      [\n\
+      \        \"https://rdap.nominet.uk/windows/\"\n      ]\n    ],\n    [\n    \
+      \  [\n        \"wow\"\n      ],\n      [\n        \"https://rdap.nominet.uk/wow/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"xbox\"\n      ],\n      [\n   \
+      \     \"https://rdap.nominet.uk/xbox/\"\n      ]\n    ],\n    [\n      [\n \
+      \       \"xn--cckwcxetd\"\n      ],\n      [\n        \"https://rdap.nominet.uk/xn--cckwcxetd/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"xn--jlq480n2rg\"\n      ],\n  \
+      \    [\n        \"https://rdap.nominet.uk/xn--jlq480n2rg/\"\n      ]\n    ],\n\
+      \    [\n      [\n        \"xn--mgbt3dhd\"\n      ],\n      [\n        \"https://rdap.nominet.uk/xn--mgbt3dhd/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"yamaxun\"\n      ],\n      [\n\
+      \        \"https://rdap.nominet.uk/yamaxun/\"\n      ]\n    ],\n    [\n    \
+      \  [\n        \"you\"\n      ],\n      [\n        \"https://rdap.nominet.uk/you/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"zappos\"\n      ],\n      [\n \
+      \       \"https://rdap.nominet.uk/zappos/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"no\"\n      ],\n      [\n        \"https://rdap.norid.no/\"\n   \
+      \   ]\n    ],\n    [\n      [\n        \"id\"\n      ],\n      [\n        \"\
+      https://rdap.pandi.id/rdap/\"\n      ]\n    ],\n    [\n      [\n        \"charity\"\
+      ,\n        \"foundation\",\n        \"gives\",\n        \"giving\",\n      \
+      \  \"ngo\",\n        \"ong\",\n        \"org\",\n        \"xn--c1avg\",\n  \
+      \      \"xn--i1b6b1a6a2e\",\n        \"xn--nqv7f\",\n        \"xn--nqv7fs00ema\"\
+      \n      ],\n      [\n        \"https://rdap.publicinterestregistry.org/rdap/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"si\"\n      ],\n      [\n     \
+      \   \"https://rdap.register.si/\"\n      ]\n    ],\n    [\n      [\n       \
+      \ \"br\"\n      ],\n      [\n        \"https://rdap.registro.br/\"\n      ]\n\
+      \    ],\n    [\n      [\n        \"bar\",\n        \"rest\"\n      ],\n    \
+      \  [\n        \"https://rdap.registry.bar/rdap/\"\n      ]\n    ],\n    [\n\
+      \      [\n        \"observer\",\n        \"realty\"\n      ],\n      [\n   \
+      \     \"https://rdap.registry.click/rdap/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"cloud\"\n      ],\n      [\n        \"https://rdap.registry.cloud/rdap/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"coop\",\n        \"creditunion\"\
+      \n      ],\n      [\n        \"https://rdap.registry.coop/rdap/\"\n      ]\n\
+      \    ],\n    [\n      [\n        \"ec\"\n      ],\n      [\n        \"https://rdap.registry.ec/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"gy\"\n      ],\n      [\n     \
+      \   \"https://rdap.registry.gy/\"\n      ]\n    ],\n    [\n      [\n       \
+      \ \"hiphop\"\n      ],\n      [\n        \"https://rdap.registry.hiphop/rdap/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"love\"\n      ],\n      [\n   \
+      \     \"https://rdap.registry.love/rdap/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"cologne\",\n        \"koeln\",\n        \"tirol\",\n        \"wien\"\
+      \n      ],\n      [\n        \"https://rdap.ryce-rsp.com/rdap/\"\n      ]\n\
+      \    ],\n    [\n      [\n        \"nl\"\n      ],\n      [\n        \"https://rdap.sidn.nl/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"anquan\",\n        \"shouji\",\n\
+      \        \"xihuan\",\n        \"xn--vuq861b\",\n        \"yun\"\n      ],\n\
+      \      [\n        \"https://rdap.teleinfo.cn/\"\n      ]\n    ],\n    [\n  \
+      \    [\n        \"xn--3ds443g\"\n      ],\n      [\n        \"https://rdap.teleinfo.cn/xn--3ds443g/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"xn--fiq228c5hs\"\n      ],\n  \
+      \    [\n        \"https://rdap.teleinfo.cn/xn--fiq228c5hs/\"\n      ]\n    ],\n\
+      \    [\n      [\n        \"xn--kput3i\"\n      ],\n      [\n        \"https://rdap.teleinfo.cn/xn--kput3i/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"xn--nyqy26a\"\n      ],\n     \
+      \ [\n        \"https://rdap.teleinfo.cn/xn--nyqy26a/\"\n      ]\n    ],\n  \
+      \  [\n      [\n        \"xn--rhqv96g\"\n      ],\n      [\n        \"https://rdap.teleinfo.cn/xn--rhqv96g/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"xn--mxtq1m\"\n      ],\n      [\n\
+      \        \"https://rdap.twnic.tw/rdap/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"com\"\n      ],\n      [\n        \"https://rdap.verisign.com/com/v1/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"net\"\n      ],\n      [\n    \
+      \    \"https://rdap.verisign.com/net/v1/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"ai\"\n      ],\n      [\n        \"https://rdap.whois.ai/\"\n   \
+      \   ]\n    ],\n    [\n      [\n        \"xn--45q11c\"\n      ],\n      [\n \
+      \       \"https://rdap.zdnsgtld.com/XN--45Q11C/\"\n      ]\n    ],\n    [\n\
+      \      [\n        \"xn--efvy88h\"\n      ],\n      [\n        \"https://rdap.zdnsgtld.com/XN--EFVY88H/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"baidu\"\n      ],\n      [\n  \
+      \      \"https://rdap.zdnsgtld.com/baidu/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"citic\"\n      ],\n      [\n        \"https://rdap.zdnsgtld.com/citic/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"icbc\"\n      ],\n      [\n   \
+      \     \"https://rdap.zdnsgtld.com/icbc/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"redstone\"\n      ],\n      [\n        \"https://rdap.zdnsgtld.com/redstone/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"ren\"\n      ],\n      [\n    \
+      \    \"https://rdap.zdnsgtld.com/ren/\"\n      ]\n    ],\n    [\n      [\n \
+      \       \"sohu\"\n      ],\n      [\n        \"https://rdap.zdnsgtld.com/sohu/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"top\"\n      ],\n      [\n    \
+      \    \"https://rdap.zdnsgtld.com/top/\"\n      ]\n    ],\n    [\n      [\n \
+      \       \"unicom\"\n      ],\n      [\n        \"https://rdap.zdnsgtld.com/unicom/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"wang\"\n      ],\n      [\n   \
+      \     \"https://rdap.zdnsgtld.com/wang/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"xn--30rr7y\"\n      ],\n      [\n        \"https://rdap.zdnsgtld.com/xn--30rr7y/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"xn--3bst00m\"\n      ],\n     \
+      \ [\n        \"https://rdap.zdnsgtld.com/xn--3bst00m/\"\n      ]\n    ],\n \
+      \   [\n      [\n        \"xn--6qq986b3xl\"\n      ],\n      [\n        \"https://rdap.zdnsgtld.com/xn--6qq986b3xl/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"xn--8y0a063a\"\n      ],\n    \
+      \  [\n        \"https://rdap.zdnsgtld.com/xn--8y0a063a/\"\n      ]\n    ],\n\
+      \    [\n      [\n        \"xn--9et52u\"\n      ],\n      [\n        \"https://rdap.zdnsgtld.com/xn--9et52u/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"xn--czr694b\"\n      ],\n     \
+      \ [\n        \"https://rdap.zdnsgtld.com/xn--czr694b/\"\n      ]\n    ],\n \
+      \   [\n      [\n        \"xn--czru2d\"\n      ],\n      [\n        \"https://rdap.zdnsgtld.com/xn--czru2d/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"xn--fiq64b\"\n      ],\n      [\n\
+      \        \"https://rdap.zdnsgtld.com/xn--fiq64b/\"\n      ]\n    ],\n    [\n\
+      \      [\n        \"xn--hxt814e\"\n      ],\n      [\n        \"https://rdap.zdnsgtld.com/xn--hxt814e/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"xn--imr513n\"\n      ],\n     \
+      \ [\n        \"https://rdap.zdnsgtld.com/xn--imr513n/\"\n      ]\n    ],\n \
+      \   [\n      [\n        \"xn--otu796d\"\n      ],\n      [\n        \"https://rdap.zdnsgtld.com/xn--otu796d/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"xn--ses554g\"\n      ],\n     \
+      \ [\n        \"https://rdap.zdnsgtld.com/xn--ses554g/\"\n      ]\n    ],\n \
+      \   [\n      [\n        \"xn--1qqw23a\",\n        \"xn--55qx5d\",\n        \"\
+      xn--io0a7i\",\n        \"xn--xhq521b\"\n      ],\n      [\n        \"https://restwhois.ngtld.cn/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"aarp\"\n      ],\n      [\n   \
+      \     \"https://tld-rdap.verisign.com/aarp/v1/\"\n      ]\n    ],\n    [\n \
+      \     [\n        \"abc\"\n      ],\n      [\n        \"https://tld-rdap.verisign.com/abc/v1/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"airbus\"\n      ],\n      [\n \
+      \       \"https://tld-rdap.verisign.com/airbus/v1/\"\n      ]\n    ],\n    [\n\
+      \      [\n        \"airtel\"\n      ],\n      [\n        \"https://tld-rdap.verisign.com/airtel/v1/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"americanfamily\"\n      ],\n  \
+      \    [\n        \"https://tld-rdap.verisign.com/americanfamily/v1/\"\n     \
+      \ ]\n    ],\n    [\n      [\n        \"amfam\"\n      ],\n      [\n        \"\
+      https://tld-rdap.verisign.com/amfam/v1/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"bharti\"\n      ],\n      [\n        \"https://tld-rdap.verisign.com/bharti/v1/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"capitalone\"\n      ],\n      [\n\
+      \        \"https://tld-rdap.verisign.com/capitalone/v1/\"\n      ]\n    ],\n\
+      \    [\n      [\n        \"cc\"\n      ],\n      [\n        \"https://tld-rdap.verisign.com/cc/v1/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"comsec\"\n      ],\n      [\n \
+      \       \"https://tld-rdap.verisign.com/comsec/v1/\"\n      ]\n    ],\n    [\n\
+      \      [\n        \"diy\"\n      ],\n      [\n        \"https://tld-rdap.verisign.com/diy/v1/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"food\"\n      ],\n      [\n   \
+      \     \"https://tld-rdap.verisign.com/food/v1/\"\n      ]\n    ],\n    [\n \
+      \     [\n        \"lego\"\n      ],\n      [\n        \"https://tld-rdap.verisign.com/lego/v1/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"lifestyle\"\n      ],\n      [\n\
+      \        \"https://tld-rdap.verisign.com/lifestyle/v1/\"\n      ]\n    ],\n\
+      \    [\n      [\n        \"living\"\n      ],\n      [\n        \"https://tld-rdap.verisign.com/living/v1/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"name\"\n      ],\n      [\n   \
+      \     \"https://tld-rdap.verisign.com/name/v1/\"\n      ]\n    ],\n    [\n \
+      \     [\n        \"nissay\"\n      ],\n      [\n        \"https://tld-rdap.verisign.com/nissay/v1/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"norton\"\n      ],\n      [\n \
+      \       \"https://tld-rdap.verisign.com/norton/v1/\"\n      ]\n    ],\n    [\n\
+      \      [\n        \"omega\"\n      ],\n      [\n        \"https://tld-rdap.verisign.com/omega/v1/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"rwe\"\n      ],\n      [\n    \
+      \    \"https://tld-rdap.verisign.com/rwe/v1/\"\n      ]\n    ],\n    [\n   \
+      \   [\n        \"sener\"\n      ],\n      [\n        \"https://tld-rdap.verisign.com/sener/v1/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"shell\"\n      ],\n      [\n  \
+      \      \"https://tld-rdap.verisign.com/shell/v1/\"\n      ]\n    ],\n    [\n\
+      \      [\n        \"swatch\"\n      ],\n      [\n        \"https://tld-rdap.verisign.com/swatch/v1/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"vana\"\n      ],\n      [\n   \
+      \     \"https://tld-rdap.verisign.com/vana/v1/\"\n      ]\n    ],\n    [\n \
+      \     [\n        \"verisign\"\n      ],\n      [\n        \"https://tld-rdap.verisign.com/verisign/v1/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"visa\"\n      ],\n      [\n   \
+      \     \"https://tld-rdap.verisign.com/visa/v1/\"\n      ]\n    ],\n    [\n \
+      \     [\n        \"weber\"\n      ],\n      [\n        \"https://tld-rdap.verisign.com/weber/v1/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"xn--11b4c3d\"\n      ],\n     \
+      \ [\n        \"https://tld-rdap.verisign.com/xn--11b4c3d/v1/\"\n      ]\n  \
+      \  ],\n    [\n      [\n        \"xn--3pxu8k\"\n      ],\n      [\n        \"\
+      https://tld-rdap.verisign.com/xn--3pxu8k/v1/\"\n      ]\n    ],\n    [\n   \
+      \   [\n        \"xn--42c2d9a\"\n      ],\n      [\n        \"https://tld-rdap.verisign.com/xn--42c2d9a/v1/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"xn--5su34j936bgsg\"\n      ],\n\
+      \      [\n        \"https://tld-rdap.verisign.com/xn--5su34j936bgsg/v1/\"\n\
+      \      ]\n    ],\n    [\n      [\n        \"xn--9dbq2a\"\n      ],\n      [\n\
+      \        \"https://tld-rdap.verisign.com/xn--9dbq2a/v1/\"\n      ]\n    ],\n\
+      \    [\n      [\n        \"xn--c2br7g\"\n      ],\n      [\n        \"https://tld-rdap.verisign.com/xn--c2br7g/v1/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"xn--fhbei\"\n      ],\n      [\n\
+      \        \"https://tld-rdap.verisign.com/xn--fhbei/v1/\"\n      ]\n    ],\n\
+      \    [\n      [\n        \"xn--j1aef\"\n      ],\n      [\n        \"https://tld-rdap.verisign.com/xn--j1aef/v1/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"xn--mk1bu44c\"\n      ],\n    \
+      \  [\n        \"https://tld-rdap.verisign.com/xn--mk1bu44c/v1/\"\n      ]\n\
+      \    ],\n    [\n      [\n        \"xn--pssy2u\"\n      ],\n      [\n       \
+      \ \"https://tld-rdap.verisign.com/xn--pssy2u/v1/\"\n      ]\n    ],\n    [\n\
+      \      [\n        \"xn--t60b56a\"\n      ],\n      [\n        \"https://tld-rdap.verisign.com/xn--t60b56a/v1/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"xn--tckwe\"\n      ],\n      [\n\
+      \        \"https://tld-rdap.verisign.com/xn--tckwe/v1/\"\n      ]\n    ],\n\
+      \    [\n      [\n        \"xn--w4r85el8fhu5dnra\"\n      ],\n      [\n     \
+      \   \"https://tld-rdap.verisign.com/xn--w4r85el8fhu5dnra/v1/\"\n      ]\n  \
+      \  ],\n    [\n      [\n        \"xn--w4rs40l\"\n      ],\n      [\n        \"\
+      https://tld-rdap.verisign.com/xn--w4rs40l/v1/\"\n      ]\n    ],\n    [\n  \
+      \    [\n        \"yahoo\"\n      ],\n      [\n        \"https://tld-rdap.verisign.com/yahoo/v1/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"ky\"\n      ],\n      [\n     \
+      \   \"https://whois.kyregistry.ky/rdap/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"mtr\"\n      ],\n      [\n        \"https://whois.nic.mtr/rdap/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"tatar\"\n      ],\n      [\n  \
+      \      \"https://whois.nic.tatar/rdap/\"\n      ]\n    ],\n    [\n      [\n\
+      \        \"xn--d1acj3b\"\n      ],\n      [\n        \"https://whois.nic.xn--d1acj3b/rdap/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"tz\"\n      ],\n      [\n     \
+      \   \"https://whois.tznic.or.tz/rdap/\"\n      ]\n    ],\n    [\n      [\n \
+      \       \"click\",\n        \"country\",\n        \"gift\",\n        \"hiv\"\
+      ,\n        \"juegos\",\n        \"link\",\n        \"property\",\n        \"\
+      sexy\",\n        \"trust\"\n      ],\n      [\n        \"https://whois.uniregistry.net/rdap/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"ads\",\n        \"android\",\n\
+      \        \"app\",\n        \"boo\",\n        \"cal\",\n        \"channel\",\n\
+      \        \"chrome\",\n        \"dad\",\n        \"day\",\n        \"dclk\",\n\
+      \        \"dev\",\n        \"docs\",\n        \"drive\",\n        \"eat\",\n\
+      \        \"esq\",\n        \"fly\",\n        \"foo\",\n        \"gbiz\",\n \
+      \       \"gle\",\n        \"gmail\",\n        \"goog\",\n        \"google\"\
+      ,\n        \"guge\",\n        \"hangout\",\n        \"here\",\n        \"how\"\
+      ,\n        \"ing\",\n        \"map\",\n        \"meet\",\n        \"meme\",\n\
+      \        \"mov\",\n        \"new\",\n        \"nexus\",\n        \"page\",\n\
+      \        \"phd\",\n        \"play\",\n        \"prod\",\n        \"prof\",\n\
+      \        \"rsvp\",\n        \"search\",\n        \"soy\",\n        \"xn--flw351e\"\
+      ,\n        \"xn--q9jyb4c\",\n        \"xn--qcka1pmc\",\n        \"youtube\"\
+      ,\n        \"zip\"\n      ],\n      [\n        \"https://www.registry.google/rdap/\"\
+      \n      ]\n    ]\n  ],\n  \"version\": \"1.0\"\n}"
+    content_type: text/plain
+    headers:
+      Access-Control-Allow-Origin: '*'
+      Age: '63088'
+      Cache-Control: max-age=86400
+      Etag: '"11c90-61e07138eeaff-br+gzip"'
+      Expires: Sat, 27 Jul 2024 14:57:31 GMT
+      Last-Modified: Thu, 25 Jul 2024 00:00:02 GMT
+      Referrer-Policy: origin-when-cross-origin
+      Strict-Transport-Security: max-age=48211200; preload
+      Vary: Accept-Encoding
+      X-Cache: HIT
+      X-Frame-Options: SAMEORIGIN
+    method: GET
+    status: 200
+    url: https://data.iana.org/rdap/dns.json
+- response:
+    auto_calculate_content_length: false
+    body: "{\n  \"description\": \"RDAP bootstrap file for IPv4 address allocations\"\
+      ,\n  \"publication\": \"2019-06-07T19:00:02Z\",\n  \"services\": [\n    [\n\
+      \      [\n        \"41.0.0.0/8\",\n        \"102.0.0.0/8\",\n        \"105.0.0.0/8\"\
+      ,\n        \"154.0.0.0/8\",\n        \"196.0.0.0/8\",\n        \"197.0.0.0/8\"\
+      \n      ],\n      [\n        \"https://rdap.afrinic.net/rdap/\",\n        \"\
+      http://rdap.afrinic.net/rdap/\"\n      ]\n    ],\n    [\n      [\n        \"\
+      1.0.0.0/8\",\n        \"14.0.0.0/8\",\n        \"27.0.0.0/8\",\n        \"36.0.0.0/8\"\
+      ,\n        \"39.0.0.0/8\",\n        \"42.0.0.0/8\",\n        \"43.0.0.0/8\"\
+      ,\n        \"49.0.0.0/8\",\n        \"58.0.0.0/8\",\n        \"59.0.0.0/8\"\
+      ,\n        \"60.0.0.0/8\",\n        \"61.0.0.0/8\",\n        \"101.0.0.0/8\"\
+      ,\n        \"103.0.0.0/8\",\n        \"106.0.0.0/8\",\n        \"110.0.0.0/8\"\
+      ,\n        \"111.0.0.0/8\",\n        \"112.0.0.0/8\",\n        \"113.0.0.0/8\"\
+      ,\n        \"114.0.0.0/8\",\n        \"115.0.0.0/8\",\n        \"116.0.0.0/8\"\
+      ,\n        \"117.0.0.0/8\",\n        \"118.0.0.0/8\",\n        \"119.0.0.0/8\"\
+      ,\n        \"120.0.0.0/8\",\n        \"121.0.0.0/8\",\n        \"122.0.0.0/8\"\
+      ,\n        \"123.0.0.0/8\",\n        \"124.0.0.0/8\",\n        \"125.0.0.0/8\"\
+      ,\n        \"126.0.0.0/8\",\n        \"133.0.0.0/8\",\n        \"150.0.0.0/8\"\
+      ,\n        \"153.0.0.0/8\",\n        \"163.0.0.0/8\",\n        \"171.0.0.0/8\"\
+      ,\n        \"175.0.0.0/8\",\n        \"180.0.0.0/8\",\n        \"182.0.0.0/8\"\
+      ,\n        \"183.0.0.0/8\",\n        \"202.0.0.0/8\",\n        \"203.0.0.0/8\"\
+      ,\n        \"210.0.0.0/8\",\n        \"211.0.0.0/8\",\n        \"218.0.0.0/8\"\
+      ,\n        \"219.0.0.0/8\",\n        \"220.0.0.0/8\",\n        \"221.0.0.0/8\"\
+      ,\n        \"222.0.0.0/8\",\n        \"223.0.0.0/8\"\n      ],\n      [\n  \
+      \      \"https://rdap.apnic.net/\"\n      ]\n    ],\n    [\n      [\n      \
+      \  \"3.0.0.0/8\",\n        \"4.0.0.0/8\",\n        \"6.0.0.0/8\",\n        \"\
+      7.0.0.0/8\",\n        \"8.0.0.0/8\",\n        \"9.0.0.0/8\",\n        \"11.0.0.0/8\"\
+      ,\n        \"12.0.0.0/8\",\n        \"13.0.0.0/8\",\n        \"15.0.0.0/8\"\
+      ,\n        \"16.0.0.0/8\",\n        \"17.0.0.0/8\",\n        \"18.0.0.0/8\"\
+      ,\n        \"19.0.0.0/8\",\n        \"20.0.0.0/8\",\n        \"21.0.0.0/8\"\
+      ,\n        \"22.0.0.0/8\",\n        \"23.0.0.0/8\",\n        \"24.0.0.0/8\"\
+      ,\n        \"26.0.0.0/8\",\n        \"28.0.0.0/8\",\n        \"29.0.0.0/8\"\
+      ,\n        \"30.0.0.0/8\",\n        \"32.0.0.0/8\",\n        \"33.0.0.0/8\"\
+      ,\n        \"34.0.0.0/8\",\n        \"35.0.0.0/8\",\n        \"38.0.0.0/8\"\
+      ,\n        \"40.0.0.0/8\",\n        \"44.0.0.0/8\",\n        \"45.0.0.0/8\"\
+      ,\n        \"47.0.0.0/8\",\n        \"48.0.0.0/8\",\n        \"50.0.0.0/8\"\
+      ,\n        \"52.0.0.0/8\",\n        \"54.0.0.0/8\",\n        \"55.0.0.0/8\"\
+      ,\n        \"56.0.0.0/8\",\n        \"63.0.0.0/8\",\n        \"64.0.0.0/8\"\
+      ,\n        \"65.0.0.0/8\",\n        \"66.0.0.0/8\",\n        \"67.0.0.0/8\"\
+      ,\n        \"68.0.0.0/8\",\n        \"69.0.0.0/8\",\n        \"70.0.0.0/8\"\
+      ,\n        \"71.0.0.0/8\",\n        \"72.0.0.0/8\",\n        \"73.0.0.0/8\"\
+      ,\n        \"74.0.0.0/8\",\n        \"75.0.0.0/8\",\n        \"76.0.0.0/8\"\
+      ,\n        \"96.0.0.0/8\",\n        \"97.0.0.0/8\",\n        \"98.0.0.0/8\"\
+      ,\n        \"99.0.0.0/8\",\n        \"100.0.0.0/8\",\n        \"104.0.0.0/8\"\
+      ,\n        \"107.0.0.0/8\",\n        \"108.0.0.0/8\",\n        \"128.0.0.0/8\"\
+      ,\n        \"129.0.0.0/8\",\n        \"130.0.0.0/8\",\n        \"131.0.0.0/8\"\
+      ,\n        \"132.0.0.0/8\",\n        \"134.0.0.0/8\",\n        \"135.0.0.0/8\"\
+      ,\n        \"136.0.0.0/8\",\n        \"137.0.0.0/8\",\n        \"138.0.0.0/8\"\
+      ,\n        \"139.0.0.0/8\",\n        \"140.0.0.0/8\",\n        \"142.0.0.0/8\"\
+      ,\n        \"143.0.0.0/8\",\n        \"144.0.0.0/8\",\n        \"146.0.0.0/8\"\
+      ,\n        \"147.0.0.0/8\",\n        \"148.0.0.0/8\",\n        \"149.0.0.0/8\"\
+      ,\n        \"152.0.0.0/8\",\n        \"155.0.0.0/8\",\n        \"156.0.0.0/8\"\
+      ,\n        \"157.0.0.0/8\",\n        \"158.0.0.0/8\",\n        \"159.0.0.0/8\"\
+      ,\n        \"160.0.0.0/8\",\n        \"161.0.0.0/8\",\n        \"162.0.0.0/8\"\
+      ,\n        \"164.0.0.0/8\",\n        \"165.0.0.0/8\",\n        \"166.0.0.0/8\"\
+      ,\n        \"167.0.0.0/8\",\n        \"168.0.0.0/8\",\n        \"169.0.0.0/8\"\
+      ,\n        \"170.0.0.0/8\",\n        \"172.0.0.0/8\",\n        \"173.0.0.0/8\"\
+      ,\n        \"174.0.0.0/8\",\n        \"184.0.0.0/8\",\n        \"192.0.0.0/8\"\
+      ,\n        \"198.0.0.0/8\",\n        \"199.0.0.0/8\",\n        \"204.0.0.0/8\"\
+      ,\n        \"205.0.0.0/8\",\n        \"206.0.0.0/8\",\n        \"207.0.0.0/8\"\
+      ,\n        \"208.0.0.0/8\",\n        \"209.0.0.0/8\",\n        \"214.0.0.0/8\"\
+      ,\n        \"215.0.0.0/8\",\n        \"216.0.0.0/8\"\n      ],\n      [\n  \
+      \      \"https://rdap.arin.net/registry/\",\n        \"http://rdap.arin.net/registry/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"2.0.0.0/8\",\n        \"5.0.0.0/8\"\
+      ,\n        \"25.0.0.0/8\",\n        \"31.0.0.0/8\",\n        \"37.0.0.0/8\"\
+      ,\n        \"46.0.0.0/8\",\n        \"51.0.0.0/8\",\n        \"53.0.0.0/8\"\
+      ,\n        \"57.0.0.0/8\",\n        \"62.0.0.0/8\",\n        \"77.0.0.0/8\"\
+      ,\n        \"78.0.0.0/8\",\n        \"79.0.0.0/8\",\n        \"80.0.0.0/8\"\
+      ,\n        \"81.0.0.0/8\",\n        \"82.0.0.0/8\",\n        \"83.0.0.0/8\"\
+      ,\n        \"84.0.0.0/8\",\n        \"85.0.0.0/8\",\n        \"86.0.0.0/8\"\
+      ,\n        \"87.0.0.0/8\",\n        \"88.0.0.0/8\",\n        \"89.0.0.0/8\"\
+      ,\n        \"90.0.0.0/8\",\n        \"91.0.0.0/8\",\n        \"92.0.0.0/8\"\
+      ,\n        \"93.0.0.0/8\",\n        \"94.0.0.0/8\",\n        \"95.0.0.0/8\"\
+      ,\n        \"109.0.0.0/8\",\n        \"141.0.0.0/8\",\n        \"145.0.0.0/8\"\
+      ,\n        \"151.0.0.0/8\",\n        \"176.0.0.0/8\",\n        \"178.0.0.0/8\"\
+      ,\n        \"185.0.0.0/8\",\n        \"188.0.0.0/8\",\n        \"193.0.0.0/8\"\
+      ,\n        \"194.0.0.0/8\",\n        \"195.0.0.0/8\",\n        \"212.0.0.0/8\"\
+      ,\n        \"213.0.0.0/8\",\n        \"217.0.0.0/8\"\n      ],\n      [\n  \
+      \      \"https://rdap.db.ripe.net/\"\n      ]\n    ],\n    [\n      [\n    \
+      \    \"177.0.0.0/8\",\n        \"179.0.0.0/8\",\n        \"181.0.0.0/8\",\n\
+      \        \"186.0.0.0/8\",\n        \"187.0.0.0/8\",\n        \"189.0.0.0/8\"\
+      ,\n        \"190.0.0.0/8\",\n        \"191.0.0.0/8\",\n        \"200.0.0.0/8\"\
+      ,\n        \"201.0.0.0/8\"\n      ],\n      [\n        \"https://rdap.lacnic.net/rdap/\"\
+      \n      ]\n    ]\n  ],\n  \"version\": \"1.0\"\n}"
+    content_type: text/plain
+    headers:
+      Accept-Ranges: bytes
+      Access-Control-Allow-Origin: '*'
+      Age: '41969'
+      Cache-Control: max-age=86400
+      Etag: '"15fd-58ac070130427-gzip"'
+      Expires: Sat, 27 Jul 2024 14:57:32 GMT
+      Last-Modified: Fri, 07 Jun 2019 19:00:02 GMT
+      Referrer-Policy: origin-when-cross-origin
+      Strict-Transport-Security: max-age=48211200; preload
+      Vary: Accept-Encoding
+      X-Cache: HIT
+      X-Frame-Options: SAMEORIGIN
+    method: GET
+    status: 200
+    url: https://data.iana.org/rdap/ipv4.json
+- response:
+    auto_calculate_content_length: false
+    body: "{\n  \"description\": \"RDAP bootstrap file for IPv6 address allocations\"\
+      ,\n  \"publication\": \"2019-11-06T19:00:04Z\",\n  \"services\": [\n    [\n\
+      \      [\n        \"2001:4200::/23\",\n        \"2c00::/12\"\n      ],\n   \
+      \   [\n        \"https://rdap.afrinic.net/rdap/\",\n        \"http://rdap.afrinic.net/rdap/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"2001:200::/23\",\n        \"2001:4400::/23\"\
+      ,\n        \"2001:8000::/19\",\n        \"2001:a000::/20\",\n        \"2001:b000::/20\"\
+      ,\n        \"2001:c00::/23\",\n        \"2001:e00::/23\",\n        \"2400::/12\"\
+      \n      ],\n      [\n        \"https://rdap.apnic.net/\"\n      ]\n    ],\n\
+      \    [\n      [\n        \"2001:1800::/23\",\n        \"2001:400::/23\",\n \
+      \       \"2001:4800::/23\",\n        \"2600::/12\",\n        \"2610::/23\",\n\
+      \        \"2620::/23\",\n        \"2630::/12\"\n      ],\n      [\n        \"\
+      https://rdap.arin.net/registry/\",\n        \"http://rdap.arin.net/registry/\"\
+      \n      ]\n    ],\n    [\n      [\n        \"2001:1400::/22\",\n        \"2001:1a00::/23\"\
+      ,\n        \"2001:1c00::/22\",\n        \"2001:2000::/19\",\n        \"2001:4000::/23\"\
+      ,\n        \"2001:4600::/23\",\n        \"2001:4a00::/23\",\n        \"2001:4c00::/23\"\
+      ,\n        \"2001:5000::/20\",\n        \"2001:600::/23\",\n        \"2001:800::/22\"\
+      ,\n        \"2003::/18\",\n        \"2a00::/12\",\n        \"2a10::/12\"\n \
+      \     ],\n      [\n        \"https://rdap.db.ripe.net/\"\n      ]\n    ],\n\
+      \    [\n      [\n        \"2001:1200::/23\",\n        \"2800::/12\"\n      ],\n\
+      \      [\n        \"https://rdap.lacnic.net/rdap/\"\n      ]\n    ]\n  ],\n\
+      \  \"version\": \"1.0\"\n}"
+    content_type: text/plain
+    headers:
+      Accept-Ranges: bytes
+      Access-Control-Allow-Origin: '*'
+      Age: '41959'
+      Cache-Control: max-age=86400
+      Etag: '"5af-596b22819f571-gzip"'
+      Expires: Sat, 27 Jul 2024 14:57:32 GMT
+      Last-Modified: Wed, 06 Nov 2019 19:00:04 GMT
+      Referrer-Policy: origin-when-cross-origin
+      Strict-Transport-Security: max-age=48211200; preload
+      Vary: Accept-Encoding
+      X-Cache: HIT
+      X-Frame-Options: SAMEORIGIN
+    method: GET
+    status: 200
+    url: https://data.iana.org/rdap/ipv6.json
+- response:
+    auto_calculate_content_length: false
+    body: "{\n  \"description\": \"RDAP bootstrap file for service provider object\
+      \ tags\",\n  \"publication\": \"2023-07-05T22:00:02Z\",\n  \"services\": [\n\
+      \    [\n      [\n        \"info@arin.net\"\n      ],\n      [\n        \"ARIN\"\
+      \n      ],\n      [\n        \"https://rdap.arin.net/registry/\",\n        \"\
+      http://rdap.arin.net/registry/\"\n      ]\n    ],\n    [\n      [\n        \"\
+      carlos@lacnic.net\"\n      ],\n      [\n        \"LACNIC\"\n      ],\n     \
+      \ [\n        \"https://rdap.lacnic.net/rdap/\"\n      ]\n    ],\n    [\n   \
+      \   [\n        \"bje@apnic.net\"\n      ],\n      [\n        \"APNIC\"\n   \
+      \   ],\n      [\n        \"https://rdap.apnic.net/\"\n      ]\n    ],\n    [\n\
+      \      [\n        \"kranjbar@ripe.net\"\n      ],\n      [\n        \"RIPE\"\
+      \n      ],\n      [\n        \"https://rdap.db.ripe.net/\"\n      ]\n    ],\n\
+      \    [\n      [\n        \"tld-tech@nic.fr\"\n      ],\n      [\n        \"\
+      FRNIC\"\n      ],\n      [\n        \"https://rdap.nic.fr/\"\n      ]\n    ],\n\
+      \    [\n      [\n        \"hello@glauca.digital\"\n      ],\n      [\n     \
+      \   \"GLAUCA\"\n      ],\n      [\n        \"https://whois-web.as207960.net/rdap/\"\
+      \n      ]\n    ]\n  ],\n  \"version\": \"1.0\"\n}"
+    content_type: text/plain
+    headers:
+      Accept-Ranges: bytes
+      Access-Control-Allow-Origin: '*'
+      Age: '5826'
+      Cache-Control: max-age=86400
+      Etag: '"427-5ffc485811434-gzip"'
+      Expires: Sat, 27 Jul 2024 14:57:32 GMT
+      Last-Modified: Wed, 05 Jul 2023 22:00:02 GMT
+      Referrer-Policy: origin-when-cross-origin
+      Strict-Transport-Security: max-age=48211200; preload
+      Vary: Accept-Encoding
+      X-Cache: HIT
+      X-Frame-Options: SAMEORIGIN
+    method: GET
+    status: 200
+    url: https://data.iana.org/rdap/object-tags.json

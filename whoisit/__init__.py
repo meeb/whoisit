@@ -2,6 +2,7 @@ from .bootstrap import _BootstrapMainModule
 from .parser import parse
 from .query import Query, QueryAsync, QueryBuilder
 from .utils import get_async_client, get_session, recursive_merge
+from .version import version
 
 # Private methods
 

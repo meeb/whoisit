@@ -26,10 +26,10 @@ build_query = _query_builder.build
 # Query helpers
 
 
-def _asn(as_number, rir=None, raw=False, allow_insecure_ssl=False, session=None, async_client=None):
+def _asn(as_number, rir=None, raw=False, session=None, async_client=None):
     is_async = async_client is not None
     method, url, _ = build_query(query_type='asn', query_value=as_number, rir=rir)
-    
+
     if is_async:
         q = QueryAsync(async_client, method, url)
     else:
@@ -40,7 +40,7 @@ def _asn(as_number, rir=None, raw=False, allow_insecure_ssl=False, session=None,
 
 def asn(as_number, rir=None, raw=False, allow_insecure_ssl=False, session=None):
     session = get_session(session, allow_insecure_ssl)
-    gen = _asn(as_number, rir, raw, allow_insecure_ssl, session=session)
+    gen = _asn(as_number, rir, raw, session=session)
     q: Query = next(gen)
     resp: dict = gen.send(q.request())
     gen.close()
@@ -49,17 +49,17 @@ def asn(as_number, rir=None, raw=False, allow_insecure_ssl=False, session=None):
 
 async def asn_async(as_number, rir=None, raw=False, allow_insecure_ssl=False, async_client=None):
     async_client = get_async_client(async_client, allow_insecure_ssl)
-    gen = _asn(as_number, rir, raw, allow_insecure_ssl, async_client=async_client)
+    gen = _asn(as_number, rir, raw, async_client=async_client)
     q: QueryAsync = next(gen)
     resp: dict = gen.send(await q.request())
     gen.close()
     return resp
 
 
-def _domain(domain_name, raw=False, allow_insecure_ssl=False, session=None, follow_related=True, async_client=None, is_async=False):
+def _domain(domain_name, raw=False, session=None, follow_related=True, async_client=None, is_async=False):
     is_async = async_client is not None
     method, url, _ = build_query(query_type='domain', query_value=domain_name)
-    
+
     if is_async:
         q = QueryAsync(async_client, method, url)
     else:
@@ -93,7 +93,7 @@ def _domain(domain_name, raw=False, allow_insecure_ssl=False, session=None, foll
 
 def domain(domain_name, raw=False, allow_insecure_ssl=False, session=None, follow_related=True):
     session = get_session(session, allow_insecure_ssl)
-    gen = _domain(domain_name, raw, allow_insecure_ssl, session, follow_related, None)
+    gen = _domain(domain_name, raw, session, follow_related, None)
     resp: dict = None
 
     q: Query
@@ -104,13 +104,13 @@ def domain(domain_name, raw=False, allow_insecure_ssl=False, session=None, follo
         if resp is req_resp:
             gen.close()
             break
-        
+
     return resp
 
 
 async def domain_async(domain_name, raw=False, allow_insecure_ssl=False, async_client=None, follow_related=True):
     async_client = get_async_client(async_client, allow_insecure_ssl)
-    gen = _domain(domain_name, raw, allow_insecure_ssl, None, follow_related, async_client)
+    gen = _domain(domain_name, raw, None, follow_related, async_client)
     resp: dict = None
 
     q: QueryAsync
@@ -122,14 +122,14 @@ async def domain_async(domain_name, raw=False, allow_insecure_ssl=False, async_c
         if resp is req_resp:
             gen.close()
             break
-        
+
     return resp
 
 
-def _ip(ip_address_or_network, rir=None, raw=False, allow_insecure_ssl=False, session=None, async_client=None, is_async=False):
+def _ip(ip_address_or_network, rir=None, raw=False, session=None, async_client=None, is_async=False):
     is_async = async_client is not None
     method, url, _ = build_query(query_type='ip', query_value=ip_address_or_network, rir=rir)
-    
+
     if is_async:
         q = QueryAsync(async_client, method, url)
     else:
@@ -140,7 +140,7 @@ def _ip(ip_address_or_network, rir=None, raw=False, allow_insecure_ssl=False, se
 
 def ip(ip_address_or_network, rir=None, raw=False, allow_insecure_ssl=False, session=None):
     session = get_session(session, allow_insecure_ssl)
-    gen = _ip(ip_address_or_network, rir, raw, allow_insecure_ssl, session, None)
+    gen = _ip(ip_address_or_network, rir, raw, session, None)
     q: Query = next(gen)
     resp: dict = gen.send(q.request())
     gen.close()
@@ -149,17 +149,17 @@ def ip(ip_address_or_network, rir=None, raw=False, allow_insecure_ssl=False, ses
 
 async def ip_async(ip_address_or_network, rir=None, raw=False, allow_insecure_ssl=False, async_client=None):
     async_client = get_async_client(async_client, allow_insecure_ssl)
-    gen = _ip(ip_address_or_network, rir, raw, allow_insecure_ssl, None, async_client)
+    gen = _ip(ip_address_or_network, rir, raw, None, async_client)
     q: QueryAsync = next(gen)
     resp: dict = gen.send(await q.request())
     gen.close()
     return resp
 
 
-def _entity(entity_handle, rir=None, raw=False, allow_insecure_ssl=False, session=None, async_client=None, is_async=False):
+def _entity(entity_handle, rir=None, raw=False, session=None, async_client=None, is_async=False):
     is_async = async_client is not None
     method, url, _ = build_query(query_type='entity', query_value=entity_handle, rir=rir)
-    
+
     if is_async:
         q = QueryAsync(async_client, method, url)
     else:
@@ -170,7 +170,7 @@ def _entity(entity_handle, rir=None, raw=False, allow_insecure_ssl=False, sessio
 
 def entity(entity_handle, rir=None, raw=False, allow_insecure_ssl=False, session=None):
     session = get_session(session, allow_insecure_ssl)
-    gen = _entity(entity_handle, rir, raw, allow_insecure_ssl, session, None)
+    gen = _entity(entity_handle, rir, raw, session, None)
     q: Query = next(gen)
     resp: dict = gen.send(q.request())
     gen.close()
@@ -179,7 +179,7 @@ def entity(entity_handle, rir=None, raw=False, allow_insecure_ssl=False, session
 
 async def entity_async(ip_address_or_network, rir=None, raw=False, allow_insecure_ssl=False, async_client=None):
     async_client = get_async_client(async_client, allow_insecure_ssl)
-    gen = _entity(ip_address_or_network, rir, raw, allow_insecure_ssl, None, async_client)
+    gen = _entity(ip_address_or_network, rir, raw, None, async_client)
     q: QueryAsync = next(gen)
     resp: dict = gen.send(await q.request())
     gen.close()

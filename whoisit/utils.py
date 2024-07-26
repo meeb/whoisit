@@ -90,11 +90,10 @@ def create_session(allow_insecure_ssl=False):
 
 def create_async_client(allow_insecure_ssl=False):
     limits = httpx.Limits(max_connections=async_http_max_connections, max_keepalive_connections=async_max_keepalive_connections)
-    retries = httpx.AsyncHTTPTransport(retries=1, limits=limits)
+    retries = httpx.AsyncHTTPTransport(retries=http_max_retries, limits=limits)
     headers = {"User-Agent": user_agent.format(version=version)}
-    # todo change this simple verify ssl to allow old ssl as
-    # mentioned in https://github.com/meeb/whoisit/issues/17
-    client = httpx.AsyncClient(transport=retries, verify=allow_insecure_ssl, headers=headers, follow_redirects=True)
+    verify = not allow_insecure_ssl
+    client = httpx.AsyncClient(transport=retries, verify=verify, headers=headers, follow_redirects=True)
     return client
 
 

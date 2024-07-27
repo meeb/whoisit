@@ -7,9 +7,12 @@ from ipaddress import (
 )
 from typing import Optional
 from typing_extensions import TypedDict
+
 from dateutil.parser import parse as dateutil_parse
+
 from .errors import BootstrapError, ParseError
 from .logger import get_logger
+
 
 log = get_logger('parser')
 

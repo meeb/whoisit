@@ -14,6 +14,7 @@ from .utils import (
     is_subnet_of,
 )
 
+
 log = get_logger('bootstrap')
 
 
@@ -417,6 +418,7 @@ class BaseBootstrap:
 
 
 class Bootstrap(BaseBootstrap):
+
     def __init__(self, session=None, allow_insecure_ssl=False, do_super_init=True):
         if do_super_init:
             BaseBootstrap.__init__(self)
@@ -430,6 +432,7 @@ class Bootstrap(BaseBootstrap):
 
 
 class BootstrapAsync(BaseBootstrap):
+
     def __init__(self, client=None, allow_insecure_ssl=False, do_super_init=True):
         if do_super_init:
             BaseBootstrap.__init__(self)
@@ -443,6 +446,7 @@ class BootstrapAsync(BaseBootstrap):
 
 
 class _BootstrapMainModule(Bootstrap, BootstrapAsync):
+
     def __init__(self) -> None:
         Bootstrap.__init__(self, do_super_init=True)
         BootstrapAsync.__init__(self, do_super_init=False)

@@ -13,6 +13,7 @@ from .errors import QueryError, UnsupportedError
 from .logger import get_logger
 from .version import version
 
+
 log = get_logger('utils')
 user_agent = 'whoisit/{version}'
 insecure_ssl_ciphers = 'ALL:@SECLEVEL=1'
@@ -87,6 +88,7 @@ def create_session(allow_insecure_ssl=False):
     if allow_insecure_ssl:
         session.mount('https://', InsecureSSLAdapter())
     return session
+
 
 def create_async_client(allow_insecure_ssl=False):
     limits = httpx.Limits(max_connections=async_http_max_connections, max_keepalive_connections=async_max_keepalive_connections)

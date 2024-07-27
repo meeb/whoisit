@@ -27,6 +27,7 @@ from .errors import (
 from .logger import get_logger
 from .utils import contains_only_chars, http_request, http_request_async
 
+
 log = get_logger('query')
 
 
@@ -221,6 +222,7 @@ class BaseQuery:
         except (TypeError, ValueError) as e:
             raise QueryError(f'Failed to parse RDAP Query response as JSON: {e}') from e
 
+
 class Query(BaseQuery):
     """
         Make an HTTP request to an RDAP endpoint as a query. This is slightly more
@@ -237,9 +239,10 @@ class Query(BaseQuery):
         response = http_request(self.session, url=self.url, method=self.method, *args, **kwargs)
         return self._process_response(response)
 
+
 class QueryAsync(BaseQuery):
     """
-        Make an Async HTTP request to an RDAP endpoint as a query. This is slightly more
+        Make an async HTTP request to an RDAP endpoint as a query. This is slightly more
         elaborate than a single function just to allow kwargs to be arbitrarily passed
         to both requests and the requested URL if required.
     """

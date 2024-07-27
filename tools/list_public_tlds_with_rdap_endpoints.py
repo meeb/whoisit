@@ -15,6 +15,7 @@ sys.path.append(str(parent_dir))
 
 
 import requests
+
 import whoisit
 from whoisit.logger import get_logger
 from whoisit.errors import UnsupportedError

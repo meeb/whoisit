@@ -115,7 +115,10 @@ class Parser:
         self.parsed['terms_of_service_url'] = ''
         self.parsed['copyright_notice'] = ''
         for notice in self.raw_data.get('notices', []):
-            title = clean(notice.get('title', '')).lower()
+            if isinstance(notice, str):
+                title = notice
+            else:
+                title = clean(notice.get('title', '')).lower()
             if title in (
                     'terms of service', 'terms of use', 'terms and conditions'
             ):

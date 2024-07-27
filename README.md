@@ -60,8 +60,36 @@ print(results['name'])
 results = whoisit.ip('2404:1234::/32')
 print(results['name'])
 
-results = whoisit.entity('ARIN-CHA-1')
+results = whoisit.entity('ARIN')
 print(results['last_changed_date'])
+```
+
+Basic async examples:
+
+```python
+import whoisit
+import asyncio
+
+async def whoisit_lookups():
+    results = await whoisit.asn_async(1234)
+    print(results['name'])
+    results = await whoisit.domain_async('example.com')
+    print(results['nameservers'])
+    results = await whoisit.ip_async('1.2.3.4')
+    print(results['name'])
+    results = await whoisit.ip_async('1.2.3.0/24')
+    print(results['name'])
+    results = await whoisit.ip_async('2404:1234:1234:1234:1234:1234:1234:1234')
+    print(results['name'])
+    results = await whoisit.ip_async('2404:1234::/32')
+    print(results['name'])
+    results = await whoisit.entity_async('ARIN')
+    print(results['last_changed_date'])
+
+loop = asyncio.get_event_loop()
+loop.run_until_complete(whoisit.bootstrap_async())
+loop.run_until_complete(whoisit_lookups())
+loop.close()
 ```
 
 
@@ -200,6 +228,12 @@ if whoisit.bootstrap_is_older_than(days=3):
     whoisit.clear_bootstrapping()
     whoisit.bootstrap()
     bootstrap_info = whoisit.save_bootstrap_data()  # and save it to upload your cache
+```
+
+As of `whoisit` version 3.0.0 there is also an optional async interface:
+
+```python
+await whoisit.bootstrap_async()
 ```
 
 A reasonable suggested way to handle bootstrapping data would be to use Memcached or
@@ -492,6 +526,12 @@ whoisit.asn(12345, rir='arin', raw=True)
 whoisit.asn(12345, allow_insecure_ssl=True)
 ```
 
+As of `whoisit` version 3.0.0 there is also an optional async interface:
+
+```python
+response = await whoisit.asn_async(12345)
+```
+
 ### `whoisit.domain(domain=str, raw=bool, allow_insecure_ssl=bool)` -> `dict`
 
 Queries a remote RDAP server for information about the specified domain name. The domain
@@ -510,6 +550,11 @@ whoisit.domain('example.com', raw=True)
 whoisit.domain('example.com', allow_insecure_ssl=True)
 ```
 
+As of `whoisit` version 3.0.0 there is also an optional async interface:
+
+```python
+response = await whoisit.domain_async('example.com')
+```
 
 ### `whoisit.ip(ip="1.1.1.1", rir=str, raw=bool, allow_insecure_ssl=bool)` -> `dict`
 
@@ -534,6 +579,12 @@ whoisit.ip(IPv6Network('2001:4860::/32'), rir='arin')
 whoisit.ip('1.1.1.1', allow_insecure_ssl=True)
 ```
 
+As of `whoisit` version 3.0.0 there is also an optional async interface:
+
+```python
+response = await whoisit.ip_async('1.1.1.1')
+```
+
 ### `whoisit.entity(entity=str, rir=str, raw=bool, allow_insecure_ssl=bool)` -> `dict`
 
 Queries a remote RDAP server for information about the specified entity name. The
@@ -549,6 +600,12 @@ whoisit.entity('ZG39-ARIN')
 whoisit.entity('ZG39-ARIN', rir='arin')
 whoisit.entity('ZG39-ARIN', rir='arin', raw=True)
 whoisit.entity('ZG39-ARIN', allow_insecure_ssl=True)
+```
+
+As of `whoisit` version 3.0.0 there is also an optional async interface:
+
+```python
+response = await whoisit.entity_async('ZG39-ARIN')
 ```
 
 

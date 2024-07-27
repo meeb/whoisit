@@ -1,5 +1,5 @@
 import unittest
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from ipaddress import IPv4Network, IPv6Network
 from pathlib import Path
 
@@ -11,8 +11,10 @@ from responses import _recorder
 
 import whoisit
 
+
 BASE_DIR = Path(__file__).resolve().parent
 RESPONSES = BASE_DIR / "responses"
+UTC = timezone.utc
 
 
 class SyncPublicInterfaceTestCase(unittest.TestCase):

@@ -19,6 +19,7 @@ from urllib.parse import (
 
 from .errors import (
     QueryError,
+    ResourceAccessDeniedError,
     RateLimitedError,
     RemoteServerError,
     ResourceDoesNotExist,
@@ -201,26 +202,64 @@ class BaseQuery:
         qs_str = urlencode(qs)
         return urlunsplit((parts.scheme, parts.netloc, parts.path, qs_str, ''))
 
+
+    def _decode_content(self, response):
+        """
+            Decode the content of the response and attempt to force it into a
+            unicode string. This is used as part of the query failure exceptions
+            to allow downstream clients to decide how to behave when errors occur.
+        """
+        try:
+            return response.text.strip()
+        except (ValueError, UnicodeDecodeError) as e:
+            return response.content.decode('utf-8', errors='ignore').strip()
+
     def _process_response(self, response):
-        if response.status_code == 404:
-            raise ResourceDoesNotExist(f'RDAP {self.method} request to {self.url} '
-                                       f'returned a 404 error, the resource does '
-                                       f'not exist')
-        elif response.status_code == 429:
-            raise RateLimitedError(f'RDAP {self.method} request to {self.url} '
-                                   f'returned a 429 error, the resource has been '
-                                   f'rate limited')
-        elif response.status_code == 500:
-            raise RemoteServerError(f'RDAP {self.method} request to {self.url} '
-                                   f'returned a 500 error, the resource returned '
-                                   f'a remote server error')
+        status_code_map = {
+            401: (
+                ResourceAccessDeniedError,
+                f'RDAP {self.method} request to {self.url} returned a '
+                f'401 error, unauthorized',
+            ),
+            403: (
+                ResourceAccessDeniedError,
+                f'RDAP {self.method} request to {self.url} returned a '
+                f'403 error, forbidden',
+            ),
+            404: (
+                ResourceDoesNotExist,
+                f'RDAP {self.method} request to {self.url} returned a '
+                f'404 error, the resource does not exist',
+            ),
+            422: (
+                ResourceAccessDeniedError,
+                f'RDAP {self.method} request to {self.url} returned a '
+                f'422 error, the request was unprocessable',
+            ),
+            429: (
+                RateLimitedError,
+                f'RDAP {self.method} request to {self.url} returned a '
+                f'429 error, the resource has been rate limited',
+            ),
+            500: (
+                RemoteServerError,
+                f'RDAP {self.method} request to {self.url} returned a '
+                f'500 error, the resource returned a remote server error',
+            ),
+        }
+        if response.status_code in status_code_map:
+            error_class, error_message = status_code_map[response.status_code]
+            error_content = self._decode_content(response)
+            raise error_class(error_message, response=error_content)
         elif response.status_code != 200:
+            error_content = self._decode_content(response)
             raise QueryError(f'RDAP {self.method} request to {self.url} returned a '
-                             f'non-200 status code of {response.status_code}')
+                             f'non-200 status code of {response.status_code}',
+                             response=error_content)
         try:
             return response.json()
         except (TypeError, ValueError) as e:
-            raise QueryError(f'Failed to parse RDAP Query response as JSON: {e}') from e
+            raise QueryError(f'Failed to parse RDAP Query response as JSON: {e}', response=error_content) from e
 
 
 class Query(BaseQuery):

@@ -250,11 +250,14 @@ class BaseQuery:
         if response.status_code in status_code_map:
             error_class, error_message = status_code_map[response.status_code]
             error_content = self._decode_content(response)
-            raise error_class(error_message, response=error_content)
+            raise error_class(error_message,
+                              status_code=response.status_code,
+                              response=error_content)
         elif response.status_code != 200:
             error_content = self._decode_content(response)
             raise QueryError(f'RDAP {self.method} request to {self.url} returned a '
                              f'non-200 status code of {response.status_code}',
+                             status_code=response.status_code,
                              response=error_content)
         try:
             return response.json()

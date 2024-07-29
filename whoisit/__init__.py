@@ -80,9 +80,9 @@ def _domain(domain_name, raw=False, session=None, follow_related=True, async_cli
                 relhref = link.get('href', '')
                 if relhref:
                     if is_async:
-                        relq = QueryAsync(async_client, method, url)
+                        relq = QueryAsync(async_client, method, relhref)
                     else:
-                        relq= Query(session, method, url)
+                        relq= Query(session, method, relhref)
                     yield
                     relresponse = yield relq
                     break

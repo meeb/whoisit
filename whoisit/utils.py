@@ -121,8 +121,7 @@ def http_request(session, url, method='GET', headers=None, data=None, *args, **k
 
 async def http_request_async(client: httpx.AsyncClient, url, method='GET', headers=None, data=None, *args, **kwargs):
     """
-        Simple wrapper over requests. Allows for optionally downgrading SSL
-        ciphers if required.
+        Simple wrapper over httpx.
     """
     headers = headers or {}
     data = data or {}

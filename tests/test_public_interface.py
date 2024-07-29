@@ -11,7 +11,6 @@ from responses import _recorder
 
 import whoisit
 
-
 BASE_DIR = Path(__file__).resolve().parent
 RESPONSES = BASE_DIR / "responses"
 UTC = timezone.utc
@@ -66,28 +65,28 @@ class SyncPublicInterfaceTestCase(unittest.TestCase):
         whoisit.bootstrap()
         resp = whoisit.domain("google.com")
         self.assertEqual(resp["type"], "domain")
-        self.assertEqual(resp["name"], "GOOGLE.COM")
+        self.assertEqual(resp["name"], "google.com")
         self.assertEqual(resp["handle"], "2138514_DOMAIN_COM-VRSN")
         self.assertEqual(resp["rir"], "")
-        self.assertEqual(resp["registration_date"], datetime(1997, 9, 15, 4, 0, tzinfo=UTC))
-        self.assertEqual(resp["url"], "https://rdap.verisign.com/com/v1/domain/GOOGLE.COM")
+        self.assertEqual(resp["registration_date"], datetime(1997, 9, 15, 7, 0, tzinfo=UTC))
+        self.assertEqual(resp["url"], "https://rdap.markmonitor.com/rdap/domain/google.com")
         self.assertEqual(
             resp["terms_of_service_url"],
-            "https://www.verisign.com/domain-names/registration-data-access-protocol/terms-service/index.xhtml",
+            "https://www.markmonitor.com/legal/domain-management-terms-and-conditions",
         )
-        self.assertEqual(resp["whois_server"], "")
+        self.assertEqual(resp["whois_server"], "whois.markmonitor.com")
         self.assertEqual(resp["copyright_notice"], "")
         self.assertEqual(resp["dnssec"], False)
-        self.assertEqual(resp["nameservers"], ["NS1.GOOGLE.COM", "NS2.GOOGLE.COM", "NS3.GOOGLE.COM", "NS4.GOOGLE.COM"])
+        self.assertEqual(resp["nameservers"], ["ns1.google.com", "ns2.google.com", "ns3.google.com", "ns4.google.com"])
         self.assertEqual(
             resp["status"],
             [
-                "client delete prohibited",
-                "client transfer prohibited",
                 "client update prohibited",
-                "server delete prohibited",
-                "server transfer prohibited",
+                "client transfer prohibited",
+                "client delete prohibited",
                 "server update prohibited",
+                "server transfer prohibited",
+                "server delete prohibited",
             ],
         )
         self.assertTrue(isinstance(resp["entities"]["registrar"], list))
@@ -289,28 +288,28 @@ class AsyncPublicInterfaceTestCase(unittest.IsolatedAsyncioTestCase):
         await whoisit.bootstrap_async()
         resp = await whoisit.domain_async("google.com")
         self.assertEqual(resp["type"], "domain")
-        self.assertEqual(resp["name"], "GOOGLE.COM")
+        self.assertEqual(resp["name"], "google.com")
         self.assertEqual(resp["handle"], "2138514_DOMAIN_COM-VRSN")
         self.assertEqual(resp["rir"], "")
-        self.assertEqual(resp["registration_date"], datetime(1997, 9, 15, 4, 0, tzinfo=UTC))
-        self.assertEqual(resp["url"], "https://rdap.verisign.com/com/v1/domain/GOOGLE.COM")
+        self.assertEqual(resp["registration_date"], datetime(1997, 9, 15, 7, 0, tzinfo=UTC))
+        self.assertEqual(resp["url"], "https://rdap.markmonitor.com/rdap/domain/google.com")
         self.assertEqual(
             resp["terms_of_service_url"],
-            "https://www.verisign.com/domain-names/registration-data-access-protocol/terms-service/index.xhtml",
+            "https://www.markmonitor.com/legal/domain-management-terms-and-conditions",
         )
-        self.assertEqual(resp["whois_server"], "")
+        self.assertEqual(resp["whois_server"], "whois.markmonitor.com")
         self.assertEqual(resp["copyright_notice"], "")
         self.assertEqual(resp["dnssec"], False)
-        self.assertEqual(resp["nameservers"], ["NS1.GOOGLE.COM", "NS2.GOOGLE.COM", "NS3.GOOGLE.COM", "NS4.GOOGLE.COM"])
+        self.assertEqual(resp["nameservers"], ["ns1.google.com", "ns2.google.com", "ns3.google.com", "ns4.google.com"])
         self.assertEqual(
             resp["status"],
             [
-                "client delete prohibited",
-                "client transfer prohibited",
                 "client update prohibited",
-                "server delete prohibited",
-                "server transfer prohibited",
+                "client transfer prohibited",
+                "client delete prohibited",
                 "server update prohibited",
+                "server transfer prohibited",
+                "server delete prohibited",
             ],
         )
         self.assertTrue(isinstance(resp["entities"]["registrar"], list))

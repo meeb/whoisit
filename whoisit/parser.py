@@ -118,13 +118,13 @@ class Parser:
                 v_card_array_data_dict["tel"] = clean(entry_label)
             elif entry_field == 'adr' and isinstance(entry_label, list) and len(entry_label) == 7:
                 v_card_array_data_dict['address'] = VCardArrayAddressDataDict(
-                    po_box= clean_address(entry_label[0]),
-                    ext_address= clean_address(entry_label[1]),
-                    street_address= clean_address(entry_label[2]),
-                    locality= clean_address(entry_label[3]),
-                    region= clean_address(entry_label[4]),
-                    postal_code= clean_address(entry_label[5]),
-                    country= clean_address(entry_label[6])
+                    po_box=clean_address(entry_label[0]),
+                    ext_address=clean_address(entry_label[1]),
+                    street_address=clean_address(entry_label[2]),
+                    locality=clean_address(entry_label[3]),
+                    region=clean_address(entry_label[4]),
+                    postal_code=clean_address(entry_label[5]),
+                    country=clean_address(entry_label[6])
                 )
 
         return v_card_array_data_dict or None

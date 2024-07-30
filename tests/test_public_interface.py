@@ -91,6 +91,17 @@ class SyncPublicInterfaceTestCase(unittest.TestCase):
         )
         self.assertTrue(isinstance(resp["entities"]["registrar"], list))
         self.assertTrue(len(resp["entities"]["registrar"]) > 0)
+        self.assertTrue(isinstance(resp["entities"]["registrant"], list))
+        self.assertTrue(len(resp["entities"]["registrant"]) > 0)
+        self.assertEqual(resp["entities"]["registrant"][0]['address'], {
+            'country': "US",
+            'ext_address': '',
+            'locality': '',
+            'po_box': '',
+            'postal_code': '',
+            'region': 'CA',
+            'street_address': '',
+        })
 
     @responses.activate
     # @_recorder.record(file_path=RESPONSES / 'ip-v4-1.yaml')
@@ -314,6 +325,17 @@ class AsyncPublicInterfaceTestCase(unittest.IsolatedAsyncioTestCase):
         )
         self.assertTrue(isinstance(resp["entities"]["registrar"], list))
         self.assertTrue(len(resp["entities"]["registrar"]) > 0)
+        self.assertTrue(isinstance(resp["entities"]["registrant"], list))
+        self.assertTrue(len(resp["entities"]["registrant"]) > 0)
+        self.assertEqual(resp["entities"]["registrant"][0]['address'], {
+            'country': "US",
+            'ext_address': '',
+            'locality': '',
+            'po_box': '',
+            'postal_code': '',
+            'region': 'CA',
+            'street_address': '',
+        })
 
     @pytest.mark.asyncio
     @pytest.mark.usefixtures("mock_httpx")

@@ -5,7 +5,7 @@ from ipaddress import (
     IPv4Network,
     IPv6Network
 )
-from typing import Optional
+from typing import Optional, List
 from typing_extensions import TypedDict
 
 from dateutil.parser import parse as dateutil_parse
@@ -39,7 +39,7 @@ class VCardArrayDataDict(TypedDict, total=False):
     name: str
     email: str
     tel: str
-    address: list[str]
+    address: List[str]
 
 
 class VCardArrayAddressDataDict(TypedDict, total=False):

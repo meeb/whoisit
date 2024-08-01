@@ -137,24 +137,33 @@ class BaseBootstrap:
             raise BootstrapError(f'Failed to load some bootstrap data, '
                                  f'missing data: {items_missing}')
 
-    def save_bootstrap_data(self):
+    def save_bootstrap_data(self, as_json=True):
         if not self.is_bootstrapped():
             raise BootstrapError('No bootstrap data is loaded')
         rtn = {'timestamp': self._bootstrap_timestamp}
         for name, data in self._data.items():
             rtn[name] = data
-        return json.dumps(rtn)
 
-    def load_bootstrap_data(self, data, overrides=False, allow_insecure=False):
+        if as_json:
+            return json.dumps(rtn)
+
+        return rtn
+
+
+    def load_bootstrap_data(self, data, overrides=False, allow_insecure=False, from_json=True):
         if self.is_bootstrapped():
             raise BootstrapError('Already bootstrapped, cannot load more data')
-        if not isinstance(data, str):
+        if not isinstance(data, str) and from_json:
+            raise BootstrapError(f'Unable to load bootstrap data, data must be a '
+                                 f'string, got: {type(data)}')
+        elif not isinstance(data, dict) and not from_json:
             raise BootstrapError(f'Unable to load bootstrap data, data must be a '
                                  f'string, got: {type(data)}')
         self._use_iana_overrides = bool(overrides)
         self._allow_insecure = bool(allow_insecure)
         try:
-            data = json.loads(data)
+            if from_json:
+                data = json.loads(data)
         except Exception as e:
             raise BootstrapError(f'Unable to load bootstrap data, failed to parse '
                                  f'as JSON: {e}') from e

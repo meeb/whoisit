@@ -1,3 +1,4 @@
+import json
 import unittest
 from datetime import datetime, timezone
 from ipaddress import IPv4Network, IPv6Network
@@ -93,15 +94,18 @@ class SyncPublicInterfaceTestCase(unittest.TestCase):
         self.assertTrue(len(resp["entities"]["registrar"]) > 0)
         self.assertTrue(isinstance(resp["entities"]["registrant"], list))
         self.assertTrue(len(resp["entities"]["registrant"]) > 0)
-        self.assertEqual(resp["entities"]["registrant"][0]['address'], {
-            'country': "US",
-            'ext_address': '',
-            'locality': '',
-            'po_box': '',
-            'postal_code': '',
-            'region': 'CA',
-            'street_address': '',
-        })
+        self.assertEqual(
+            resp["entities"]["registrant"][0]["address"],
+            {
+                "country": "US",
+                "ext_address": "",
+                "locality": "",
+                "po_box": "",
+                "postal_code": "",
+                "region": "CA",
+                "street_address": "",
+            },
+        )
 
     @responses.activate
     # @_recorder.record(file_path=RESPONSES / 'ip-v4-1.yaml')
@@ -224,6 +228,60 @@ class SyncPublicInterfaceTestCase(unittest.TestCase):
         self.assertTrue(isinstance(resp["entities"]["technical"], list))
         self.assertTrue(len(resp["entities"]["technical"]) > 0)
 
+    @responses.activate
+    # @_recorder.record(file_path=RESPONSES / 'boostrap.yaml')
+    def test_save_bootstrap_data(self):
+        responses._add_from_file(RESPONSES / "boostrap.yaml")
+        whoisit.bootstrap()
+        self.assertTrue(whoisit.is_bootstrapped())
+
+        result = whoisit.save_bootstrap_data()
+        self.assertTrue(isinstance(result, str))
+
+        data = json.loads(result)
+        self.assertTrue(bool(data))
+
+    @responses.activate
+    # @_recorder.record(file_path=RESPONSES / 'boostrap.yaml')
+    def test_save_bootstrap_data_no_json(self):
+        responses._add_from_file(RESPONSES / "boostrap.yaml")
+        whoisit.bootstrap()
+        self.assertTrue(whoisit.is_bootstrapped())
+
+        data = whoisit.save_bootstrap_data(as_json=False)
+        self.assertTrue(isinstance(data, dict))
+        self.assertTrue(bool(data))
+
+    @responses.activate
+    # @_recorder.record(file_path=RESPONSES / 'boostrap.yaml')
+    def test_load_bootstrap_data(self):
+        responses._add_from_file(RESPONSES / "boostrap.yaml")
+        whoisit.bootstrap()
+        self.assertTrue(whoisit.is_bootstrapped())
+
+        data = whoisit.save_bootstrap_data()
+        self.assertTrue(isinstance(data, str))
+
+        whoisit.clear_bootstrapping()
+
+        whoisit.load_bootstrap_data(data)
+        self.assertTrue(whoisit.is_bootstrapped())
+
+    @responses.activate
+    # @_recorder.record(file_path=RESPONSES / 'boostrap.yaml')
+    def test_load_bootstrap_data_no_json(self):
+        responses._add_from_file(RESPONSES / "boostrap.yaml")
+        whoisit.bootstrap()
+        self.assertTrue(whoisit.is_bootstrapped())
+
+        data = whoisit.save_bootstrap_data(as_json=False)
+        self.assertTrue(isinstance(data, dict))
+
+        whoisit.clear_bootstrapping()
+
+        whoisit.load_bootstrap_data(data, from_json=False)
+        self.assertTrue(whoisit.is_bootstrapped())
+
 
 #############################################
 ################### Async ###################
@@ -327,15 +385,18 @@ class AsyncPublicInterfaceTestCase(unittest.IsolatedAsyncioTestCase):
         self.assertTrue(len(resp["entities"]["registrar"]) > 0)
         self.assertTrue(isinstance(resp["entities"]["registrant"], list))
         self.assertTrue(len(resp["entities"]["registrant"]) > 0)
-        self.assertEqual(resp["entities"]["registrant"][0]['address'], {
-            'country': "US",
-            'ext_address': '',
-            'locality': '',
-            'po_box': '',
-            'postal_code': '',
-            'region': 'CA',
-            'street_address': '',
-        })
+        self.assertEqual(
+            resp["entities"]["registrant"][0]["address"],
+            {
+                "country": "US",
+                "ext_address": "",
+                "locality": "",
+                "po_box": "",
+                "postal_code": "",
+                "region": "CA",
+                "street_address": "",
+            },
+        )
 
     @pytest.mark.asyncio
     @pytest.mark.usefixtures("mock_httpx")
@@ -457,3 +518,57 @@ class AsyncPublicInterfaceTestCase(unittest.IsolatedAsyncioTestCase):
         )
         self.assertTrue(isinstance(resp["entities"]["technical"], list))
         self.assertTrue(len(resp["entities"]["technical"]) > 0)
+
+    @pytest.mark.asyncio
+    @pytest.mark.usefixtures("mock_httpx")
+    async def test_save_bootstrap_data(self):
+        load_sync_responses_to_httpx_mock(RESPONSES / "boostrap.yaml", self.httpx_mock)
+        await whoisit.bootstrap_async()
+        self.assertTrue(whoisit.is_bootstrapped())
+
+        result = whoisit.save_bootstrap_data()
+        self.assertTrue(isinstance(result, str))
+
+        data = json.loads(result)
+        self.assertTrue(bool(data))
+
+    @pytest.mark.asyncio
+    @pytest.mark.usefixtures("mock_httpx")
+    async def test_save_bootstrap_data_no_json(self):
+        load_sync_responses_to_httpx_mock(RESPONSES / "boostrap.yaml", self.httpx_mock)
+        await whoisit.bootstrap_async()
+        self.assertTrue(whoisit.is_bootstrapped())
+
+        data = whoisit.save_bootstrap_data(as_json=False)
+        self.assertTrue(isinstance(data, dict))
+        self.assertTrue(bool(data))
+
+    @pytest.mark.asyncio
+    @pytest.mark.usefixtures("mock_httpx")
+    async def test_load_bootstrap_data(self):
+        load_sync_responses_to_httpx_mock(RESPONSES / "boostrap.yaml", self.httpx_mock)
+        await whoisit.bootstrap_async()
+        self.assertTrue(whoisit.is_bootstrapped())
+
+        data = whoisit.save_bootstrap_data()
+        self.assertTrue(isinstance(data, str))
+
+        whoisit.clear_bootstrapping()
+
+        whoisit.load_bootstrap_data(data)
+        self.assertTrue(whoisit.is_bootstrapped())
+
+    @pytest.mark.asyncio
+    @pytest.mark.usefixtures("mock_httpx")
+    async def test_load_bootstrap_data_no_json(self):
+        load_sync_responses_to_httpx_mock(RESPONSES / "boostrap.yaml", self.httpx_mock)
+        await whoisit.bootstrap_async()
+        self.assertTrue(whoisit.is_bootstrapped())
+
+        data = whoisit.save_bootstrap_data(as_json=False)
+        self.assertTrue(isinstance(data, dict))
+
+        whoisit.clear_bootstrapping()
+
+        whoisit.load_bootstrap_data(data, from_json=False)
+        self.assertTrue(whoisit.is_bootstrapped())

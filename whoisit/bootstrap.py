@@ -158,7 +158,7 @@ class BaseBootstrap:
                                  f'string, got: {type(data)}')
         elif not isinstance(data, dict) and not from_json:
             raise BootstrapError(f'Unable to load bootstrap data, data must be a '
-                                 f'string, got: {type(data)}')
+                                 f'dict, got: {type(data)}')
         self._use_iana_overrides = bool(overrides)
         self._allow_insecure = bool(allow_insecure)
         try:

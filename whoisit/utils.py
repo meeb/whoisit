@@ -128,7 +128,6 @@ async def http_request_async(client: httpx.AsyncClient, url, method='GET', heade
     methods = ('GET',)
     if method not in methods:
         raise UnsupportedError(f'HTTP methods supported are: {methods}, got: {method}')
-
     log.debug(f'Making async HTTP {method} request to {url}')
     try:
         if 'timeout' not in kwargs:

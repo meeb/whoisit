@@ -143,10 +143,8 @@ class BaseBootstrap:
         rtn = {'timestamp': self._bootstrap_timestamp}
         for name, data in self._data.items():
             rtn[name] = data
-
         if as_json:
             return json.dumps(rtn)
-
         return rtn
 
 

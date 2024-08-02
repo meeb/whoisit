@@ -273,6 +273,15 @@ or
 whoisit.load_bootstrap_data(bootstrap_info, overrides=True)
 ```
 
+Both `whoisit.save_bootstrap_data()` and `whoisit.load_bootstrap_data(some_data)` also
+support `as_json=True` as a default argument. The default operation is to return bootstrap
+data as a JSON encoded string and load it from a JSON encoded string. If you want to
+serialise the bootstrapping information in some other format you can use set `as_json=False` on
+both `whoisit.save_bootstrap_data(as_json=False)` and
+`whoisit.load_bootstrap_data(some_data, as_json=False)`. These methods will then return and
+load a Python dictionary instead of JSON and you can perform serialisation yourself however
+you need in your application.
+
 **Important**: when using the overrides you may recieve non-standard data, data that
 is not in the same format as officially listed IANA data and you may not recieve a copy
 of any required terms of service or terms of use. You will have to manually verify data

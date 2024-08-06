@@ -154,21 +154,27 @@ def contains_only_chars(s, chars=default_chars):
 
 
 def recursive_merge(d1, d2):
+    '''
+        Recursively merge two dictionaries. This is used to overlay subrequest
+        data from related info RDAP endpoints over the top of primary RDAP
+        request data. It has some special handling to account for related RDAP
+        info having slightly different formats for events, notices, and remarks.
+    '''
     for k, v in d2.items():
         if k in d1 and isinstance(d1[k], dict) and isinstance(v, dict):
             recursive_merge(d1[k], v)
-        elif k == "events" and isinstance(v, list):
+        elif k == 'events' and isinstance(v, list):
             v1 = d1.get(k) or []
             d1[k] = recursive_merge_lists(v1, v, dedup_on='eventAction')
-        elif k in {"notices", "remarks"} and isinstance(v, list):
+        elif k in {'notices', 'remarks'} and isinstance(v, list):
             v1 = d1.get(k) or []
             d1[k] = recursive_merge_lists(v1, v)
         elif v:
             d1[k] = v
 
 
-def recursive_merge_lists(l1, l2, dedup_on="title"):
-    list1 = {l[dedup_on]: l for l in l1}
-    list2 = {l[dedup_on]: l for l in l2}
+def recursive_merge_lists(l1, l2, dedup_on='title'):
+    list1 = {l[dedup_on]: l for l in l1 if dedup_on in l}
+    list2 = {l[dedup_on]: l for l in l2 if dedup_on in l}
     recursive_merge(list1, list2)
     return list(list1.values())

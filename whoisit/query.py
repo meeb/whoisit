@@ -262,6 +262,7 @@ class BaseQuery:
         try:
             return response.json()
         except (TypeError, ValueError) as e:
+            error_content = self._decode_content(response)
             raise QueryError(f'Failed to parse RDAP Query response as JSON: {e}', response=error_content) from e
 
 

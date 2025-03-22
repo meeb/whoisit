@@ -64,7 +64,7 @@ def clean_address_label(adr_label, max_size=7):
         return entry_label[:i] + parsed_address + entry_label[i+len(parsed_address):]
 
     except Exception as e:
-        log.exception(f'Exception "{e}" while parsing non-compliant vCard adr: {repr(adr_label)}')
+        log.debug(f'Exception while parsing non-compliant vCard adr: {repr(adr_label)}')
         return [""] * max_size
 
 

@@ -26,7 +26,7 @@ setup(
     license = 'BSD',
     include_package_data = True,
     install_requires = requirements,
-    packages = find_packages(),
+    packages = find_packages(exclude=('tests',)),
     classifiers = [
         'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',

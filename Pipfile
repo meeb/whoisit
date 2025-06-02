@@ -7,6 +7,7 @@ verify_ssl = true
 responses = "*"
 pytest-httpx = "*"
 pytest-asyncio = "*"
+pytest = "*"
 
 [packages]
 httpx = "*"

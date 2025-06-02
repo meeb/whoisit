@@ -264,7 +264,7 @@ class Parser:
                     self.parsed['entities'].setdefault(role, [])
                     # ignore duplicate entity per role
                     if parsed_entity not in self.parsed['entities'].get(role, []):
-                        self.parsed['entities'][role].append(parsed_entity)
+                        self.parsed['entities'][role.lower()].append(parsed_entity)
             if entity.get('entities'):
                 self.extract_entities(entities=entity.get('entities'))
 

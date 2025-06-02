@@ -127,7 +127,6 @@ class Parser:
                     postal_code=clean_address(entry_label[5]),
                     country=clean_address(entry_label[6])
                 )
-                print(json.dumps(v_card_array_data_dict['address'], indent=2))
 
         return v_card_array_data_dict or None
 

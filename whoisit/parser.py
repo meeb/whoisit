@@ -1,3 +1,4 @@
+import json
 from sys import getsizeof
 from ipaddress import (
     ip_address,
@@ -33,39 +34,6 @@ def clean_address(a):
     if not isinstance(a, str):
         a = str(a)
     return a.strip()
-
-
-def clean_address_label(adr_label, max_size=7):
-    try:
-        # In cases where multiple address lines are present, such as
-        # when specifying a suite or floor number, the label
-        # configuration employs a carriage return and line feed
-        # ('\r\n') to separate these details.
-        parsed_address = adr_label.replace('\r\n', '; ').split('\n')
-
-        # Help ensure reliable results or none at all
-        if any('' == x or x.isspace() for x in parsed_address):
-            log.debug(f'Failed to parse non-compliant vCard adr: {repr(adr_label)}')
-            return [""] * max_size
-        elif len(parsed_address) > max_size:
-            log.debug(f'Failed to parse non-compliant vCard adr: {repr(adr_label)}')
-            return [""] * max_size
-        elif len(parsed_address) == 0:
-            log.debug(f'Failed to parse non-compliant vCard adr: {repr(adr_label)}')
-            return [""] * max_size
-
-        entry_label = [""] * max_size
-
-        # Calculate the starting index for insertion
-        i = len(entry_label) - len(parsed_address)
-
-        # Insert elements of parsed_address into entry_label starting
-        # from the calculated index
-        return entry_label[:i] + parsed_address + entry_label[i+len(parsed_address):]
-
-    except Exception as e:
-        log.debug(f'Exception while parsing non-compliant vCard adr: {repr(adr_label)}')
-        return [""] * max_size
 
 
 class VCardArrayDataDict(TypedDict, total=False):
@@ -150,9 +118,6 @@ class Parser:
             elif entry_field == 'tel':
                 v_card_array_data_dict["tel"] = clean(entry_label)
             elif entry_field == 'adr' and isinstance(entry_label, list) and len(entry_label) == 7:
-                # Process non-compliant address label in vCard adr field
-                if 'label' in entry_data and all('' == x or x.isspace() for x in entry_label):
-                    entry_label = clean_address_label(entry_data['label'], max_size=len(entry_label))
                 v_card_array_data_dict['address'] = VCardArrayAddressDataDict(
                     po_box=clean_address(entry_label[0]),
                     ext_address=clean_address(entry_label[1]),
@@ -162,6 +127,7 @@ class Parser:
                     postal_code=clean_address(entry_label[5]),
                     country=clean_address(entry_label[6])
                 )
+                print(json.dumps(v_card_array_data_dict['address'], indent=2))
 
         return v_card_array_data_dict or None
 

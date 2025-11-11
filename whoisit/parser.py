@@ -131,7 +131,21 @@ class Parser:
         return v_card_array_data_dict or None
 
     def extract_handle(self):
-        self.parsed['handle'] = clean(self.raw_data.get('handle', '')).upper()
+        # First try to get handle from top level
+        handle = clean(self.raw_data.get('handle', ''))
+        if handle:
+            self.parsed['handle'] = handle.upper()
+            return
+        
+        # If no top-level handle, look for it in entities (registrar entity usually has it)
+        for entity in self.raw_data.get('entities', []):
+            entity_handle = clean(entity.get('handle', ''))
+            if entity_handle:
+                self.parsed['handle'] = entity_handle.upper()
+                return
+        
+        # If still no handle found, set empty string
+        self.parsed['handle'] = ''
 
     def extract_parent_handle(self):
         self.parsed['parent_handle'] = clean(

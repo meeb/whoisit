@@ -78,7 +78,9 @@ def _domain(domain_name, raw=False, session=None, follow_related=True, async_cli
             rel = link.get('rel', '')
             if rel in ('related', 'registration'):
                 relhref = link.get('href', '')
-                if relhref:
+                reltype = link.get('type', '')
+                # Exclude related links with type set to HTML content types to avoid parsing web pages as JSON
+                if relhref and not reltype.startswith('text/html'):
                     if is_async:
                         relq = QueryAsync(async_client, method, relhref)
                     else:

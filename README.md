@@ -105,6 +105,20 @@ results = whoisit.domain('example.com', raw=True)
 # 'results' is now the full, raw response from the RDAP service
 ```
 
+If you want to obtain both the parsed and raw data you can use the `raw_and_parsed=True`
+argument. In this case a tuple of `(raw, parsed)` will be returned. For example:
+
+```python
+raw, parsed = whoisit.domain('example.com', raw_and_parsed=True)
+# 'raw' is the full, raw response from the RDAP service
+# 'parsed' is the parsed response from whoisit
+```
+
+The `raw` argument takes precedence over `raw_and_parsed`, so if you specify both
+`raw=True` and `raw_and_parsed=True` only the raw data will be returned.
+
+### Specifying RDAP service / RIR
+
 If for some reason you accidentally end up querying the wrong RDAP endpoint your query
 should end up still working, for example if you query ARIN for information on the IP
 address `1.1.1.1` it will redirect you to APNIC (where `1.1.1.1` is allocated)

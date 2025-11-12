@@ -27,7 +27,7 @@ build_query = _query_builder.build
 # Query helpers
 
 
-def _asn(as_number, rir=None, raw=False, session=None, async_client=None):
+def _asn(as_number, rir=None, raw=False, raw_and_parsed=False, session=None, async_client=None):
     is_async = async_client is not None
     method, url, _ = build_query(query_type='asn', query_value=as_number, rir=rir)
 
@@ -36,28 +36,33 @@ def _asn(as_number, rir=None, raw=False, session=None, async_client=None):
     else:
         q = Query(session, method, url)
     response = yield q
-    yield response if raw else parse(_bootstrap, 'autnum', as_number, response)
+    
+    if raw:
+        yield response
+    else:
+        parsed = parse(_bootstrap, 'autnum', as_number, response)
+        yield (response, parsed) if raw_and_parsed else parsed
 
 
-def asn(as_number, rir=None, raw=False, allow_insecure_ssl=False, session=None):
+def asn(as_number, rir=None, raw=False, raw_and_parsed=False, allow_insecure_ssl=False, session=None):
     session = get_session(session, allow_insecure_ssl)
-    gen = _asn(as_number, rir, raw, session=session)
+    gen = _asn(as_number, rir, raw, raw_and_parsed, session=session)
     q: Query = next(gen)
     resp: dict = gen.send(q.request())
     gen.close()
     return resp
 
 
-async def asn_async(as_number, rir=None, raw=False, allow_insecure_ssl=False, async_client=None):
+async def asn_async(as_number, rir=None, raw=False, raw_and_parsed=False, allow_insecure_ssl=False, async_client=None):
     async_client = get_async_client(async_client, allow_insecure_ssl)
-    gen = _asn(as_number, rir, raw, async_client=async_client)
+    gen = _asn(as_number, rir, raw, raw_and_parsed, async_client=async_client)
     q: QueryAsync = next(gen)
     resp: dict = gen.send(await q.request())
     gen.close()
     return resp
 
 
-def _domain(domain_name, raw=False, session=None, follow_related=True, async_client=None, is_async=False):
+def _domain(domain_name, raw=False, raw_and_parsed=False, session=None, follow_related=True, async_client=None, is_async=False):
     is_async = async_client is not None
     method, url, _ = build_query(query_type='domain', query_value=domain_name)
 
@@ -91,12 +96,13 @@ def _domain(domain_name, raw=False, session=None, follow_related=True, async_cli
         if relresponse:
             # Overlay the related response over the original response
             recursive_merge(response, relresponse)
-    yield parse(_bootstrap, 'domain', domain_name, response)
+    parsed = parse(_bootstrap, 'domain', domain_name, response)
+    yield (response, parsed) if raw_and_parsed else parsed
 
 
-def domain(domain_name, raw=False, allow_insecure_ssl=False, session=None, follow_related=True):
+def domain(domain_name, raw=False, raw_and_parsed=False, allow_insecure_ssl=False, session=None, follow_related=True):
     session = get_session(session, allow_insecure_ssl)
-    gen = _domain(domain_name, raw, session, follow_related, None)
+    gen = _domain(domain_name, raw, raw_and_parsed, session, follow_related, None)
     resp: dict = None
 
     q: Query
@@ -111,9 +117,9 @@ def domain(domain_name, raw=False, allow_insecure_ssl=False, session=None, follo
     return resp
 
 
-async def domain_async(domain_name, raw=False, allow_insecure_ssl=False, async_client=None, follow_related=True):
+async def domain_async(domain_name, raw=False, raw_and_parsed=False, allow_insecure_ssl=False, async_client=None, follow_related=True):
     async_client = get_async_client(async_client, allow_insecure_ssl)
-    gen = _domain(domain_name, raw, None, follow_related, async_client)
+    gen = _domain(domain_name, raw, raw_and_parsed, None, follow_related, async_client)
     resp: dict = None
 
     q: QueryAsync
@@ -129,7 +135,7 @@ async def domain_async(domain_name, raw=False, allow_insecure_ssl=False, async_c
     return resp
 
 
-def _ip(ip_address_or_network, rir=None, raw=False, session=None, async_client=None, is_async=False):
+def _ip(ip_address_or_network, rir=None, raw=False, raw_and_parsed=False, session=None, async_client=None, is_async=False):
     is_async = async_client is not None
     method, url, _ = build_query(query_type='ip', query_value=ip_address_or_network, rir=rir)
 
@@ -138,28 +144,33 @@ def _ip(ip_address_or_network, rir=None, raw=False, session=None, async_client=N
     else:
         q = Query(session, method, url)
     response = yield q
-    yield response if raw else parse(_bootstrap, 'ip', ip_address_or_network, response)
+    
+    if raw:
+        yield response
+    else:
+        parsed = parse(_bootstrap, 'ip', ip_address_or_network, response)
+        yield (response, parsed) if raw_and_parsed else parsed
 
 
-def ip(ip_address_or_network, rir=None, raw=False, allow_insecure_ssl=False, session=None):
+def ip(ip_address_or_network, rir=None, raw=False, raw_and_parsed=False, allow_insecure_ssl=False, session=None):
     session = get_session(session, allow_insecure_ssl)
-    gen = _ip(ip_address_or_network, rir, raw, session, None)
+    gen = _ip(ip_address_or_network, rir, raw, raw_and_parsed, session, None)
     q: Query = next(gen)
     resp: dict = gen.send(q.request())
     gen.close()
     return resp
 
 
-async def ip_async(ip_address_or_network, rir=None, raw=False, allow_insecure_ssl=False, async_client=None):
+async def ip_async(ip_address_or_network, rir=None, raw=False, raw_and_parsed=False, allow_insecure_ssl=False, async_client=None):
     async_client = get_async_client(async_client, allow_insecure_ssl)
-    gen = _ip(ip_address_or_network, rir, raw, None, async_client)
+    gen = _ip(ip_address_or_network, rir, raw, raw_and_parsed, None, async_client)
     q: QueryAsync = next(gen)
     resp: dict = gen.send(await q.request())
     gen.close()
     return resp
 
 
-def _entity(entity_handle, rir=None, raw=False, session=None, async_client=None, is_async=False):
+def _entity(entity_handle, rir=None, raw=False, raw_and_parsed=False, session=None, async_client=None, is_async=False):
     is_async = async_client is not None
     method, url, _ = build_query(query_type='entity', query_value=entity_handle, rir=rir)
 
@@ -168,21 +179,25 @@ def _entity(entity_handle, rir=None, raw=False, session=None, async_client=None,
     else:
         q = Query(session, method, url)
     response = yield q
-    yield response if raw else parse(_bootstrap, 'entity', entity_handle, response)
+    
+    if raw:
+        yield response
+    else:
+        parsed = parse(_bootstrap, 'entity', entity_handle, response)
+        yield (response, parsed) if raw_and_parsed else parsed
 
-
-def entity(entity_handle, rir=None, raw=False, allow_insecure_ssl=False, session=None):
+def entity(entity_handle, rir=None, raw=False, raw_and_parsed=False, allow_insecure_ssl=False, session=None):
     session = get_session(session, allow_insecure_ssl)
-    gen = _entity(entity_handle, rir, raw, session, None)
+    gen = _entity(entity_handle, rir, raw, raw_and_parsed, session, None)
     q: Query = next(gen)
     resp: dict = gen.send(q.request())
     gen.close()
     return resp
 
 
-async def entity_async(ip_address_or_network, rir=None, raw=False, allow_insecure_ssl=False, async_client=None):
+async def entity_async(ip_address_or_network, rir=None, raw=False, raw_and_parsed=False, allow_insecure_ssl=False, async_client=None):
     async_client = get_async_client(async_client, allow_insecure_ssl)
-    gen = _entity(ip_address_or_network, rir, raw, None, async_client)
+    gen = _entity(ip_address_or_network, rir, raw, raw_and_parsed, None, async_client)
     q: QueryAsync = next(gen)
     resp: dict = gen.send(await q.request())
     gen.close()

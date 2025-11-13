@@ -106,12 +106,12 @@ results = whoisit.domain('example.com', raw=True)
 ```
 
 If you want to obtain both the parsed and raw data you can use the `raw_and_parsed=True`
-argument. In this case a tuple of `(raw, parsed)` will be returned. For example:
+argument. In this case, the `results` will contain an additional `raw` key that contains the raw data. For example:
 
 ```python
-raw, parsed = whoisit.domain('example.com', raw_and_parsed=True)
-# 'raw' is the full, raw response from the RDAP service
-# 'parsed' is the parsed response from whoisit
+results = whoisit.domain('example.com', raw_and_parsed=True)
+# 'results' is the parsed response from whoisit
+# the raw response can now be accessed as 'results["raw"]'
 ```
 
 The `raw` argument takes precedence over `raw_and_parsed`, so if you specify both

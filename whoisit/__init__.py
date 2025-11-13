@@ -26,7 +26,6 @@ build_query = _query_builder.build
 
 # Query helpers
 
-
 def _asn(as_number, rir=None, raw=False, raw_and_parsed=False, session=None, async_client=None):
     is_async = async_client is not None
     method, url, _ = build_query(query_type='asn', query_value=as_number, rir=rir)
@@ -37,11 +36,7 @@ def _asn(as_number, rir=None, raw=False, raw_and_parsed=False, session=None, asy
         q = Query(session, method, url)
     response = yield q
     
-    if raw:
-        yield response
-    else:
-        parsed = parse(_bootstrap, 'autnum', as_number, response)
-        yield (response, parsed) if raw_and_parsed else parsed
+    yield response if raw else parse(_bootstrap, 'autnum', as_number, response, raw_and_parsed)
 
 
 def asn(as_number, rir=None, raw=False, raw_and_parsed=False, allow_insecure_ssl=False, session=None):
@@ -96,8 +91,7 @@ def _domain(domain_name, raw=False, raw_and_parsed=False, session=None, follow_r
         if relresponse:
             # Overlay the related response over the original response
             recursive_merge(response, relresponse)
-    parsed = parse(_bootstrap, 'domain', domain_name, response)
-    yield (response, parsed) if raw_and_parsed else parsed
+    yield parse(_bootstrap, 'domain', domain_name, response, raw_and_parsed)
 
 
 def domain(domain_name, raw=False, raw_and_parsed=False, allow_insecure_ssl=False, session=None, follow_related=True):
@@ -144,12 +138,7 @@ def _ip(ip_address_or_network, rir=None, raw=False, raw_and_parsed=False, sessio
     else:
         q = Query(session, method, url)
     response = yield q
-    
-    if raw:
-        yield response
-    else:
-        parsed = parse(_bootstrap, 'ip', ip_address_or_network, response)
-        yield (response, parsed) if raw_and_parsed else parsed
+    yield response if raw else parse(_bootstrap, 'ip', ip_address_or_network, response, raw_and_parsed)
 
 
 def ip(ip_address_or_network, rir=None, raw=False, raw_and_parsed=False, allow_insecure_ssl=False, session=None):
@@ -179,12 +168,7 @@ def _entity(entity_handle, rir=None, raw=False, raw_and_parsed=False, session=No
     else:
         q = Query(session, method, url)
     response = yield q
-    
-    if raw:
-        yield response
-    else:
-        parsed = parse(_bootstrap, 'entity', entity_handle, response)
-        yield (response, parsed) if raw_and_parsed else parsed
+    yield response if raw else parse(_bootstrap, 'entity', entity_handle, response, raw_and_parsed)
 
 def entity(entity_handle, rir=None, raw=False, raw_and_parsed=False, allow_insecure_ssl=False, session=None):
     session = get_session(session, allow_insecure_ssl)

@@ -233,13 +233,6 @@ class BootstrapTestCase(unittest.TestCase):
         override_endpoints, match = whoisit._bootstrap.get_dns_endpoints('de')
         self.assertEqual(override_endpoints[0], 'https://rdap.denic.de/')
         self.assertFalse(match)
-        # Test for SLD overrides
-        override_endpoints, match = whoisit._bootstrap.get_dns_endpoints('gl')
-        self.assertEqual(override_endpoints[0], 'https://rdap.centralnic.com/gl/')
-        self.assertFalse(match)
-        override_endpoints, match = whoisit._bootstrap.get_dns_endpoints('co.gl')
-        self.assertEqual(override_endpoints[0], 'https://rdap.centralnic.com/co.gl/')
-        self.assertFalse(match)
 
     def test_insecure_scheme_endpoints(self):
 

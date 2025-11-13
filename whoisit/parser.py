@@ -463,7 +463,7 @@ parser_map = {
 }
 
 
-def parse(bootstrap, data_type, query, raw_data):
+def parse(bootstrap, data_type, query, raw_data, include_raw=False):
     # Find a parser for the response type, falling back to the request / data type
     response_type = raw_data.get('objectClassName', data_type)
     parser_class = parser_map.get(response_type, None)
@@ -473,4 +473,7 @@ def parse(bootstrap, data_type, query, raw_data):
               f'with parser: {response_type} / {parser_class}')
     p = parser_class(bootstrap, raw_data, query,
                      using_overrides=bootstrap.is_using_overrides())
-    return p.parse()
+    parsed = p.parse()
+    if include_raw:
+        parsed['raw'] = raw_data
+    return parsed

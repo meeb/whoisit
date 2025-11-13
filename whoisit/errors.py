@@ -3,6 +3,10 @@ class WhoisItError(Exception):
         Parent Exception for all whoisit raised exceptions.
     """
 
+class ArgumentError(WhoisItError):
+    """
+        Raised when there are any issues with function arguments, e.g. invalid combinations.
+    """
 
 class BootstrapError(WhoisItError):
     """

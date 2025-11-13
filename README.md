@@ -105,6 +105,23 @@ results = whoisit.domain('example.com', raw=True)
 # 'results' is now the full, raw response from the RDAP service
 ```
 
+If you want to obtain both the parsed and raw data you can use the `include_raw=True`
+argument. In this case, the `results` will contain an additional `raw` key that contains the raw data. For example:
+
+```python
+results = whoisit.domain('example.com', include_raw=True)
+# 'results' is the parsed response from whoisit
+# the raw response can now be accessed as 'results["raw"]'
+```
+
+The `raw` and `include_raw` arguments cannot be used together. In such a case an `ArgumentError` will be raised.
+```python
+results = whoisit.domain('example.com', raw=True, include_raw=True)
+# This raises a whoisit.errors.ArgumentError
+```
+
+### Specifying RDAP service / RIR
+
 If for some reason you accidentally end up querying the wrong RDAP endpoint your query
 should end up still working, for example if you query ARIN for information on the IP
 address `1.1.1.1` it will redirect you to APNIC (where `1.1.1.1` is allocated)
@@ -518,11 +535,11 @@ Tests if the loaded bootstrap data is older than the specified number of days as
 integer. Returns True or False. If no bootstrap information is loaded a
 `whoisit.errors.BootstrapError` exception will be raised.
 
-### `whoisit.asn(asn=int, rir=str, raw=bool, allow_insecure_ssl=bool)` -> `dict`
+### `whoisit.asn(asn=int, rir=str, raw=bool, include_raw=False, allow_insecure_ssl=bool)` -> `dict`
 
 Queries a remote RDAP server for information about the specified AS number. AS number
 must be an integer. Returns a dict of information. If `raw=True` is passed a large dict
-of the raw RDAP response will be returned. If the query fails a
+of the raw RDAP response will be returned. If `include_raw` is passed the raw RDAP response will be included in the parsed response under the `raw` key. If both `raw` and `include_raw` are set a `whoisit.errors.ArgumentError` will be raised. If the query fails a
 `whoisit.errors.QueryError` exception will be raised. If no bootstrap data is loaded
 a `whoisit.errors.BootstrapError` exception will be raised. if `allow_insecure_ssl=True`
 is passed the RDAP queries will allow weaker SSL handshakes. Examples:
@@ -531,6 +548,7 @@ is passed the RDAP queries will allow weaker SSL handshakes. Examples:
 whoisit.asn(12345)
 whoisit.asn(12345, rir='arin')
 whoisit.asn(12345, raw=True)
+whoisit.asn(12345, include_raw=True)
 whoisit.asn(12345, rir='arin', raw=True)
 whoisit.asn(12345, allow_insecure_ssl=True)
 ```
@@ -541,12 +559,12 @@ As of `whoisit` version 3.0.0 there is also an optional async interface:
 response = await whoisit.asn_async(12345)
 ```
 
-### `whoisit.domain(domain=str, raw=bool, allow_insecure_ssl=bool)` -> `dict`
+### `whoisit.domain(domain=str, raw=bool, include_raw=False, allow_insecure_ssl=bool)` -> `dict`
 
 Queries a remote RDAP server for information about the specified domain name. The domain
 name must be a string and in a valid domain name "something.tld" style format. Returns a
 dict of information. If `raw=True` is passed a large dict of the raw RDAP response will
-be returned. If the query fails a `whoisit.errors.QueryError` exception will be raised.
+be returned. If `include_raw` is passed the raw RDAP response will be included in the parsed response under the `raw` key. If both `raw` and `include_raw` are set a `whoisit.errors.ArgumentError` will be raised. If the query fails a `whoisit.errors.QueryError` exception will be raised.
 If no bootstrap data is loaded a `whoisit.errors.BootstrapError` exception will be
 raised. If the TLD is unsupported a `whoisit.errors.UnsupportedError` exception will be
 raised.  if `allow_insecure_ssl=True` is passed the RDAP queries will allow weaker SSL
@@ -556,6 +574,7 @@ Examples:
 ```python
 whoisit.domain('example.com')
 whoisit.domain('example.com', raw=True)
+whoisit.domain('example.com', include_raw=True)
 whoisit.domain('example.com', allow_insecure_ssl=True)
 ```
 
@@ -565,13 +584,13 @@ As of `whoisit` version 3.0.0 there is also an optional async interface:
 response = await whoisit.domain_async('example.com')
 ```
 
-### `whoisit.ip(ip="1.1.1.1", rir=str, raw=bool, allow_insecure_ssl=bool)` -> `dict`
+### `whoisit.ip(ip="1.1.1.1", rir=str, raw=bool, include_raw=False, allow_insecure_ssl=bool)` -> `dict`
 
 Queries a remote RDAP server for information about the specified IP address or CIDR. The
 IP address or CIDR must be a string and in the correct IP address or CIDR format or
 any one of IPv4Address, IPv4Network, IPv6Address or IPv6Network objects. Returns a dict
 of information. If `raw=True` is passed a large dict of the raw RDAP response will be
-returned. If the query fails a `whoisit.errors.QueryError` exception will be raised. If
+returned. If `include_raw` is passed the raw RDAP response will be included in the parsed response under the `raw` key. If both `raw` and `include_raw` are set a `whoisit.errors.ArgumentError` will be raised. If the query fails a `whoisit.errors.QueryError` exception will be raised. If
 no bootstrap data is loaded a `whoisit.errors.BootstrapError` exception will be raised.
 if `allow_insecure_ssl=True` is passed the RDAP queries will allow weaker SSL handshakes.
 Examples:
@@ -580,6 +599,7 @@ Examples:
 whoisit.ip('1.1.1.1')
 whoisit.ip('1.1.1.1', rir='apnic')
 whoisit.ip('1.1.1.1', raw=True, rir='apnic')
+whoisit.ip('1.1.1.1', include_raw=True, rir='apnic')
 whoisit.ip('1.1.1.0/24')
 whoisit.ip(IPv4Address('1.1.1.1'))
 whoisit.ip(IPv4Network('1.1.1.0/24'))
@@ -594,12 +614,12 @@ As of `whoisit` version 3.0.0 there is also an optional async interface:
 response = await whoisit.ip_async('1.1.1.1')
 ```
 
-### `whoisit.entity(entity=str, rir=str, raw=bool, allow_insecure_ssl=bool)` -> `dict`
+### `whoisit.entity(entity=str, rir=str, raw=bool, include_raw=False, allow_insecure_ssl=bool)` -> `dict`
 
 Queries a remote RDAP server for information about the specified entity name. The
 entity name must be a string and in the correct entity format. Returns a dict of
 information. If `raw=True` is passed a large dict of the raw RDAP response will be
-returned. If the query fails a `whoisit.errors.QueryError` exception will be raised.
+returned. If `include_raw` is passed the raw RDAP response will be included in the parsed response under the `raw` key. If both `raw` and `include_raw` are set a `whoisit.errors.ArgumentError` will be raised. If the query fails a `whoisit.errors.QueryError` exception will be raised.
 If no bootstrap data is loaded a `whoisit.errors.BootstrapError` exception will be
 raised. if `allow_insecure_ssl=True` is passed the RDAP queries will allow weaker
 SSL handshakes. Examples:
@@ -608,6 +628,7 @@ SSL handshakes. Examples:
 whoisit.entity('ZG39-ARIN')
 whoisit.entity('ZG39-ARIN', rir='arin')
 whoisit.entity('ZG39-ARIN', rir='arin', raw=True)
+whoisit.entity('ZG39-ARIN', rir='arin', include_raw=True)
 whoisit.entity('ZG39-ARIN', allow_insecure_ssl=True)
 ```
 

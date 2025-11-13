@@ -35,7 +35,6 @@ def _asn(as_number, rir=None, raw=False, raw_and_parsed=False, session=None, asy
     else:
         q = Query(session, method, url)
     response = yield q
-    
     yield response if raw else parse(_bootstrap, 'autnum', as_number, response, raw_and_parsed)
 
 

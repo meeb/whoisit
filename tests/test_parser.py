@@ -603,3 +603,13 @@ class ParserTestCase(unittest.TestCase):
                 }
             ]
         )
+
+    
+    def test_parser_include_raw(self):
+        with open(BASE_DIR / 'data_rdap_response_asn.json') as f:
+            test_data = json.loads(f.read())
+        parsed = whoisit.parser.parse(whoisit._bootstrap, 'autnum', '13335', test_data)
+        self.assertNotIn('raw', parsed) # by default raw is not included
+        parsed = whoisit.parser.parse(whoisit._bootstrap, 'autnum', '13335', test_data, include_raw=True)
+        self.assertIn('raw', parsed)
+        self.assertEqual(parsed['raw'], test_data)

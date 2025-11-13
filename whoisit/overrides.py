@@ -19,15 +19,6 @@ iana_overrides = {
 
         # 2022-10-17 - .gl and .gl SLDs have RDAP endpoints they're just not listed
         'gl': ['https://rdap.centralnic.com/gl/'],
-        'co.gl': ['https://rdap.centralnic.com/co.gl/'],
-        'com.gl': ['https://rdap.centralnic.com/com.gl/'],
-        'edu.gl': ['https://rdap.centralnic.com/edu.gl/'],
-        'gov.gl': ['https://rdap.centralnic.com/gov.gl/'],
-        'net.gl': ['https://rdap.centralnic.com/net.gl/'],
-        'org.gl': ['https://rdap.centralnic.com/org.gl/'],
-
-        # 2023-09-05 - .nl has an RDAP endpoint it's just not listed
-        'nl': ['https://rdap.sidn.nl/'],
 
         # 2024-04-30 - the Identity Digital RDAP server appears to support these ccTLDs
         'ac': ['https://rdap.identitydigital.services/rdap/'],

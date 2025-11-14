@@ -1,4 +1,3 @@
-import json
 from sys import getsizeof
 from ipaddress import (
     ip_address,

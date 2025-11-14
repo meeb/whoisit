@@ -1,4 +1,4 @@
-from .bootstrap import _BootstrapMainModule
+from .bootstrap import _BootstrapWrapper
 from .errors import ArgumentError
 from .parser import parse
 from .query import Query, QueryAsync, QueryBuilder
@@ -8,7 +8,7 @@ from .version import version
 
 # Private methods
 
-_bootstrap = _BootstrapMainModule()
+_bootstrap = _BootstrapWrapper()
 _query_builder = QueryBuilder(_bootstrap)
 
 
@@ -180,6 +180,7 @@ def _entity(entity_handle, rir=None, raw=False, include_raw=False, session=None,
         q = Query(session, method, url)
     response = yield q
     yield response if raw else parse(_bootstrap, 'entity', entity_handle, response, include_raw)
+
 
 def entity(entity_handle, rir=None, raw=False, include_raw=False, allow_insecure_ssl=False, session=None):
     session = get_session(session, allow_insecure_ssl)

@@ -451,7 +451,7 @@ class BootstrapAsync(BaseBootstrap):
             gen.send(response)
 
 
-class _BootstrapMainModule(Bootstrap, BootstrapAsync):
+class _BootstrapWrapper(Bootstrap, BootstrapAsync):
 
     def __init__(self) -> None:
         Bootstrap.__init__(self, do_super_init=True)

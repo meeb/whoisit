@@ -603,7 +603,6 @@ class ParserTestCase(unittest.TestCase):
                 }
             ]
         )
-
     
     def test_parser_include_raw(self):
         with open(BASE_DIR / 'data_rdap_response_asn.json') as f:
@@ -613,3 +612,87 @@ class ParserTestCase(unittest.TestCase):
         parsed = whoisit.parser.parse(whoisit._bootstrap, 'autnum', '13335', test_data, include_raw=True)
         self.assertIn('raw', parsed)
         self.assertEqual(parsed['raw'], test_data)
+
+    def test_domain_handle_in_entities(self):
+        """Test that handles can be found in entities when not included in the top level."""
+        # Mock RDAP response similar to applegater.org - no top-level handle
+        raw_data = {
+            'ldhName': 'applegater.org',
+            'unicodeName': 'applegater.org',
+            'objectClassName': 'domain',
+            'status': ['client transfer prohibited', 'client update prohibited'],
+            'events': [
+                {'eventAction': 'expiration', 'eventDate': '2026-04-02T17:16:10.748Z'},
+                {'eventAction': 'registration', 'eventDate': '2008-04-02T17:16:10Z'},
+                {'eventAction': 'last changed', 'eventDate': '2025-03-18T14:01:05Z'}
+            ],
+            'nameservers': [
+                {'objectClassName': 'nameserver', 'ldhName': 'ns1.startlogic.com'},
+                {'objectClassName': 'nameserver', 'ldhName': 'ns2.startlogic.com'}
+            ],
+            'entities': [
+                {
+                    'objectClassName': 'entity',
+                    'handle': '69',
+                    'roles': ['registrar'],
+                    'publicIds': [{'type': 'IANA Registrar ID', 'identifier': '69'}]
+                }
+            ]
+        }
+        parser = whoisit.parser.ParseDomain(whoisit._bootstrap, raw_data, 'applegater.org', using_overrides=False)
+        result = parser.parse()
+        # The fix should find the handle in the entities section
+        self.assertEqual(result['handle'], '69')
+        self.assertEqual(result['name'], 'applegater.org')
+        self.assertEqual(result['status'], ['client transfer prohibited', 'client update prohibited'])
+        self.assertEqual(len(result['nameservers']), 2)
+        self.assertEqual(result['nameservers'][0], 'ns1.startlogic.com')
+        self.assertEqual(result['nameservers'][1], 'ns2.startlogic.com')
+
+    def test_domain_handle_top_level_still_works(self):
+        """Test that normal domains with top-level handles still work."""
+        # Normal RDAP response with top level handle
+        raw_data = {
+            'handle': '12345',
+            'ldhName': 'example.com',
+            'objectClassName': 'domain',
+            'status': ['ok'],
+            'events': [
+                {'eventAction': 'expiration', 'eventDate': '2025-08-01T00:00:00Z'}
+            ],
+            'nameservers': [
+                {'objectClassName': 'nameserver', 'ldhName': 'ns1.example.com'}
+            ],
+            'entities': [
+                {
+                    'objectClassName': 'entity',
+                    'handle': '999',
+                    'roles': ['registrar']
+                }
+            ]
+        }
+        parser = whoisit.parser.ParseDomain(whoisit._bootstrap, raw_data, 'example.com', using_overrides=False)
+        result = parser.parse()
+        # Should prefer the top-level handle
+        self.assertEqual(result['handle'], '12345')
+        self.assertEqual(result['name'], 'example.com')
+
+    def test_domain_no_handle_anywhere(self):
+        """Test domain with no handle anywhere - should still raise a ParseError."""
+        # RDAP response with no handle at all
+        raw_data = {
+            'ldhName': 'test.com',
+            'objectClassName': 'domain',
+            'status': ['ok'],
+            'events': [
+                {'eventAction': 'expiration', 'eventDate': '2025-08-01T00:00:00Z'}
+            ],
+            'nameservers': [
+                {'objectClassName': 'nameserver', 'ldhName': 'ns1.test.com'}
+            ]
+            # No entities section either
+        }
+        # Should still raise ParseError when no handle found anywhere
+        with self.assertRaises(whoisit.errors.ParseError):
+            parser = whoisit.parser.ParseDomain(whoisit._bootstrap, raw_data, 'test.com', using_overrides=False)
+            parser.parse()

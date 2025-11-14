@@ -1,6 +1,10 @@
 test:
-	echo && uv run python -m pytest -v
+	uv run python -m pytest -v
 
 
 build:
 	uv build
+
+
+tld-endpoints:
+	uv run tools/list_public_tlds_with_rdap_endpoints.py

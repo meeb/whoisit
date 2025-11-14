@@ -9,12 +9,11 @@ BASE_DIR = Path(__file__).resolve().parent
 
 
 class BootstrapTestCase(unittest.TestCase):
-
     maxDiff = None
 
     def setUp(self):
         whoisit.clear_bootstrapping()
-        with open(BASE_DIR / 'data_bootstrap.json', 'rt') as f:
+        with open(BASE_DIR / "data_bootstrap.json", "rt") as f:
             self.bootstrap_data = f.read()
 
     def tearDown(self):
@@ -32,13 +31,13 @@ class BootstrapTestCase(unittest.TestCase):
     def test_bootstrap_loading(self):
         whoisit.clear_bootstrapping()
         with self.assertRaises(whoisit.errors.BootstrapError):
-            whoisit.load_bootstrap_data('')
+            whoisit.load_bootstrap_data("")
         with self.assertRaises(whoisit.errors.BootstrapError):
             whoisit.load_bootstrap_data('{"some":"dict"}')
         with self.assertRaises(whoisit.errors.BootstrapError):
             whoisit.load_bootstrap_data(12345)
         with self.assertRaises(whoisit.errors.BootstrapError):
-            whoisit.load_bootstrap_data(b'test')
+            whoisit.load_bootstrap_data(b"test")
         whoisit.clear_bootstrapping()
         self.assertFalse(whoisit.is_bootstrapped())
         whoisit.load_bootstrap_data(self.bootstrap_data)
@@ -49,8 +48,8 @@ class BootstrapTestCase(unittest.TestCase):
         whoisit.clear_bootstrapping()
 
     def test_bootstrap_asn_parser(self):
-        test_rdap_url = 'https://rdap.example.com/'
-        test_data = [[['1-2', '6-7', '9'], [test_rdap_url]]]
+        test_rdap_url = "https://rdap.example.com/"
+        test_data = [[["1-2", "6-7", "9"], [test_rdap_url]]]
         expected = {
             (1, 2): [test_rdap_url],
             (6, 7): [test_rdap_url],
@@ -59,57 +58,56 @@ class BootstrapTestCase(unittest.TestCase):
         self.assertEqual(whoisit._bootstrap.parse_asn_data(test_data), expected)
 
     def test_bootstrap_dns_parser(self):
-        test_rdap_url = 'https://rdap.example.com/'
-        test_data = [[['a', 'b', 'c'], [test_rdap_url]]]
+        test_rdap_url = "https://rdap.example.com/"
+        test_data = [[["a", "b", "c"], [test_rdap_url]]]
         expected = {
-            'a': [test_rdap_url],
-            'b': [test_rdap_url],
-            'c': [test_rdap_url],
+            "a": [test_rdap_url],
+            "b": [test_rdap_url],
+            "c": [test_rdap_url],
         }
         self.assertEqual(whoisit._bootstrap.parse_dns_data(test_data), expected)
 
     def test_bootstrap_ipv4_parser(self):
-        test_rdap_url = 'https://rdap.example.com/'
-        test_data = [[['10.0.0.0/8', '127.0.0.0/8'], [test_rdap_url]]]
+        test_rdap_url = "https://rdap.example.com/"
+        test_data = [[["10.0.0.0/8", "127.0.0.0/8"], [test_rdap_url]]]
         expected = {
-            IPv4Network('10.0.0.0/8'): [test_rdap_url],
-            IPv4Network('127.0.0.0/8'): [test_rdap_url],
+            IPv4Network("10.0.0.0/8"): [test_rdap_url],
+            IPv4Network("127.0.0.0/8"): [test_rdap_url],
         }
         self.assertEqual(whoisit._bootstrap.parse_ipv4_data(test_data), expected)
 
     def test_bootstrap_ipv6_parser(self):
-        test_rdap_url = 'https://rdap.example.com/'
-        test_data = [[['2001:1400::/22', '2001:200::/23'], [test_rdap_url]]]
+        test_rdap_url = "https://rdap.example.com/"
+        test_data = [[["2001:1400::/22", "2001:200::/23"], [test_rdap_url]]]
         expected = {
-            IPv6Network('2001:1400::/22'): [test_rdap_url],
-            IPv6Network('2001:200::/23'): [test_rdap_url],
+            IPv6Network("2001:1400::/22"): [test_rdap_url],
+            IPv6Network("2001:200::/23"): [test_rdap_url],
         }
         self.assertEqual(whoisit._bootstrap.parse_ipv6_data(test_data), expected)
 
     def test_bootstrap_object_parser(self):
-        test_rdap_url = 'https://rdap.example.com/'
-        test_data = [[['does', 'nothing', 'yet'], [test_rdap_url]]]
+        test_rdap_url = "https://rdap.example.com/"
+        test_data = [[["does", "nothing", "yet"], [test_rdap_url]]]
         expected = {}
         self.assertEqual(whoisit._bootstrap.parse_object_data(test_data), expected)
 
     def test_bootstrap_full_parsing(self):
-
         # Load bootstrap data
         whoisit.clear_bootstrapping()
         whoisit.load_bootstrap_data(self.bootstrap_data)
 
         # ASN endpoint tests
         test = 327691
-        expected = ['https://rdap.afrinic.net/rdap/'], True
+        expected = ["https://rdap.afrinic.net/rdap/"], True
         self.assertEqual(whoisit._bootstrap.get_asn_endpoints(test), expected)
         test = 4567
-        expected = ['https://rdap.arin.net/registry/'], True
+        expected = ["https://rdap.arin.net/registry/"], True
         self.assertEqual(whoisit._bootstrap.get_asn_endpoints(test), expected)
         test = 206236
-        expected = ['https://rdap.db.ripe.net/'], True
+        expected = ["https://rdap.db.ripe.net/"], True
         self.assertEqual(whoisit._bootstrap.get_asn_endpoints(test), expected)
         test = 2047
-        expected = ['https://rdap.db.ripe.net/'], True
+        expected = ["https://rdap.db.ripe.net/"], True
         self.assertEqual(whoisit._bootstrap.get_asn_endpoints(test), expected)
         # One of the random fallbacks for an invalid ASN
         test = 59438593485903
@@ -123,97 +121,107 @@ class BootstrapTestCase(unittest.TestCase):
         self.assertEqual(exact_match, False)
 
         # Domain endpoint tests
-        test = 'com'
-        expected = ['https://rdap.verisign.com/com/v1/'], True
+        test = "com"
+        expected = ["https://rdap.verisign.com/com/v1/"], True
         self.assertEqual(whoisit._bootstrap.get_dns_endpoints(test), expected)
-        test = 'no'
-        expected = ['https://rdap.norid.no/'], True
+        test = "no"
+        expected = ["https://rdap.norid.no/"], True
         self.assertEqual(whoisit._bootstrap.get_dns_endpoints(test), expected)
-        test = 'dev'
-        expected = ['https://www.registry.google/rdap/'], True
+        test = "dev"
+        expected = ["https://www.registry.google/rdap/"], True
         self.assertEqual(whoisit._bootstrap.get_dns_endpoints(test), expected)
         # Invalid TLDs should raise an error
-        test = 'testtesttesttesttesttesttesttesttesttesttest'
+        test = "testtesttesttesttesttesttesttesttesttesttest"
         with self.assertRaises(whoisit.errors.UnsupportedError):
             whoisit._bootstrap.get_dns_endpoints(test)
 
         # IPv4 prefix endpoint tests
-        test = IPv4Address('1.1.1.1')
-        expected = ['https://rdap.apnic.net/'], True
+        test = IPv4Address("1.1.1.1")
+        expected = ["https://rdap.apnic.net/"], True
         self.assertEqual(whoisit._bootstrap.get_ipv4_endpoints(test), expected)
-        test = IPv4Network('1.1.1.0/24')
-        expected = ['https://rdap.apnic.net/'], True
+        test = IPv4Network("1.1.1.0/24")
+        expected = ["https://rdap.apnic.net/"], True
         self.assertEqual(whoisit._bootstrap.get_ipv4_endpoints(test), expected)
-        test = IPv4Address('8.8.8.8')
-        expected = ['https://rdap.arin.net/registry/'], True
+        test = IPv4Address("8.8.8.8")
+        expected = ["https://rdap.arin.net/registry/"], True
         self.assertEqual(whoisit._bootstrap.get_ipv4_endpoints(test), expected)
-        test = IPv4Network('8.8.8.0/24')
-        expected = ['https://rdap.arin.net/registry/'], True
+        test = IPv4Network("8.8.8.0/24")
+        expected = ["https://rdap.arin.net/registry/"], True
         self.assertEqual(whoisit._bootstrap.get_ipv4_endpoints(test), expected)
         with self.assertRaises(whoisit.errors.BootstrapError):
             # Private IP addresses can't have a public RDAP endpoint at all
-            whoisit._bootstrap.get_ipv4_endpoints(IPv4Address('127.0.0.1'))
+            whoisit._bootstrap.get_ipv4_endpoints(IPv4Address("127.0.0.1"))
 
         # IPv6 prefix endpoint tests
-        test = IPv6Address('2606:4700:4700::1111')
-        expected = ['https://rdap.arin.net/registry/'], True
+        test = IPv6Address("2606:4700:4700::1111")
+        expected = ["https://rdap.arin.net/registry/"], True
         self.assertEqual(whoisit._bootstrap.get_ipv6_endpoints(test), expected)
-        test = IPv6Network('2606:4700::/32')
-        expected = ['https://rdap.arin.net/registry/'], True
+        test = IPv6Network("2606:4700::/32")
+        expected = ["https://rdap.arin.net/registry/"], True
         self.assertEqual(whoisit._bootstrap.get_ipv6_endpoints(test), expected)
-        test = IPv6Address('2001:67c:2e8:22::c100:68b')
-        expected = ['https://rdap.db.ripe.net/'], True
+        test = IPv6Address("2001:67c:2e8:22::c100:68b")
+        expected = ["https://rdap.db.ripe.net/"], True
         self.assertEqual(whoisit._bootstrap.get_ipv6_endpoints(test), expected)
-        test = IPv6Network('2001:67c:2e8::/48')
-        expected = ['https://rdap.db.ripe.net/'], True
+        test = IPv6Network("2001:67c:2e8::/48")
+        expected = ["https://rdap.db.ripe.net/"], True
         self.assertEqual(whoisit._bootstrap.get_ipv6_endpoints(test), expected)
         with self.assertRaises(whoisit.errors.BootstrapError):
             # Private IP addresses can't have a public RDAP endpoint at all
-            whoisit._bootstrap.get_ipv6_endpoints(IPv6Address('fc00::1'))
+            whoisit._bootstrap.get_ipv6_endpoints(IPv6Address("fc00::1"))
 
         # Entity endpoint tests with prefixes
-        test = 'ENTITY-RIPE'
-        expected = ['https://rdap.db.ripe.net/'], True
+        test = "ENTITY-RIPE"
+        expected = ["https://rdap.db.ripe.net/"], True
         self.assertEqual(whoisit._bootstrap.get_entity_endpoints(test), expected)
-        test = 'ENTITY-AP'
-        expected = ['https://rdap.apnic.net/'], True
+        test = "ENTITY-AP"
+        expected = ["https://rdap.apnic.net/"], True
         self.assertEqual(whoisit._bootstrap.get_entity_endpoints(test), expected)
-        test = 'ARIN-ENTITY'
-        expected = ['https://rdap.arin.net/registry/'], True
+        test = "ARIN-ENTITY"
+        expected = ["https://rdap.arin.net/registry/"], True
         self.assertEqual(whoisit._bootstrap.get_entity_endpoints(test), expected)
         # Entities without a prefix or postfix we can parse are unsupported
         with self.assertRaises(whoisit.errors.UnsupportedError):
-            whoisit._bootstrap.get_entity_endpoints('ANYTHING')
+            whoisit._bootstrap.get_entity_endpoints("ANYTHING")
 
         # Clean up
         whoisit.clear_bootstrapping()
 
     def test_override_endpoint(self):
-
         # Load bootstrap data
         whoisit.clear_bootstrapping()
         whoisit.load_bootstrap_data(self.bootstrap_data)
 
         # Invalid RIR endpoint name
         with self.assertRaises(whoisit.errors.BootstrapError):
-            whoisit._bootstrap.get_rir_endpoint('test')
+            whoisit._bootstrap.get_rir_endpoint("test")
 
         # Check the RIRs are all supported
         for name, endpoint in whoisit._bootstrap.RIR_RDAP_ENDPOINTS.items():
             self.assertEqual(whoisit._bootstrap.get_rir_endpoint(name), endpoint)
 
         # Check the RIR names are valid
-        expected = ('afnic', 'afrinic', 'arin', 'apnic', 'jpnic', 'idnic', 'krnic',
-                    'lacnic', 'registro.br', 'ripe', 'twnic')
+        expected = (
+            "afnic",
+            "afrinic",
+            "arin",
+            "apnic",
+            "jpnic",
+            "idnic",
+            "krnic",
+            "lacnic",
+            "registro.br",
+            "ripe",
+            "twnic",
+        )
         self.assertEqual(whoisit._bootstrap.get_rir_endpoint_names(), expected)
 
         # Clean up
         whoisit.clear_bootstrapping()
 
     def test_iana_overrides(self):
-
         # Test iana_overrides are a dict
         from whoisit.overrides import iana_overrides
+
         self.assertIsInstance(iana_overrides, dict)
 
         # Test bootstrapping with overrides disabled
@@ -222,32 +230,31 @@ class BootstrapTestCase(unittest.TestCase):
         self.assertFalse(whoisit._bootstrap.is_using_overrides())
         with self.assertRaises(whoisit.errors.UnsupportedError):
             # .de has no RDAP entry in IANA data currently, this should error
-            whoisit._bootstrap.get_dns_endpoints('de')
+            whoisit._bootstrap.get_dns_endpoints("de")
 
         # Test bootstrapping with overrides enabled
         whoisit.clear_bootstrapping()
         whoisit.load_bootstrap_data(self.bootstrap_data, overrides=True)
         self.assertTrue(whoisit._bootstrap.is_using_overrides())
         # .de has endpoint overrides
-        override_endpoints, match = whoisit._bootstrap.get_dns_endpoints('de')
-        self.assertEqual(override_endpoints[0], 'https://rdap.denic.de/')
+        override_endpoints, match = whoisit._bootstrap.get_dns_endpoints("de")
+        self.assertEqual(override_endpoints[0], "https://rdap.denic.de/")
         self.assertFalse(match)
 
     def test_insecure_scheme_endpoints(self):
-
         # Test secure HTTPS endpoints, the default
         whoisit.clear_bootstrapping()
         whoisit.load_bootstrap_data(self.bootstrap_data, allow_insecure=False)
         self.assertFalse(whoisit._bootstrap.is_allowing_insecure_endpoints())
         with self.assertRaises(whoisit.errors.UnsupportedError):
             # .uz only has an insecure HTTP RDAP entry in IANA data
-            whoisit._bootstrap.get_dns_endpoints('uz')
+            whoisit._bootstrap.get_dns_endpoints("uz")
 
         # Test bootstrapping with insecure endpoints allowed
         whoisit.clear_bootstrapping()
         whoisit.load_bootstrap_data(self.bootstrap_data, allow_insecure=True)
         self.assertTrue(whoisit._bootstrap.is_allowing_insecure_endpoints())
         # .uz should now have a valid RDAP endpoint over HTTP
-        override_endpoints, match = whoisit._bootstrap.get_dns_endpoints('uz')
-        self.assertEqual(override_endpoints[0], 'http://cctld.uz:9000/')
+        override_endpoints, match = whoisit._bootstrap.get_dns_endpoints("uz")
+        self.assertEqual(override_endpoints[0], "http://cctld.uz:9000/")
         self.assertTrue(match)

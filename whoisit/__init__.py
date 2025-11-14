@@ -6,7 +6,15 @@ from .bootstrap import _BootstrapWrapper
 from .errors import ArgumentError
 from .parser import parse
 from .query import Query, QueryAsync, QueryBuilder
-from .utils import get_async_client, get_session, recursive_merge, clear_session as clear_session, set_proxy as set_proxy, get_proxy as get_proxy, clear_proxy as clear_proxy
+from .utils import (
+    get_async_client,
+    get_session,
+    recursive_merge,
+    clear_session as clear_session,
+    set_proxy as set_proxy,
+    get_proxy as get_proxy,
+    clear_proxy as clear_proxy,
+)
 from .version import version as version
 
 
@@ -30,19 +38,38 @@ build_query = _query_builder.build
 
 # Query helpers
 
-def _asn(as_number: int, rir: str | None = None, raw: bool = False, include_raw: bool = False, session: requests.Session | None = None, async_client: httpx.AsyncClient | None = None) -> Iterator:
+
+def _asn(
+    as_number: int,
+    rir: str | None = None,
+    raw: bool = False,
+    include_raw: bool = False,
+    session: requests.Session | None = None,
+    async_client: httpx.AsyncClient | None = None,
+) -> Iterator:
     if raw and include_raw:
         raise ArgumentError("You cannot set both raw=True and include_raw=True")
-    method, url, _ = build_query(query_type='asn', query_value=as_number, rir=rir)
+    method, url, _ = build_query(query_type="asn", query_value=as_number, rir=rir)
     if isinstance(async_client, httpx.AsyncClient):
         q = QueryAsync(async_client, method, url)
     else:
         q = Query(session, method, url)
     response = yield q
-    yield response if raw else parse(_bootstrap, 'autnum', as_number, response, include_raw)
+    yield (
+        response
+        if raw
+        else parse(_bootstrap, "autnum", as_number, response, include_raw)
+    )
 
 
-def asn(as_number: int, rir: str | None = None, raw: bool = False, include_raw: bool = False, allow_insecure_ssl: bool = False, session: requests.Session | None = None) -> dict:
+def asn(
+    as_number: int,
+    rir: str | None = None,
+    raw: bool = False,
+    include_raw: bool = False,
+    allow_insecure_ssl: bool = False,
+    session: requests.Session | None = None,
+) -> dict:
     session = get_session(session, allow_insecure_ssl)
     gen = _asn(as_number, rir, raw, include_raw, session=session)
     q: Query = next(gen)
@@ -51,7 +78,14 @@ def asn(as_number: int, rir: str | None = None, raw: bool = False, include_raw: 
     return resp
 
 
-async def asn_async(as_number: int, rir: str | None = None, raw: bool = False, include_raw: bool = False, allow_insecure_ssl: bool = False, async_client: httpx.AsyncClient | None = None) -> dict:
+async def asn_async(
+    as_number: int,
+    rir: str | None = None,
+    raw: bool = False,
+    include_raw: bool = False,
+    allow_insecure_ssl: bool = False,
+    async_client: httpx.AsyncClient | None = None,
+) -> dict:
     async_client = get_async_client(async_client, allow_insecure_ssl)
     gen = _asn(as_number, rir, raw, include_raw, async_client=async_client)
     q: QueryAsync = next(gen)
@@ -60,11 +94,18 @@ async def asn_async(as_number: int, rir: str | None = None, raw: bool = False, i
     return resp
 
 
-def _domain(domain_name: str, raw: bool = False, include_raw: bool = False, follow_related: bool = True, session: requests.Session | None = None, async_client: httpx.AsyncClient | None = None) -> Iterator:
+def _domain(
+    domain_name: str,
+    raw: bool = False,
+    include_raw: bool = False,
+    follow_related: bool = True,
+    session: requests.Session | None = None,
+    async_client: httpx.AsyncClient | None = None,
+) -> Iterator:
     if raw and include_raw:
         raise ArgumentError("You cannot set both raw=True and include_raw=True")
     is_async = isinstance(async_client, httpx.AsyncClient)
-    method, url, _ = build_query(query_type='domain', query_value=domain_name)
+    method, url, _ = build_query(query_type="domain", query_value=domain_name)
     if is_async:
         q = QueryAsync(async_client, method, url)
     else:
@@ -76,27 +117,34 @@ def _domain(domain_name: str, raw: bool = False, include_raw: bool = False, foll
         # Attempt to follow the 'related' or 'registration' links if the TLD has
         # an upstream RDAP endpoint that may have more information
         relresponse = None
-        for link in response.get('links', []):
-            rel = link.get('rel', '')
-            if rel in ('related', 'registration'):
-                relhref = link.get('href', '')
-                reltype = link.get('type', '')
+        for link in response.get("links", []):
+            rel = link.get("rel", "")
+            if rel in ("related", "registration"):
+                relhref = link.get("href", "")
+                reltype = link.get("type", "")
                 # Exclude related links with type set to HTML content types to avoid parsing web pages as JSON
-                if relhref and not reltype.startswith('text/html'):
+                if relhref and not reltype.startswith("text/html"):
                     if is_async:
                         relq = QueryAsync(async_client, method, relhref)
                     else:
-                        relq= Query(session, method, relhref)
+                        relq = Query(session, method, relhref)
                     yield
                     relresponse = yield relq
                     break
         if relresponse:
             # Overlay the related response over the original response
             recursive_merge(response, relresponse)
-    yield parse(_bootstrap, 'domain', domain_name, response, include_raw)
+    yield parse(_bootstrap, "domain", domain_name, response, include_raw)
 
 
-def domain(domain_name: str, raw: bool = False, include_raw: bool = False, allow_insecure_ssl: bool = False, session: requests.Session | None = None, follow_related: bool = True) -> dict:
+def domain(
+    domain_name: str,
+    raw: bool = False,
+    include_raw: bool = False,
+    allow_insecure_ssl: bool = False,
+    session: requests.Session | None = None,
+    follow_related: bool = True,
+) -> dict:
     session = get_session(session, allow_insecure_ssl)
     gen = _domain(domain_name, raw, include_raw, follow_related, session, None)
     resp: dict | None = None
@@ -110,7 +158,14 @@ def domain(domain_name: str, raw: bool = False, include_raw: bool = False, allow
     return resp
 
 
-async def domain_async(domain_name: str, raw: bool = False, include_raw: bool = False, allow_insecure_ssl: bool = False, async_client: httpx.AsyncClient | None = None, follow_related: bool = True) -> dict:
+async def domain_async(
+    domain_name: str,
+    raw: bool = False,
+    include_raw: bool = False,
+    allow_insecure_ssl: bool = False,
+    async_client: httpx.AsyncClient | None = None,
+    follow_related: bool = True,
+) -> dict:
     async_client = get_async_client(async_client, allow_insecure_ssl)
     gen = _domain(domain_name, raw, include_raw, follow_related, None, async_client)
     resp: dict | None = None
@@ -125,19 +180,39 @@ async def domain_async(domain_name: str, raw: bool = False, include_raw: bool = 
     return resp
 
 
-def _ip(ip_address_or_network: str | IPv4Address | IPv4Network | IPv6Address | IPv6Network, rir: str | None = None, raw: bool = False, include_raw: bool = False, session: requests.Session | None = None, async_client: bool = None) -> Iterator:
+def _ip(
+    ip_address_or_network: str | IPv4Address | IPv4Network | IPv6Address | IPv6Network,
+    rir: str | None = None,
+    raw: bool = False,
+    include_raw: bool = False,
+    session: requests.Session | None = None,
+    async_client: bool = None,
+) -> Iterator:
     if raw and include_raw:
         raise ArgumentError("You cannot set both raw=True and include_raw=True")
-    method, url, _ = build_query(query_type='ip', query_value=ip_address_or_network, rir=rir)
+    method, url, _ = build_query(
+        query_type="ip", query_value=ip_address_or_network, rir=rir
+    )
     if isinstance(async_client, httpx.AsyncClient):
         q = QueryAsync(async_client, method, url)
     else:
         q = Query(session, method, url)
     response = yield q
-    yield response if raw else parse(_bootstrap, 'ip', ip_address_or_network, response, include_raw)
+    yield (
+        response
+        if raw
+        else parse(_bootstrap, "ip", ip_address_or_network, response, include_raw)
+    )
 
 
-def ip(ip_address_or_network: str | IPv4Address | IPv4Network | IPv6Address | IPv6Network, rir: str | None = None, raw: bool = False, include_raw: bool = False, allow_insecure_ssl: bool = False, session: requests.Session | None = None) -> dict:
+def ip(
+    ip_address_or_network: str | IPv4Address | IPv4Network | IPv6Address | IPv6Network,
+    rir: str | None = None,
+    raw: bool = False,
+    include_raw: bool = False,
+    allow_insecure_ssl: bool = False,
+    session: requests.Session | None = None,
+) -> dict:
     session = get_session(session, allow_insecure_ssl)
     gen = _ip(ip_address_or_network, rir, raw, include_raw, session, None)
     q: Query = next(gen)
@@ -146,7 +221,14 @@ def ip(ip_address_or_network: str | IPv4Address | IPv4Network | IPv6Address | IP
     return resp
 
 
-async def ip_async(ip_address_or_network: str | IPv4Address | IPv4Network | IPv6Address | IPv6Network, rir: str | None = None, raw: bool = False, include_raw: bool = False, allow_insecure_ssl: bool = False, async_client: httpx.AsyncClient | None = None) -> dict:
+async def ip_async(
+    ip_address_or_network: str | IPv4Address | IPv4Network | IPv6Address | IPv6Network,
+    rir: str | None = None,
+    raw: bool = False,
+    include_raw: bool = False,
+    allow_insecure_ssl: bool = False,
+    async_client: httpx.AsyncClient | None = None,
+) -> dict:
     async_client = get_async_client(async_client, allow_insecure_ssl)
     gen = _ip(ip_address_or_network, rir, raw, include_raw, None, async_client)
     q: QueryAsync = next(gen)
@@ -155,19 +237,39 @@ async def ip_async(ip_address_or_network: str | IPv4Address | IPv4Network | IPv6
     return resp
 
 
-def _entity(entity_handle: str, rir: str | None = None, raw: bool = False, include_raw: bool = False, session: requests.Session | None = None, async_client: httpx.AsyncClient | None = None) -> Iterator:
+def _entity(
+    entity_handle: str,
+    rir: str | None = None,
+    raw: bool = False,
+    include_raw: bool = False,
+    session: requests.Session | None = None,
+    async_client: httpx.AsyncClient | None = None,
+) -> Iterator:
     if raw and include_raw:
         raise ArgumentError("You cannot set both raw=True and include_raw=True")
-    method, url, _ = build_query(query_type='entity', query_value=entity_handle, rir=rir)
+    method, url, _ = build_query(
+        query_type="entity", query_value=entity_handle, rir=rir
+    )
     if isinstance(async_client, httpx.AsyncClient):
         q = QueryAsync(async_client, method, url)
     else:
         q = Query(session, method, url)
     response = yield q
-    yield response if raw else parse(_bootstrap, 'entity', entity_handle, response, include_raw)
+    yield (
+        response
+        if raw
+        else parse(_bootstrap, "entity", entity_handle, response, include_raw)
+    )
 
 
-def entity(entity_handle: str, rir: str | None = None, raw: bool = False, include_raw: bool = False, allow_insecure_ssl: bool = False, session: requests.Session | None = None) -> dict:
+def entity(
+    entity_handle: str,
+    rir: str | None = None,
+    raw: bool = False,
+    include_raw: bool = False,
+    allow_insecure_ssl: bool = False,
+    session: requests.Session | None = None,
+) -> dict:
     session = get_session(session, allow_insecure_ssl)
     gen = _entity(entity_handle, rir, raw, include_raw, session, None)
     q: Query = next(gen)
@@ -176,7 +278,14 @@ def entity(entity_handle: str, rir: str | None = None, raw: bool = False, includ
     return resp
 
 
-async def entity_async(entity_handle, rir: str | None = None, raw: bool = False, include_raw: bool = False, allow_insecure_ssl: bool = False, async_client: httpx.AsyncClient | None = None) -> dict:
+async def entity_async(
+    entity_handle,
+    rir: str | None = None,
+    raw: bool = False,
+    include_raw: bool = False,
+    allow_insecure_ssl: bool = False,
+    async_client: httpx.AsyncClient | None = None,
+) -> dict:
     async_client = get_async_client(async_client, allow_insecure_ssl)
     gen = _entity(entity_handle, rir, raw, include_raw, None, async_client)
     q: QueryAsync = next(gen)

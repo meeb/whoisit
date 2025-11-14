@@ -7,6 +7,7 @@ import pytest
 import responses
 import yaml
 from dateutil.tz import tzoffset
+
 # from responses import _recorder
 import whoisit
 
@@ -46,9 +47,18 @@ class SyncPublicInterfaceTestCase(unittest.TestCase):
         self.assertEqual(resp["rir"], "arin")
         self.assertEqual(resp["asn_range"], [13335, 13335])
         self.assertEqual(resp["whois_server"], "whois.arin.net")
-        self.assertEqual(resp["copyright_notice"], "Copyright 1997-2024, American Registry for Internet Numbers, Ltd.")
-        self.assertEqual(resp["terms_of_service_url"], "https://www.arin.net/resources/registry/whois/tou/")
-        self.assertEqual(resp["registration_date"], datetime(2010, 7, 14, 18, 35, 57, tzinfo=tzoffset(None, -14400)))
+        self.assertEqual(
+            resp["copyright_notice"],
+            "Copyright 1997-2024, American Registry for Internet Numbers, Ltd.",
+        )
+        self.assertEqual(
+            resp["terms_of_service_url"],
+            "https://www.arin.net/resources/registry/whois/tou/",
+        )
+        self.assertEqual(
+            resp["registration_date"],
+            datetime(2010, 7, 14, 18, 35, 57, tzinfo=tzoffset(None, -14400)),
+        )
         self.assertTrue(isinstance(resp["entities"]["registrant"], list))
         self.assertTrue(len(resp["entities"]["registrant"]) > 0)
         self.assertTrue(isinstance(resp["entities"]["abuse"], list))
@@ -68,8 +78,12 @@ class SyncPublicInterfaceTestCase(unittest.TestCase):
         self.assertEqual(resp["name"], "google.com")
         self.assertEqual(resp["handle"], "2138514_DOMAIN_COM-VRSN")
         self.assertEqual(resp["rir"], "")
-        self.assertEqual(resp["registration_date"], datetime(1997, 9, 15, 7, 0, tzinfo=UTC))
-        self.assertEqual(resp["url"], "https://rdap.markmonitor.com/rdap/domain/google.com")
+        self.assertEqual(
+            resp["registration_date"], datetime(1997, 9, 15, 7, 0, tzinfo=UTC)
+        )
+        self.assertEqual(
+            resp["url"], "https://rdap.markmonitor.com/rdap/domain/google.com"
+        )
         self.assertEqual(
             resp["terms_of_service_url"],
             "https://www.markmonitor.com/legal/domain-management-terms-and-conditions",
@@ -77,7 +91,10 @@ class SyncPublicInterfaceTestCase(unittest.TestCase):
         self.assertEqual(resp["whois_server"], "whois.markmonitor.com")
         self.assertEqual(resp["copyright_notice"], "")
         self.assertEqual(resp["dnssec"], False)
-        self.assertEqual(resp["nameservers"], ["ns1.google.com", "ns2.google.com", "ns3.google.com", "ns4.google.com"])
+        self.assertEqual(
+            resp["nameservers"],
+            ["ns1.google.com", "ns2.google.com", "ns3.google.com", "ns4.google.com"],
+        )
         self.assertEqual(
             resp["status"],
             [
@@ -117,9 +134,13 @@ class SyncPublicInterfaceTestCase(unittest.TestCase):
         self.assertEqual(resp["handle"], "1.1.1.0 - 1.1.1.255")
         self.assertEqual(resp["network"], IPv4Network("1.1.1.0/24"))
         self.assertEqual(resp["rir"], "apnic")
-        self.assertEqual(resp["registration_date"], datetime(2011, 8, 10, 23, 12, 35, tzinfo=UTC))
+        self.assertEqual(
+            resp["registration_date"], datetime(2011, 8, 10, 23, 12, 35, tzinfo=UTC)
+        )
         self.assertEqual(resp["url"], "https://rdap.apnic.net/ip/1.1.1.0/24")
-        self.assertEqual(resp["terms_of_service_url"], "http://www.apnic.net/db/dbcopyright.html")
+        self.assertEqual(
+            resp["terms_of_service_url"], "http://www.apnic.net/db/dbcopyright.html"
+        )
         self.assertEqual(resp["whois_server"], "whois.apnic.net")
         self.assertEqual(resp["copyright_notice"], "")
         self.assertEqual(
@@ -144,12 +165,21 @@ class SyncPublicInterfaceTestCase(unittest.TestCase):
         self.assertEqual(resp["handle"], "NET6-2606-4700-1")
         self.assertEqual(resp["network"], IPv6Network("2606:4700::/32"))
         self.assertEqual(resp["rir"], "arin")
-        self.assertEqual(resp["registration_date"], datetime(2011, 11, 1, 15, 59, 58, tzinfo=tzoffset(None, -14400)))
+        self.assertEqual(
+            resp["registration_date"],
+            datetime(2011, 11, 1, 15, 59, 58, tzinfo=tzoffset(None, -14400)),
+        )
         self.assertEqual(resp["url"], "https://rdap.arin.net/registry/ip/2606:4700::")
-        self.assertEqual(resp["terms_of_service_url"], "https://www.arin.net/resources/registry/whois/tou/")
+        self.assertEqual(
+            resp["terms_of_service_url"],
+            "https://www.arin.net/resources/registry/whois/tou/",
+        )
         self.assertEqual(resp["whois_server"], "whois.arin.net")
         self.assertEqual(
-            resp["description"], ["All Cloudflare abuse reporting can be done via https://www.cloudflare.com/abuse"]
+            resp["description"],
+            [
+                "All Cloudflare abuse reporting can be done via https://www.cloudflare.com/abuse"
+            ],
         )
         self.assertTrue(isinstance(resp["entities"]["administrative"], list))
         self.assertTrue(len(resp["entities"]["administrative"]) > 0)
@@ -164,9 +194,13 @@ class SyncPublicInterfaceTestCase(unittest.TestCase):
         self.assertEqual(resp["name"], "APNIC-LABS")
         self.assertEqual(resp["handle"], "1.1.1.0 - 1.1.1.255")
         self.assertEqual(resp["rir"], "apnic")
-        self.assertEqual(resp["registration_date"], datetime(2011, 8, 10, 23, 12, 35, tzinfo=UTC))
+        self.assertEqual(
+            resp["registration_date"], datetime(2011, 8, 10, 23, 12, 35, tzinfo=UTC)
+        )
         self.assertEqual(resp["url"], "https://rdap.apnic.net/ip/1.1.1.0/24")
-        self.assertEqual(resp["terms_of_service_url"], "http://www.apnic.net/db/dbcopyright.html")
+        self.assertEqual(
+            resp["terms_of_service_url"], "http://www.apnic.net/db/dbcopyright.html"
+        )
         self.assertEqual(resp["whois_server"], "whois.apnic.net")
         self.assertEqual(resp["copyright_notice"], "")
         self.assertEqual(resp["assignment_type"], "assigned portable")
@@ -195,12 +229,21 @@ class SyncPublicInterfaceTestCase(unittest.TestCase):
         self.assertEqual(resp["handle"], "NET6-2606-4700-1")
         self.assertEqual(resp["network"], IPv6Network("2606:4700::/32"))
         self.assertEqual(resp["rir"], "arin")
-        self.assertEqual(resp["registration_date"], datetime(2011, 11, 1, 15, 59, 58, tzinfo=tzoffset(None, -14400)))
+        self.assertEqual(
+            resp["registration_date"],
+            datetime(2011, 11, 1, 15, 59, 58, tzinfo=tzoffset(None, -14400)),
+        )
         self.assertEqual(resp["url"], "https://rdap.arin.net/registry/ip/2606:4700::")
-        self.assertEqual(resp["terms_of_service_url"], "https://www.arin.net/resources/registry/whois/tou/")
+        self.assertEqual(
+            resp["terms_of_service_url"],
+            "https://www.arin.net/resources/registry/whois/tou/",
+        )
         self.assertEqual(resp["whois_server"], "whois.arin.net")
         self.assertEqual(
-            resp["description"], ["All Cloudflare abuse reporting can be done via https://www.cloudflare.com/abuse"]
+            resp["description"],
+            [
+                "All Cloudflare abuse reporting can be done via https://www.cloudflare.com/abuse"
+            ],
         )
         self.assertTrue(isinstance(resp["entities"]["administrative"], list))
         self.assertTrue(len(resp["entities"]["administrative"]) > 0)
@@ -216,13 +259,20 @@ class SyncPublicInterfaceTestCase(unittest.TestCase):
         self.assertEqual(resp["handle"], "GOVI")
         self.assertEqual(resp["parent_handle"], "")
         self.assertEqual(resp["rir"], "arin")
-        self.assertEqual(resp["registration_date"], datetime(2001, 5, 8, 0, 0, tzinfo=tzoffset(None, -14400)))
+        self.assertEqual(
+            resp["registration_date"],
+            datetime(2001, 5, 8, 0, 0, tzinfo=tzoffset(None, -14400)),
+        )
         self.assertEqual(resp["expiration_date"], None)
         self.assertEqual(resp["url"], "https://rdap.arin.net/registry/entity/GOVI")
-        self.assertEqual(resp["terms_of_service_url"], "https://www.arin.net/resources/registry/whois/tou/")
+        self.assertEqual(
+            resp["terms_of_service_url"],
+            "https://www.arin.net/resources/registry/whois/tou/",
+        )
         self.assertEqual(resp["whois_server"], "whois.arin.net")
         self.assertEqual(
-            resp["description"], ["http://www.govital.net\r", "Standard NOC hours are 10am to 6pm EST M-F"]
+            resp["description"],
+            ["http://www.govital.net\r", "Standard NOC hours are 10am to 6pm EST M-F"],
         )
         self.assertTrue(isinstance(resp["entities"]["technical"], list))
         self.assertTrue(len(resp["entities"]["technical"]) > 0)
@@ -337,9 +387,18 @@ class AsyncPublicInterfaceTestCase(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(resp["rir"], "arin")
         self.assertEqual(resp["asn_range"], [13335, 13335])
         self.assertEqual(resp["whois_server"], "whois.arin.net")
-        self.assertEqual(resp["copyright_notice"], "Copyright 1997-2024, American Registry for Internet Numbers, Ltd.")
-        self.assertEqual(resp["terms_of_service_url"], "https://www.arin.net/resources/registry/whois/tou/")
-        self.assertEqual(resp["registration_date"], datetime(2010, 7, 14, 18, 35, 57, tzinfo=tzoffset(None, -14400)))
+        self.assertEqual(
+            resp["copyright_notice"],
+            "Copyright 1997-2024, American Registry for Internet Numbers, Ltd.",
+        )
+        self.assertEqual(
+            resp["terms_of_service_url"],
+            "https://www.arin.net/resources/registry/whois/tou/",
+        )
+        self.assertEqual(
+            resp["registration_date"],
+            datetime(2010, 7, 14, 18, 35, 57, tzinfo=tzoffset(None, -14400)),
+        )
         self.assertTrue(isinstance(resp["entities"]["registrant"], list))
         self.assertTrue(len(resp["entities"]["registrant"]) > 0)
         self.assertTrue(isinstance(resp["entities"]["abuse"], list))
@@ -359,8 +418,12 @@ class AsyncPublicInterfaceTestCase(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(resp["name"], "google.com")
         self.assertEqual(resp["handle"], "2138514_DOMAIN_COM-VRSN")
         self.assertEqual(resp["rir"], "")
-        self.assertEqual(resp["registration_date"], datetime(1997, 9, 15, 7, 0, tzinfo=UTC))
-        self.assertEqual(resp["url"], "https://rdap.markmonitor.com/rdap/domain/google.com")
+        self.assertEqual(
+            resp["registration_date"], datetime(1997, 9, 15, 7, 0, tzinfo=UTC)
+        )
+        self.assertEqual(
+            resp["url"], "https://rdap.markmonitor.com/rdap/domain/google.com"
+        )
         self.assertEqual(
             resp["terms_of_service_url"],
             "https://www.markmonitor.com/legal/domain-management-terms-and-conditions",
@@ -368,7 +431,10 @@ class AsyncPublicInterfaceTestCase(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(resp["whois_server"], "whois.markmonitor.com")
         self.assertEqual(resp["copyright_notice"], "")
         self.assertEqual(resp["dnssec"], False)
-        self.assertEqual(resp["nameservers"], ["ns1.google.com", "ns2.google.com", "ns3.google.com", "ns4.google.com"])
+        self.assertEqual(
+            resp["nameservers"],
+            ["ns1.google.com", "ns2.google.com", "ns3.google.com", "ns4.google.com"],
+        )
         self.assertEqual(
             resp["status"],
             [
@@ -408,9 +474,13 @@ class AsyncPublicInterfaceTestCase(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(resp["handle"], "1.1.1.0 - 1.1.1.255")
         self.assertEqual(resp["network"], IPv4Network("1.1.1.0/24"))
         self.assertEqual(resp["rir"], "apnic")
-        self.assertEqual(resp["registration_date"], datetime(2011, 8, 10, 23, 12, 35, tzinfo=UTC))
+        self.assertEqual(
+            resp["registration_date"], datetime(2011, 8, 10, 23, 12, 35, tzinfo=UTC)
+        )
         self.assertEqual(resp["url"], "https://rdap.apnic.net/ip/1.1.1.0/24")
-        self.assertEqual(resp["terms_of_service_url"], "http://www.apnic.net/db/dbcopyright.html")
+        self.assertEqual(
+            resp["terms_of_service_url"], "http://www.apnic.net/db/dbcopyright.html"
+        )
         self.assertEqual(resp["whois_server"], "whois.apnic.net")
         self.assertEqual(resp["copyright_notice"], "")
         self.assertEqual(
@@ -435,12 +505,21 @@ class AsyncPublicInterfaceTestCase(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(resp["handle"], "NET6-2606-4700-1")
         self.assertEqual(resp["network"], IPv6Network("2606:4700::/32"))
         self.assertEqual(resp["rir"], "arin")
-        self.assertEqual(resp["registration_date"], datetime(2011, 11, 1, 15, 59, 58, tzinfo=tzoffset(None, -14400)))
+        self.assertEqual(
+            resp["registration_date"],
+            datetime(2011, 11, 1, 15, 59, 58, tzinfo=tzoffset(None, -14400)),
+        )
         self.assertEqual(resp["url"], "https://rdap.arin.net/registry/ip/2606:4700::")
-        self.assertEqual(resp["terms_of_service_url"], "https://www.arin.net/resources/registry/whois/tou/")
+        self.assertEqual(
+            resp["terms_of_service_url"],
+            "https://www.arin.net/resources/registry/whois/tou/",
+        )
         self.assertEqual(resp["whois_server"], "whois.arin.net")
         self.assertEqual(
-            resp["description"], ["All Cloudflare abuse reporting can be done via https://www.cloudflare.com/abuse"]
+            resp["description"],
+            [
+                "All Cloudflare abuse reporting can be done via https://www.cloudflare.com/abuse"
+            ],
         )
         self.assertTrue(isinstance(resp["entities"]["administrative"], list))
         self.assertTrue(len(resp["entities"]["administrative"]) > 0)
@@ -448,16 +527,22 @@ class AsyncPublicInterfaceTestCase(unittest.IsolatedAsyncioTestCase):
     @pytest.mark.asyncio
     @pytest.mark.usefixtures("mock_httpx")
     async def test_ip_interface_v4_cidr_1(self):
-        load_sync_responses_to_httpx_mock(RESPONSES / "ip-v4-cidr-1.yaml", self.httpx_mock)
+        load_sync_responses_to_httpx_mock(
+            RESPONSES / "ip-v4-cidr-1.yaml", self.httpx_mock
+        )
         await whoisit.bootstrap_async()
         resp = await whoisit.ip_async("1.1.1.0/24")
         self.assertEqual(resp["type"], "ip network")
         self.assertEqual(resp["name"], "APNIC-LABS")
         self.assertEqual(resp["handle"], "1.1.1.0 - 1.1.1.255")
         self.assertEqual(resp["rir"], "apnic")
-        self.assertEqual(resp["registration_date"], datetime(2011, 8, 10, 23, 12, 35, tzinfo=UTC))
+        self.assertEqual(
+            resp["registration_date"], datetime(2011, 8, 10, 23, 12, 35, tzinfo=UTC)
+        )
         self.assertEqual(resp["url"], "https://rdap.apnic.net/ip/1.1.1.0/24")
-        self.assertEqual(resp["terms_of_service_url"], "http://www.apnic.net/db/dbcopyright.html")
+        self.assertEqual(
+            resp["terms_of_service_url"], "http://www.apnic.net/db/dbcopyright.html"
+        )
         self.assertEqual(resp["whois_server"], "whois.apnic.net")
         self.assertEqual(resp["copyright_notice"], "")
         self.assertEqual(resp["assignment_type"], "assigned portable")
@@ -478,7 +563,9 @@ class AsyncPublicInterfaceTestCase(unittest.IsolatedAsyncioTestCase):
     @pytest.mark.asyncio
     @pytest.mark.usefixtures("mock_httpx")
     async def test_ip_interface_v6_cidr_1(self):
-        load_sync_responses_to_httpx_mock(RESPONSES / "ip-v6-cidr-1.yaml", self.httpx_mock)
+        load_sync_responses_to_httpx_mock(
+            RESPONSES / "ip-v6-cidr-1.yaml", self.httpx_mock
+        )
         await whoisit.bootstrap_async()
         resp = await whoisit.ip_async("2606:4700::/32")
         self.assertEqual(resp["type"], "ip network")
@@ -486,12 +573,21 @@ class AsyncPublicInterfaceTestCase(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(resp["handle"], "NET6-2606-4700-1")
         self.assertEqual(resp["network"], IPv6Network("2606:4700::/32"))
         self.assertEqual(resp["rir"], "arin")
-        self.assertEqual(resp["registration_date"], datetime(2011, 11, 1, 15, 59, 58, tzinfo=tzoffset(None, -14400)))
+        self.assertEqual(
+            resp["registration_date"],
+            datetime(2011, 11, 1, 15, 59, 58, tzinfo=tzoffset(None, -14400)),
+        )
         self.assertEqual(resp["url"], "https://rdap.arin.net/registry/ip/2606:4700::")
-        self.assertEqual(resp["terms_of_service_url"], "https://www.arin.net/resources/registry/whois/tou/")
+        self.assertEqual(
+            resp["terms_of_service_url"],
+            "https://www.arin.net/resources/registry/whois/tou/",
+        )
         self.assertEqual(resp["whois_server"], "whois.arin.net")
         self.assertEqual(
-            resp["description"], ["All Cloudflare abuse reporting can be done via https://www.cloudflare.com/abuse"]
+            resp["description"],
+            [
+                "All Cloudflare abuse reporting can be done via https://www.cloudflare.com/abuse"
+            ],
         )
         self.assertTrue(isinstance(resp["entities"]["administrative"], list))
         self.assertTrue(len(resp["entities"]["administrative"]) > 0)
@@ -507,13 +603,20 @@ class AsyncPublicInterfaceTestCase(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(resp["handle"], "GOVI")
         self.assertEqual(resp["parent_handle"], "")
         self.assertEqual(resp["rir"], "arin")
-        self.assertEqual(resp["registration_date"], datetime(2001, 5, 8, 0, 0, tzinfo=tzoffset(None, -14400)))
+        self.assertEqual(
+            resp["registration_date"],
+            datetime(2001, 5, 8, 0, 0, tzinfo=tzoffset(None, -14400)),
+        )
         self.assertEqual(resp["expiration_date"], None)
         self.assertEqual(resp["url"], "https://rdap.arin.net/registry/entity/GOVI")
-        self.assertEqual(resp["terms_of_service_url"], "https://www.arin.net/resources/registry/whois/tou/")
+        self.assertEqual(
+            resp["terms_of_service_url"],
+            "https://www.arin.net/resources/registry/whois/tou/",
+        )
         self.assertEqual(resp["whois_server"], "whois.arin.net")
         self.assertEqual(
-            resp["description"], ["http://www.govital.net\r", "Standard NOC hours are 10am to 6pm EST M-F"]
+            resp["description"],
+            ["http://www.govital.net\r", "Standard NOC hours are 10am to 6pm EST M-F"],
         )
         self.assertTrue(isinstance(resp["entities"]["technical"], list))
         self.assertTrue(len(resp["entities"]["technical"]) > 0)

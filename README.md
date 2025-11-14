@@ -363,6 +363,16 @@ result = whoisit.domain('example.com')
 You can switch or clear proxies at any time. Note that setting or clearing a proxy will also
 reset the session. Proxies are supported by both the asynchonous and synchronous interfaces.
 
+## Sessions
+
+`whoisit` shared connection pools for all requests by default. This creates HTTP sessions that
+are shared when multiple connections are made to the same RDAP endpoints. If required, you can
+reset these sessions with the `clear_session()` method. For example:
+
+```python
+whoisit.clear_session()
+```
+
 
 ## Response data
 

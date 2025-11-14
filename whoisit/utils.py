@@ -25,6 +25,7 @@ http_pool_maxsize = 10               # Maximum HTTP pool connection size
 async_http_max_connections = 100     # Maximum number of HTTP connections allowed for async client
 async_max_keepalive_connections = 20 # Allow the connection pool to maintain keep-alive connections below this point
 _default_session = {'secure': None, 'insecure': False}
+_proxy = None
 
 
 def get_session_or_async_client(session_or_async_client=None, allow_insecure_ssl=False, is_async=False):
@@ -55,6 +56,29 @@ def get_session_or_async_client(session_or_async_client=None, allow_insecure_ssl
             else:
                 _default_session['secure'] = create_session(allow_insecure_ssl=allow_insecure_ssl)
             return _default_session['secure']
+
+
+def clear_session():
+    global _default_session
+    _default_session = {'secure': None, 'insecure': None}
+
+
+def clear_proxy():
+    global _proxy
+    _proxy = None
+    clear_session()
+
+
+def get_proxy():
+    global _proxy
+    return _proxy
+
+def set_proxy(proxy):
+    global _proxy
+    if not isinstance(proxy, str):
+        raise ValueError('"proxy" must be a string and specified in the proto://[user:pass]@host:port format')
+    _proxy = proxy
+    clear_session()
 
 
 def get_session(session=None, allow_insecure_ssl=False) -> requests.Session:
@@ -95,7 +119,7 @@ def create_async_client(allow_insecure_ssl=False):
     retries = httpx.AsyncHTTPTransport(retries=http_max_retries, limits=limits)
     headers = {"User-Agent": user_agent.format(version=version)}
     verify = not allow_insecure_ssl
-    client = httpx.AsyncClient(transport=retries, verify=verify, headers=headers, follow_redirects=True)
+    client = httpx.AsyncClient(transport=retries, verify=verify, headers=headers, follow_redirects=True, proxy=get_proxy())
     return client
 
 
@@ -110,13 +134,16 @@ def http_request(session, url, method='GET', headers=None, data=None, *args, **k
     if method not in methods:
         raise UnsupportedError(f'HTTP methods supported are: {methods}, got: {method}')
     headers['User-Agent'] = user_agent.format(version=version)
-    log.debug(f'Making HTTP {method} request to {url}')
+    proxy = get_proxy()
+    proxies = {'http': proxy, 'https': proxy} if proxy else None
+    proxystr = f' via proxy: {proxy}' if proxy else ''
+    log.debug(f'Making HTTP {method} request to {url}{proxystr}')
     try:
         if 'timeout' not in kwargs:
             kwargs['timeout'] = http_timeout
-        return session.request(method, url, headers=headers, data=data, *args, **kwargs)
+        return session.request(method, url, headers=headers, data=data, proxies=proxies, *args, **kwargs)
     except Exception as e:
-        raise QueryError(f'Failed to make a {method} request to {url}: {e}') from e
+        raise QueryError(f'Failed to make a {method} request to {url}{proxystr}: {e}') from e
 
 
 async def http_request_async(client: httpx.AsyncClient, url, method='GET', headers=None, data=None, *args, **kwargs):
@@ -128,13 +155,16 @@ async def http_request_async(client: httpx.AsyncClient, url, method='GET', heade
     methods = ('GET',)
     if method not in methods:
         raise UnsupportedError(f'HTTP methods supported are: {methods}, got: {method}')
-    log.debug(f'Making async HTTP {method} request to {url}')
+    headers['User-Agent'] = user_agent.format(version=version)
+    proxy = get_proxy()
+    proxystr = f' via proxy: {proxy}' if proxy else ''
+    log.debug(f'Making async HTTP {method} request to {url}{proxystr}')
     try:
         if 'timeout' not in kwargs:
             kwargs['timeout'] = http_timeout
         return await client.request(method, url, headers=headers, data=data, *args, **kwargs)
     except Exception as e:
-        raise QueryError(f'Failed to make a {method} request to {url}: {e}') from e
+        raise QueryError(f'Failed to make a {method} request to {url}{proxystr}: {e}') from e
 
 
 def is_subnet_of(network_a, network_b):

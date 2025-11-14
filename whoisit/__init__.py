@@ -2,18 +2,17 @@ from .bootstrap import _BootstrapMainModule
 from .errors import ArgumentError
 from .parser import parse
 from .query import Query, QueryAsync, QueryBuilder
-from .utils import get_async_client, get_session, recursive_merge
+from .utils import get_async_client, get_session, recursive_merge, set_proxy, get_proxy, clear_proxy
 from .version import version
 
-# Private methods
 
+# Private methods
 
 _bootstrap = _BootstrapMainModule()
 _query_builder = QueryBuilder(_bootstrap)
 
 
 # Expose class methods as the public API
-
 
 bootstrap = _bootstrap.bootstrap
 bootstrap_async = _bootstrap.bootstrap_async

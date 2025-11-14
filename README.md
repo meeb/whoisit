@@ -344,6 +344,25 @@ or
 whoisit.load_bootstrap_data(bootstrap_info, allow_insecure=True)
 ```
 
+## Proxies
+
+You can specify an HTTP proxy to use for all requests made by `whoisit` by calling the
+`set_proxy(...)` method. You can clear the proxy with `clear_proxy()`. All requests made
+by `whoisit` will use the proxy specified by the last call to `set_proxy(...)`. For example:
+
+```python
+whoisit.set_proxy('http://127.0.0.1:8080')
+# Both bootstrapping and the IP query for 1.1.1.1 will use the proxy at http://127.0.0.1:8080
+whoisit.bootstrap()
+result = whoisit.ip('1.1.1.1')
+whoisit.clear_proxy()
+# All future requests will not use a proxy
+result = whoisit.domain('example.com')
+```
+
+You can switch or clear proxies at any time. Note that setting or clearing a proxy will also
+reset the session. Proxies are supported by both the asynchonous and synchronous interfaces.
+
 
 ## Response data
 

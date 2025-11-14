@@ -147,7 +147,6 @@ class BaseBootstrap:
             return json.dumps(rtn)
         return rtn
 
-
     def load_bootstrap_data(self, data, overrides=False, allow_insecure=False, from_json=True):
         if self.is_bootstrapped():
             raise BootstrapError('Already bootstrapped, cannot load more data')

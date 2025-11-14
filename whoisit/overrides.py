@@ -4,7 +4,7 @@
     onto the IANA data by default.
 """
 
-iana_overrides = {
+iana_overrides: dict[str, ...] = {
 
     'domain': {
 

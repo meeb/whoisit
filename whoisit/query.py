@@ -17,6 +17,9 @@ from urllib.parse import (
     urlunsplit,
 )
 
+import httpx
+import requests
+
 from .errors import (
     QueryError,
     ResourceAccessDeniedError,
@@ -27,6 +30,7 @@ from .errors import (
 )
 from .logger import get_logger
 from .utils import contains_only_chars, http_request, http_request_async
+from .bootstrap import _BootstrapWrapper
 
 
 log = get_logger('query')
@@ -51,7 +55,7 @@ class QueryBuilder:
         'entity': 'entity',
     }
 
-    def __init__(self, bootstrap):
+    def __init__(self, bootstrap: _BootstrapWrapper) -> None:
         # These map to the supported RDAP types, not the bootstrap data types
         self.query_endpoints_fetchers = {
             'autnum': self.get_autnum_endpoint,
@@ -61,7 +65,7 @@ class QueryBuilder:
         }
         self.bootstrap = bootstrap
 
-    def build(self, query_type=None, query_value=None, rir=None):
+    def build(self, query_type: str | None = None, query_value: str | None = None, rir: str | None = None) -> tuple[str, str, bool]:
         if not self.bootstrap.is_bootstrapped():
             raise QueryError(f'You need to load bootstrap data before making '
                              f'any queries')
@@ -81,7 +85,7 @@ class QueryBuilder:
         log.debug(f'{what} query for {query_value} built as {method} {url}{match_str}')
         return method, url, exact_match
 
-    def construct_url(self, base_url, what, value):
+    def construct_url(self, base_url: str, what: str, value: str) -> str:
         if not base_url.endswith('/'):
             base_url += '/'
         resource = urljoin(base_url, str(what))
@@ -90,7 +94,7 @@ class QueryBuilder:
         quoted_value = quote(str(value))
         return unquote(urljoin(resource, quoted_value))
 
-    def get_autnum_endpoint(self, value):
+    def get_autnum_endpoint(self, value: str | int) -> tuple[str, bool]:
         if isinstance(value, str):
             value = value.strip().upper()
             if value.startswith('AS'):
@@ -106,12 +110,11 @@ class QueryBuilder:
                       f'defaulting to: {endpoint}')
         return self.construct_url(endpoint, 'autnum', value), exact_match
 
-    def get_domain_endpoint(self, value):
+    def get_domain_endpoint(self, value: str) -> tuple[str, bool]:
         value = str(value).strip()
         parts = value.split('.')
         if len(parts) < 2:
             raise QueryError(f'Failed to extract TLD from domain "{value}"')
-        domain = '.'.join(parts[:-1])
         try:
             # First check for SLDs
             tld = '.'.join(parts[-2:])
@@ -126,7 +129,7 @@ class QueryBuilder:
                       f'defaulting to: {endpoint}')
         return self.construct_url(endpoint, 'domain', value), exact_match
 
-    def get_ip_endpoint(self, value):
+    def get_ip_endpoint(self, value: str | IPv4Address | IPv4Network | IPv6Address | IPv6Network) -> tuple[str, bool]:
         if not isinstance(value, (IPv4Address, IPv4Network, IPv6Address, IPv6Network)):
             value = str(value)
         if isinstance(value, str):
@@ -152,7 +155,7 @@ class QueryBuilder:
                           f'defaulting to: {endpoint}')
         return self.construct_url(endpoint, 'ip', str(value)), exact_match
 
-    def get_entity_endpoint(self, value):
+    def get_entity_endpoint(self, value: str) -> tuple[str, bool]:
         value = str(value).strip().upper()
         # Entity names can only contain A-Z upper case, 0-9 and hyphens
         if not contains_only_chars(value):
@@ -162,13 +165,12 @@ class QueryBuilder:
         endpoint = random.choice(endpoints)
         return self.construct_url(endpoint, 'entity', value), exact_match
 
-    def get_override_endpoint(self, rir_endpoint_name, query_name, value):
+    def get_override_endpoint(self, rir_endpoint_name: str, query_name: str, value: str) -> tuple[str, bool]:
         '''
             The query should be built using a manually overriden RIR endpoint name,
             such as 'arin' or 'ripe' and not use the bootstrap data.
         '''
-        if isinstance(value, str):
-            value = value.strip()
+        value = str(value).strip()
         query_name = str(query_name).strip()
         endpoint = self.bootstrap.get_rir_endpoint(rir_endpoint_name)
         if not endpoint:
@@ -184,7 +186,7 @@ class BaseQuery:
         to both requests and the requested URL if required.
     """
 
-    def __init__(self, method, url, **kwargs):
+    def __init__(self, method: str, url: str, **kwargs) -> None:
         self.method = method.strip().upper()
         if kwargs:
             # kwargs are appended to the URL, such as test=123 becomes url?test=123
@@ -192,7 +194,7 @@ class BaseQuery:
         else:
             self.url = url
 
-    def add_url_params(self, url, extra_params):
+    def add_url_params(self, url: str, extra_params: dict) -> str:
         parts = urlsplit(url)
         qs = {}
         for k, v in parse_qs(parts.query):
@@ -203,10 +205,10 @@ class BaseQuery:
         return urlunsplit((parts.scheme, parts.netloc, parts.path, qs_str, ''))
 
 
-    def _decode_content(self, response):
+    def _decode_content(self, response: requests.Response | httpx.Response) -> str:
         """
             Decode the content of the response and attempt to force it into a
-            unicode string. This is used as part of the query failure exceptions
+            Unicode string. This is used as part of the query failure exceptions
             to allow downstream clients to decide how to behave when errors occur.
         """
         try:
@@ -214,7 +216,7 @@ class BaseQuery:
         except (ValueError, UnicodeDecodeError) as e:
             return response.content.decode('utf-8', errors='ignore').strip()
 
-    def _process_response(self, response):
+    def _process_response(self, response: requests.Response | httpx.Response) -> dict:
         status_code_map = {
             401: (
                 ResourceAccessDeniedError,
@@ -273,11 +275,11 @@ class Query(BaseQuery):
         to both requests and the requested URL if required.
     """
 
-    def __init__(self, session, method, url, **kwargs):
+    def __init__(self, session: requests.Session, method: str, url: str, **kwargs) -> None:
         super().__init__(method, url, **kwargs)
         self.session = session
 
-    def request(self, *args, **kwargs):
+    def request(self, *args, **kwargs) -> dict:
         # args and kwargs here are passed directly to requests.request(...)
         response = http_request(self.session, url=self.url, method=self.method, *args, **kwargs)
         return self._process_response(response)
@@ -290,11 +292,11 @@ class QueryAsync(BaseQuery):
         to both requests and the requested URL if required.
     """
 
-    def __init__(self, client, method, url, **kwargs):
+    def __init__(self, client: httpx.AsyncClient, method: str, url: str, **kwargs) -> None:
         super().__init__(method, url, **kwargs)
         self.client = client
 
-    async def request(self, *args, **kwargs):
+    async def request(self, *args, **kwargs) -> dict:
         # args and kwargs here are passed directly to httpx.request(...)
         response = await http_request_async(self.client, url=self.url, method=self.method, *args, **kwargs)
         return self._process_response(response)

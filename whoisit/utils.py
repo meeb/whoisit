@@ -1,14 +1,12 @@
+from ipaddress import IPv4Network, IPv6Network
 from urllib3.util import retry
-
+from urllib3.poolmanager import PoolManager
 try:
     from urllib3.util import create_urllib3_context
 except ImportError:
     from urllib3.util.ssl_ import create_urllib3_context
-
 import httpx
 import requests
-from urllib3.poolmanager import PoolManager
-
 from .errors import QueryError, UnsupportedError
 from .logger import get_logger
 from .version import version
@@ -28,7 +26,7 @@ _default_session = {'secure': None, 'insecure': False}
 _proxy = None
 
 
-def get_session_or_async_client(session_or_async_client=None, allow_insecure_ssl=False, is_async=False):
+def get_session_or_async_client(session_or_async_client: requests.Session | httpx.AsyncClient | None = None, allow_insecure_ssl: bool = False, is_async: bool = False) -> requests.Session | httpx.AsyncClient:
     """
         Creates and caches the default sessions, one for secure (default) SSL
         and one for SSL with an insecure cipher suite.
@@ -49,34 +47,37 @@ def get_session_or_async_client(session_or_async_client=None, allow_insecure_ssl
         return _default_session[key]
 
 
-def clear_session():
+def clear_session() -> bool:
     global _default_session
     _default_session = {'secure': None, 'insecure': None}
+    return True
 
 
-def clear_proxy():
+def clear_proxy() -> bool:
     global _proxy
     _proxy = None
     clear_session()
+    return True
 
 
-def get_proxy():
+def get_proxy() -> str | None:
     global _proxy
     return _proxy
 
-def set_proxy(proxy):
+def set_proxy(proxy: str) -> bool:
     global _proxy
     if not isinstance(proxy, str):
         raise ValueError('"proxy" must be a string and specified in the proto://[user:pass]@host:port format')
     _proxy = proxy
     clear_session()
+    return True
 
 
-def get_session(session=None, allow_insecure_ssl=False) -> requests.Session:
+def get_session(session: requests.Session | None = None, allow_insecure_ssl: bool = False) -> requests.Session:
     return get_session_or_async_client(session, allow_insecure_ssl, is_async=False)
 
 
-def get_async_client(client=None, allow_insecure_ssl=False) -> httpx.AsyncClient:
+def get_async_client(client: httpx.AsyncClient | None = None, allow_insecure_ssl: bool = False) -> httpx.AsyncClient:
     return get_session_or_async_client(client, allow_insecure_ssl, is_async=True)
 
 
@@ -85,12 +86,12 @@ class InsecureSSLAdapter(requests.adapters.HTTPAdapter):
         Custom adapter to permit insecure SSL connections.
     """
 
-    def init_poolmanager(self, connections, maxsize, block=False):
+    def init_poolmanager(self, connections: int, maxsize: int, block: bool = False) -> None:
         insecure_ssl_ciphersuite = create_urllib3_context(ciphers=insecure_ssl_ciphers)
         self.poolmanager = PoolManager(ssl_context=insecure_ssl_ciphersuite)
 
 
-def create_session(allow_insecure_ssl=False):
+def create_session(allow_insecure_ssl: bool = False) -> requests.Session:
     session = requests.session()
     session_retry = retry.Retry(total=http_max_retries,
                                 status_forcelist=http_retry_statuses,
@@ -105,7 +106,7 @@ def create_session(allow_insecure_ssl=False):
     return session
 
 
-def create_async_client(allow_insecure_ssl=False):
+def create_async_client(allow_insecure_ssl: bool = False) -> httpx.AsyncClient:
     limits = httpx.Limits(max_connections=async_http_max_connections, max_keepalive_connections=async_max_keepalive_connections)
     retries = httpx.AsyncHTTPTransport(retries=http_max_retries, limits=limits)
     headers = {"User-Agent": user_agent.format(version=version)}
@@ -114,11 +115,7 @@ def create_async_client(allow_insecure_ssl=False):
     return client
 
 
-def http_request(session, url, method='GET', headers=None, data=None, *args, **kwargs):
-    """
-        Simple wrapper over requests. Allows for optionally downgrading SSL
-        ciphers if required.
-    """
+def _validate_request(headers: dict | None, data: dict | None, method: str) -> tuple[dict, dict, str, str, dict, str]:
     headers = headers or {}
     data = data or {}
     methods = ('GET',)
@@ -128,6 +125,15 @@ def http_request(session, url, method='GET', headers=None, data=None, *args, **k
     proxy = get_proxy()
     proxies = {'http': proxy, 'https': proxy} if proxy else None
     proxystr = f' via proxy: {proxy}' if proxy else ''
+    return headers, data, method, proxy, proxies, proxystr
+
+
+def http_request(session: requests.Session, url: str, method: str = 'GET', headers: dict | None = None, data: dict | None = None, *args, **kwargs) -> requests.Response:
+    """
+        Simple wrapper over requests. Allows for optionally downgrading SSL
+        ciphers if required.
+    """
+    headers, data, method, proxy, proxies, proxystr = _validate_request(headers, data, method)
     log.debug(f'Making HTTP {method} request to {url}{proxystr}')
     try:
         if 'timeout' not in kwargs:
@@ -137,18 +143,11 @@ def http_request(session, url, method='GET', headers=None, data=None, *args, **k
         raise QueryError(f'Failed to make a {method} request to {url}{proxystr}: {e}') from e
 
 
-async def http_request_async(client: httpx.AsyncClient, url, method='GET', headers=None, data=None, *args, **kwargs):
+async def http_request_async(client: httpx.AsyncClient, url: str, method: str = 'GET', headers: dict | None = None, data: dict | None = None, *args, **kwargs) -> httpx.Response:
     """
         Simple wrapper over httpx.
     """
-    headers = headers or {}
-    data = data or {}
-    methods = ('GET',)
-    if method not in methods:
-        raise UnsupportedError(f'HTTP methods supported are: {methods}, got: {method}')
-    headers['User-Agent'] = user_agent.format(version=version)
-    proxy = get_proxy()
-    proxystr = f' via proxy: {proxy}' if proxy else ''
+    headers, data, method, proxy, proxies, proxystr = _validate_request(headers, data, method)
     log.debug(f'Making async HTTP {method} request to {url}{proxystr}')
     try:
         if 'timeout' not in kwargs:
@@ -158,23 +157,25 @@ async def http_request_async(client: httpx.AsyncClient, url, method='GET', heade
         raise QueryError(f'Failed to make a {method} request to {url}{proxystr}: {e}') from e
 
 
-def is_subnet_of(network_a, network_b):
+def is_subnet_of(network_a: IPv4Network | IPv6Network, network_b: IPv4Network | IPv6Network) -> bool:
+    if network_a.version != network_b.version:
+        raise ValueError(f'Cannot compare subnets of different address families: {network_a} and {network_b}')
     a_len = network_a.prefixlen
     b_len = network_b.prefixlen
     return a_len >= b_len and network_a.supernet(a_len - b_len) == network_b
 
 
-default_chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-'
+default_chars: str = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-'
 
 
-def contains_only_chars(s, chars=default_chars):
+def contains_only_chars(s: str, chars: str = default_chars) -> bool:
     for c in s:
         if c not in chars:
             return False
     return True
 
 
-def recursive_merge(d1, d2):
+def recursive_merge(d1: dict, d2: dict) -> None:
     '''
         Recursively merge two dictionaries. This is used to overlay subrequest
         data from related info RDAP endpoints over the top of primary RDAP
@@ -194,7 +195,7 @@ def recursive_merge(d1, d2):
             d1[k] = v
 
 
-def recursive_merge_lists(l1, l2, dedup_on='title'):
+def recursive_merge_lists(l1: list, l2: list, dedup_on: str = 'title') -> list:
     list1 = {l[dedup_on]: l for l in l1 if dedup_on in l}
     list2 = {l[dedup_on]: l for l in l2 if dedup_on in l}
     recursive_merge(list1, list2)

@@ -5,19 +5,19 @@ from ipaddress import (
     IPv4Network,
     IPv6Network
 )
-from typing import Optional, List
 from typing_extensions import TypedDict
 
 from dateutil.parser import parse as dateutil_parse
 
 from .errors import BootstrapError, ParseError
 from .logger import get_logger
+from .bootstrap import _BootstrapWrapper
 
 
 log = get_logger('parser')
 
 
-def clean(s):
+def clean(s: str) -> str:
     if s is None:
         s = ''
     if not isinstance(s, str):
@@ -25,7 +25,7 @@ def clean(s):
     return s.strip()
 
 
-def clean_address(a):
+def clean_address(a: str | None) -> str:
     if a is None:
         a = ''
     if isinstance(a, list):
@@ -35,14 +35,14 @@ def clean_address(a):
     return a.strip()
 
 
-class VCardArrayDataDict(TypedDict, total=False):
+class VCardArrayDataDict(TypedDict, total = False):
     name: str
     email: str
     tel: str
-    address: List[str]
+    address: 'VCardArrayAddressDataDict'
 
 
-class VCardArrayAddressDataDict(TypedDict, total=False):
+class VCardArrayAddressDataDict(TypedDict, total = False):
     po_box: str
     ext_address: str
     street_address: str
@@ -55,12 +55,12 @@ class VCardArrayAddressDataDict(TypedDict, total=False):
 class Parser:
     """
         A Parser extracts the most useful information from an RDAP response for each
-        response type (ip, domain etc.) and returns it as a flat dictionary. This
+        response type (ip, domain, etc.) and returns it as a flat dictionary. This
         parent class extracts generic information available to all entity types where
         available.
     """
 
-    def __init__(self, bootstrap, raw_data, query, using_overrides=False):
+    def __init__(self, bootstrap: _BootstrapWrapper, raw_data: dict, query: str, using_overrides: bool = False) -> None:
         self.bootstrap = bootstrap
         self.raw_data = raw_data
         self.query = str(query)
@@ -88,7 +88,7 @@ class Parser:
     def parse(self):
         raise NotImplementedError('parse must be implemented')
 
-    def parse_vcard_array(self, vcard) -> Optional[VCardArrayDataDict]:
+    def parse_vcard_array(self, vcard: dict | list) -> VCardArrayDataDict | None:
         '''
             Extract useful summary information from a VCard array.
         '''
@@ -100,12 +100,10 @@ class Parser:
         if card_field != 'vcard':
             return None
         v_card_array_data_dict = VCardArrayDataDict()
-
         for field in card_data:
             if len(field) != 4:
                 continue
             entry_field, entry_data, entry_type, entry_label = field
-
             if entry_type != 'text':
                 continue
             elif entry_field == 'fn':
@@ -126,40 +124,36 @@ class Parser:
                     postal_code=clean_address(entry_label[5]),
                     country=clean_address(entry_label[6])
                 )
-
         return v_card_array_data_dict or None
 
-    def extract_handle(self):
-        # First try to get handle from top level
+    def extract_handle(self) -> None:
+        # First, try to get the handle from top level results
         handle = clean(self.raw_data.get('handle', ''))
         if handle:
             self.parsed['handle'] = handle.upper()
             return
-        
         # If no top-level handle, look for it in entities (registrar entity usually has it)
         for entity in self.raw_data.get('entities', []):
             entity_handle = clean(entity.get('handle', ''))
             if entity_handle:
                 self.parsed['handle'] = entity_handle.upper()
                 return
-        
         # If still no handle found, set empty string
         self.parsed['handle'] = ''
 
-    def extract_parent_handle(self):
-        self.parsed['parent_handle'] = clean(
-            self.raw_data.get('parentHandle', '')).upper()
+    def extract_parent_handle(self) -> None:
+        self.parsed['parent_handle'] = clean(self.raw_data.get('parentHandle', '')).upper()
 
-    def extract_name(self):
+    def extract_name(self) -> None:
         self.parsed['name'] = clean(self.raw_data.get('name', ''))
 
-    def extract_whois_server(self):
+    def extract_whois_server(self) -> None:
         self.parsed['whois_server'] = clean(self.raw_data.get('port43', ''))
 
-    def extract_response_type(self):
+    def extract_response_type(self) -> None:
         self.parsed['type'] = clean(self.raw_data.get('objectClassName', ''))
 
-    def extract_notices(self):
+    def extract_notices(self) -> None:
         self.parsed['terms_of_service_url'] = ''
         self.parsed['copyright_notice'] = ''
         for notice in self.raw_data.get('notices', []):
@@ -185,7 +179,7 @@ class Parser:
                     continue
                 self.parsed['copyright_notice'] = clean(description)
 
-    def extract_description(self):
+    def extract_description(self) -> None:
         self.parsed['description'] = []
         remarks = self.raw_data.get('remarks', [])
         for remark in remarks:
@@ -200,7 +194,7 @@ class Parser:
                 # Multiple remarks, add only the description
                 self.parsed['description'] = description
 
-    def extract_dates(self):
+    def extract_dates(self) -> None:
         self.parsed['last_changed_date'] = None
         self.parsed['registration_date'] = None
         self.parsed['expiration_date'] = None
@@ -219,7 +213,7 @@ class Parser:
                 if expiration_date:
                     self.parsed['expiration_date'] = dateutil_parse(expiration_date, fuzzy=True)
 
-    def extract_self_link(self):
+    def extract_self_link(self) -> None:
         self.parsed['url'] = ''
         for link in self.raw_data.get('links', []):
             if link.get('rel', '').strip().lower() == 'self':
@@ -233,12 +227,10 @@ class Parser:
             except BootstrapError:
                 pass
 
-    def extract_entities(self, entities=None):
+    def extract_entities(self, entities: dict | None = None) -> None:
         self.parsed.setdefault('entities', {})
-
         if not entities:
             entities = self.raw_data.get('entities', [])
-
         for entity in entities:
             if not isinstance(entity, dict):
                 continue
@@ -287,7 +279,7 @@ class ParseAutnum(Parser):
         Additional data extractors for autnum objects.
     """
 
-    def parse(self):
+    def parse(self) -> dict:
         response_type = self.parsed['type']
         if response_type != 'autnum':
             raise ParseError(f'Expected response type of "autnum", got reply '
@@ -295,7 +287,7 @@ class ParseAutnum(Parser):
         self.extract_asn_range()
         return self.parsed
 
-    def extract_asn_range(self):
+    def extract_asn_range(self) -> None:
         self.parsed['asn_range'] = None
         start_asn_range = self.raw_data.get('startAutnum', 0)
         end_asn_range = self.raw_data.get('endAutnum', 0)
@@ -316,7 +308,7 @@ class ParseDomain(Parser):
         Additional data extractors for domain objects.
     """
 
-    def parse(self):
+    def parse(self) -> dict:
         response_type = self.parsed['type']
         if response_type != 'domain':
             raise ParseError(f'Expected response type of "domain", got reply '
@@ -327,11 +319,11 @@ class ParseDomain(Parser):
         self.extract_domain_dnssec()
         return self.parsed
 
-    def extract_domain_name(self):
+    def extract_domain_name(self) -> None:
         self.parsed['name'] = clean(self.raw_data.get('ldhName', ''))
         self.parsed['unicode_name'] = clean(self.raw_data.get('unicodeName', ''))
 
-    def extract_domain_nameservers(self):
+    def extract_domain_nameservers(self) -> None:
         self.parsed['nameservers'] = []
         for nameserver in self.raw_data.get('nameservers', []):
             if nameserver.get('objectClassName', '') == 'nameserver':
@@ -339,12 +331,12 @@ class ParseDomain(Parser):
                 if nameserver:
                     self.parsed['nameservers'].append(clean(nameserver))
 
-    def extract_domain_status(self):
+    def extract_domain_status(self) -> None:
         self.parsed['status'] = []
         for status in self.raw_data.get('status', []):
             self.parsed['status'].append(clean(status))
 
-    def extract_domain_dnssec(self):
+    def extract_domain_dnssec(self) -> None:
         """
             SecureDNS.delegationSigned boolean indicates active dnssec.
         """
@@ -358,7 +350,7 @@ class ParseIPNetwork(Parser):
         Additional data extractors for ip network objects.
     """
 
-    def parse(self):
+    def parse(self) -> dict:
         response_type = self.parsed['type']
         if response_type != 'ip network':
             raise ParseError(f'Expected response type of "ip network", got reply '
@@ -369,10 +361,10 @@ class ParseIPNetwork(Parser):
         self.extract_network()
         return self.parsed
 
-    def extract_country(self):
+    def extract_country(self) -> None:
         self.parsed['country'] = clean(self.raw_data.get('country', ''))
 
-    def extract_ip_version(self):
+    def extract_ip_version(self) -> None:
         self.parsed['ip_version'] = None
         ip_version = clean(self.raw_data.get('ipVersion', ''))
         if ip_version == 'v4':
@@ -380,10 +372,10 @@ class ParseIPNetwork(Parser):
         elif ip_version == 'v6':
             self.parsed['ip_version'] = 6
 
-    def extract_assignment_type(self):
+    def extract_assignment_type(self) -> None:
         self.parsed['assignment_type'] = clean(self.raw_data.get('type', '')).lower()
 
-    def extract_network(self):
+    def extract_network(self) -> None:
         self.parsed['network'] = None
         cidr = self.raw_data.get('cidr0_cidrs', None)
         if isinstance(cidr, list):
@@ -423,7 +415,7 @@ class ParseIPNetwork(Parser):
         else:
             start_address = self.raw_data.get('startAddress', None)
             end_address = self.raw_data.get('endAddress', None)
-            if start_address and end_address:
+            if start_address is not None and end_address is not None:
                 try:
                     networks = summarize_address_range(ip_address(start_address),
                                                        ip_address(end_address))
@@ -437,7 +429,7 @@ class ParseEntity(Parser):
         Additional data extractors for entity objects.
     """
 
-    def parse(self):
+    def parse(self) -> dict:
         response_type = self.parsed['type']
         if response_type != 'entity':
             raise ParseError(f'Expected response type of "entity", got reply '
@@ -445,7 +437,7 @@ class ParseEntity(Parser):
         self.extract_root_vcard()
         return self.parsed
 
-    def extract_root_vcard(self):
+    def extract_root_vcard(self) -> None:
         root_vcard = self.raw_data.get('vcardArray', [])
         if root_vcard:
             parsed = self.parse_vcard_array(root_vcard)
@@ -454,7 +446,7 @@ class ParseEntity(Parser):
 
 
 # These map the objectClassName values returned in RDAP responses
-parser_map = {
+parser_map: dict[str, type[Parser]] = {
     'autnum': ParseAutnum,
     'domain': ParseDomain,
     'ip network': ParseIPNetwork,
@@ -462,11 +454,11 @@ parser_map = {
 }
 
 
-def parse(bootstrap, data_type, query, raw_data, include_raw=False):
+def parse(bootstrap: _BootstrapWrapper, data_type: dict, query: str, raw_data: dict, include_raw: bool = False) -> dict:
     # Find a parser for the response type, falling back to the request / data type
     response_type = raw_data.get('objectClassName', data_type)
     parser_class = parser_map.get(response_type, None)
-    if not parser_class:
+    if parser_class is None:
         raise ParseError(f'No parser for response_type: {response_type}')
     log.debug(f'Parsing request type {data_type} {getsizeof(raw_data)} byte dict '
               f'with parser: {response_type} / {parser_class}')

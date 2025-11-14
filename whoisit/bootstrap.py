@@ -1,8 +1,10 @@
 import json
 from ipaddress import IPv4Address, IPv4Network, IPv6Address, IPv6Network
+from collections.abc import Generator
 from time import time
 from urllib.parse import urlsplit
-
+import httpx
+import requests
 from .errors import BootstrapError, UnsupportedError
 from .logger import get_logger
 from .overrides import iana_overrides
@@ -28,7 +30,7 @@ class BaseBootstrap:
         'ipv6': 'https://data.iana.org/rdap/ipv6.json',
         'object': 'https://data.iana.org/rdap/object-tags.json',
     }
-    # RDAP by default must be over HTTPS, but can be toggled to allow HTTP
+    # RDAP by default must be over HTTPS but can be toggled to allow HTTP
     SECURE_RDAP_PROTOCOLS = ('https',)
     INSECURE_RDAP_PROTOCOLS = ('http', 'https')
     # Servers to fall back to in the event of failing to resolve the correct server
@@ -66,7 +68,7 @@ class BaseBootstrap:
         'TW': 'twnic',
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.bootstrap_parsers = {
             'asn': self.parse_asn_data,
             'dns': self.parse_dns_data,
@@ -87,16 +89,16 @@ class BaseBootstrap:
         self._use_iana_overrides = False
         self.clear_bootstrapping()
 
-    def is_using_overrides(self):
+    def is_using_overrides(self) -> bool:
         return self._use_iana_overrides
 
-    def is_allowing_insecure_endpoints(self):
+    def is_allowing_insecure_endpoints(self) -> bool:
         return self._allow_insecure
 
-    def is_bootstrapped(self):
+    def is_bootstrapped(self) -> bool:
         return self._is_bootstrapped
 
-    def clear_bootstrapping(self):
+    def clear_bootstrapping(self) -> bool:
         self._data = {}
         self._parsed_data = {}
         for k in self.BOOTSTRAP_URLS.keys():
@@ -104,8 +106,9 @@ class BaseBootstrap:
         self._is_bootstrapped = False
         self._use_iana_overrides = False
         log.debug('Cleared bootstrap data')
+        return True
 
-    def _bootstrap(self, overrides=False, allow_insecure=False):
+    def _bootstrap(self, overrides: bool = False, allow_insecure: bool = False) -> bool | Generator:
         if self.is_bootstrapped():
             return True
         self._use_iana_overrides = bool(overrides)
@@ -117,7 +120,6 @@ class BaseBootstrap:
             if response.status_code != 200:
                 raise BootstrapError(f'Failed to download bootstrap URL: {url}, got '
                                      f'non-200 response code: {response.status_code}')
-            data = False
             try:
                 data = response.json()
             except Exception as e:
@@ -137,7 +139,7 @@ class BaseBootstrap:
             raise BootstrapError(f'Failed to load some bootstrap data, '
                                  f'missing data: {items_missing}')
 
-    def save_bootstrap_data(self, as_json=True):
+    def save_bootstrap_data(self, as_json: bool = True) -> str | dict:
         if not self.is_bootstrapped():
             raise BootstrapError('No bootstrap data is loaded')
         rtn = {'timestamp': self._bootstrap_timestamp}
@@ -147,7 +149,7 @@ class BaseBootstrap:
             return json.dumps(rtn)
         return rtn
 
-    def load_bootstrap_data(self, data, overrides=False, allow_insecure=False, from_json=True):
+    def load_bootstrap_data(self, data: str | dict, overrides: bool = False, allow_insecure: bool = False, from_json: bool = True) -> bool:
         if self.is_bootstrapped():
             raise BootstrapError('Already bootstrapped, cannot load more data')
         if not isinstance(data, str) and from_json:
@@ -185,7 +187,7 @@ class BaseBootstrap:
             raise BootstrapError(f'Failed to load some bootstrap data, '
                                  f'missing data: {items_missing}')
 
-    def bootstrap_is_older_than(self, days):
+    def bootstrap_is_older_than(self, days: int) -> bool:
         if not self.is_bootstrapped():
             raise BootstrapError('No bootstrap data is loaded')
         if not isinstance(days, int):
@@ -196,7 +198,7 @@ class BaseBootstrap:
         log.debug(f'Bootstrap data age in days: {age_in_days} > {days}')
         return age_in_days > days
 
-    def parse_bootstrap_data(self):
+    def parse_bootstrap_data(self) -> bool:
         '''
             The bootstrap data itself is not organised in a way that can be quickly
             resolved. Parse each bootstrap objects data to make fast lookups possible.
@@ -213,7 +215,7 @@ class BaseBootstrap:
             self._parsed_data[item] = parser(services)
         return True
 
-    def validate_rdap_urls(self, urls):
+    def validate_rdap_urls(self, urls: list[str]) -> list[str]:
         allowed_schemes = (self.INSECURE_RDAP_PROTOCOLS if self._allow_insecure
                            else self.SECURE_RDAP_PROTOCOLS)
         insecure_scheme = False
@@ -235,7 +237,7 @@ class BaseBootstrap:
                       f'from: {urls}{insecure_str}')
         return validated_urls
 
-    def parse_asn_data(self, services):
+    def parse_asn_data(self, services: list[tuple[list[str], list[str]]]) -> dict[tuple[int, int], list[str]]:
         parsed = {}
         for selector, urls in services:
             validated_urls = self.validate_rdap_urls(urls)
@@ -256,7 +258,7 @@ class BaseBootstrap:
                     raise BootstrapError(f'Invalid ASN range selector: {asnrange}')
         return parsed
 
-    def parse_dns_data(self, services):
+    def parse_dns_data(self, services: list[tuple[list[str], list[str]]]) -> dict[str, list[str]]:
         parsed = {}
         for selector, urls in services:
             validated_urls = self.validate_rdap_urls(urls)
@@ -267,7 +269,7 @@ class BaseBootstrap:
                 parsed[tld] = validated_urls
         return parsed
 
-    def parse_ipv4_data(self, services):
+    def parse_ipv4_data(self, services: list[tuple[list[str], list[str]]]) -> dict[IPv4Network, list[str]]:
         parsed = {}
         for selector, urls in services:
             validated_urls = self.validate_rdap_urls(urls)
@@ -278,7 +280,7 @@ class BaseBootstrap:
                 parsed[network] = validated_urls
         return parsed
 
-    def parse_ipv6_data(self, services):
+    def parse_ipv6_data(self, services: list[tuple[list[str], list[str]]]) -> dict[IPv6Network, list[str]]:
         parsed = {}
         for selector, urls in services:
             validated_urls = self.validate_rdap_urls(urls)
@@ -289,15 +291,15 @@ class BaseBootstrap:
                 parsed[network] = validated_urls
         return parsed
 
-    def parse_object_data(self, services):
+    def parse_object_data(self, services: list[tuple[list[str], list[str]]]) -> dict[str, list[str]]:
         # Bootstrap entity information doesn't contain any mappings to RIR endpoints
         # so just ignore it and return an empty dict
         return {}
 
-    def get_fallback_endpoints(self):
+    def get_fallback_endpoints(self) -> tuple[str, ...]:
         return self.DEFAULT_RDAP_FALLBACKS
 
-    def get_asn_endpoints(self, asn):
+    def get_asn_endpoints(self, asn: int) -> tuple[tuple[str, ...], bool]:
         if not self.is_bootstrapped():
             raise BootstrapError('No bootstrap data is loaded')
         if not isinstance(asn, int):
@@ -310,7 +312,7 @@ class BaseBootstrap:
         log.debug(f'Failed to map ASN "{asn}" to an endpoint, using a fallback')
         return self.get_fallback_endpoints(), False
 
-    def get_dns_endpoints(self, tld):
+    def get_dns_endpoints(self, tld: str) -> tuple[tuple[str, ...], bool]:
         if not self.is_bootstrapped():
             raise BootstrapError('No bootstrap data is loaded')
         if not isinstance(tld, str):
@@ -331,7 +333,7 @@ class BaseBootstrap:
                                f'and is unsupported. It may be supported by '
                                f'overrides, try using whoisit.bootstrap(overrides=True)')
 
-    def get_ipv4_endpoints(self, ipv4):
+    def get_ipv4_endpoints(self, ipv4: IPv4Address | IPv4Network) -> tuple[tuple[str, ...], bool]:
         if not self.is_bootstrapped():
             raise BootstrapError('No bootstrap data is loaded')
         if not isinstance(ipv4, (IPv4Address, IPv4Network)):
@@ -356,7 +358,7 @@ class BaseBootstrap:
                     return endpoints, True
         return self.get_fallback_endpoints(), False
     
-    def get_ipv6_endpoints(self, ipv6):
+    def get_ipv6_endpoints(self, ipv6: IPv6Address | IPv6Network) -> tuple[tuple[str, ...], bool]:
         if not self.is_bootstrapped():
             raise BootstrapError('No bootstrap data is loaded')
         if not isinstance(ipv6, (IPv6Address, IPv6Network)):
@@ -381,10 +383,10 @@ class BaseBootstrap:
                     return endpoints, True
         return self.get_fallback_endpoints(), False
 
-    def get_entity_endpoints(self, entity):
+    def get_entity_endpoints(self, entity: str) -> tuple[tuple[str, ...], bool]:
         entity = entity.strip().upper()
-        # Attempt to match a prefix or postfix to an RIR, for example many entities have
-        # names such as RIPE-NAME or EXAMPLE-AP, we can use these prefixes and postfixes
+        # Attempt to match a prefix or postfix to an RIR. For example, many entities have
+        # names such as RIPE-NAME or EXAMPLE-AP and we can use these prefixes and postfixes
         # to attempt to guess the correct RIR to query
         for part, rir_name in self.RIR_ENTITY_PREFIXES.items():
             if entity.startswith(f'{part}-') or entity.endswith(f'-{part}'):
@@ -393,12 +395,12 @@ class BaseBootstrap:
                 log.debug(f'Mapped entity "{entity}" to RIR "{rir_name}" and to '
                           f'endpoints: {endpoints}')
                 return endpoints, True
-        # No match found, as querying a random RIR RDAP endpoint for a likely unknown
+        # No match found. As querying a random RIR RDAP endpoint for a likely unknown
         # entity is almost certainly going to fail, raise it as unsupported
         raise UnsupportedError(f'Entity "{entity}" has no detectable RDAP endpoint, '
                                f'try specifying one manually with rir=...')
 
-    def get_rir_endpoint(self, name):
+    def get_rir_endpoint(self, name: str) -> str:
         # allow 'ripencc' as an alias
         if name == 'ripencc':
             name = 'ripe'
@@ -408,10 +410,10 @@ class BaseBootstrap:
             raise BootstrapError(f'Invalid RIR endpoint name: {name}, must be '
                                  f'one of: {self.get_rir_endpoint_names()}')
 
-    def get_rir_endpoint_names(self):
+    def get_rir_endpoint_names(self) -> tuple[str, ...]:
         return tuple(self.RIR_RDAP_ENDPOINTS.keys())
 
-    def get_rir_name_by_endpoint_url(self, url):
+    def get_rir_name_by_endpoint_url(self, url: str) -> str:
         """
             A reverse lookup that maps endpoint URLs like https://rdap.arin.net/whatever
             to a name like 'arin'.
@@ -425,12 +427,12 @@ class BaseBootstrap:
 
 class Bootstrap(BaseBootstrap):
 
-    def __init__(self, session=None, allow_insecure_ssl=False, do_super_init=True):
+    def __init__(self, session: requests.Session | None = None, allow_insecure_ssl: bool = False, do_super_init: bool = True) -> None:
         if do_super_init:
             BaseBootstrap.__init__(self)
         self.session = get_session(session, allow_insecure_ssl=allow_insecure_ssl)
 
-    def bootstrap(self, overrides=False, allow_insecure=False):
+    def bootstrap(self, overrides: bool = False, allow_insecure: bool = False) -> None:
         gen = self._bootstrap(overrides, allow_insecure)
         for url in gen:
             response = http_request(self.session, url)
@@ -439,12 +441,12 @@ class Bootstrap(BaseBootstrap):
 
 class BootstrapAsync(BaseBootstrap):
 
-    def __init__(self, client=None, allow_insecure_ssl=False, do_super_init=True):
+    def __init__(self, client: httpx.AsyncClient | None = None, allow_insecure_ssl: bool = False, do_super_init: bool = True) -> None:
         if do_super_init:
             BaseBootstrap.__init__(self)
         self.client = get_async_client(client, allow_insecure_ssl)
 
-    async def bootstrap_async(self, overrides=False, allow_insecure=False):
+    async def bootstrap_async(self, overrides: bool = False, allow_insecure: bool = False) -> None:
         gen = self._bootstrap(overrides, allow_insecure)
         for url in gen:
             response = await http_request_async(self.client, url)

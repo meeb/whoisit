@@ -15,7 +15,6 @@ sys.path.append(str(parent_dir))
 
 
 import requests
-
 import whoisit
 from whoisit.logger import get_logger
 from whoisit.errors import UnsupportedError
@@ -23,29 +22,29 @@ from whoisit.overrides import iana_overrides
 
 
 log = get_logger('tools')
-overrides = iana_overrides.get('domain', {})
-ROOT_TLD_URL = 'https://data.iana.org/TLD/tlds-alpha-by-domain.txt'
+overrides: dict = iana_overrides.get('domain', {})
+ROOT_TLD_URL: str = 'https://data.iana.org/TLD/tlds-alpha-by-domain.txt'
 
 
-def fetch_root_tlds(url):
-    tlds = []
+def fetch_root_tlds(url: str) -> list[str]:
+    root_tlds = []
     response = requests.get(url)
     for line in response.iter_lines(decode_unicode=True):
         line = line.strip()
         if not line or line.startswith('#'):
             continue
-        tlds.append(line.lower())
-    return list(sorted(tlds))
+        root_tlds.append(line.lower())
+    return list(sorted(root_tlds))
 
 
-def get_endpoint(tld):
+def get_endpoint(tld: str) -> tuple[list[str], str]:
     try:
-        endpoints, match = whoisit._bootstrap.get_dns_endpoints(tld)
-        return endpoints, 'iana'
+        tld_endpoints, match = whoisit._bootstrap.get_dns_endpoints(tld)
+        return tld_endpoints, 'iana'
     except UnsupportedError:
-        endpoints = overrides.get(tld)
-        if endpoints:
-            return endpoints, 'override'
+        tld_endpoints = overrides.get(tld)
+        if tld_endpoints:
+            return tld_endpoints, 'override'
         else:
             return [], 'unsupported'
 

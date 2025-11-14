@@ -1,7 +1,7 @@
 [project]
 name = "whoisit"
-version = "3.1.1"
-description = "Python RDAP client to look up domains, IPs and ASNs"
+version = "4.0.0"
+description = "A Python client to RDAP WHOIS-like services for internet resources."
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [

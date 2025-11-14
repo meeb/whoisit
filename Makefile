@@ -1,5 +1,6 @@
-python=/usr/bin/env python3
-
-
 test:
-	echo && PYTHONPATH="${PYTHONPATH}:whoisit" $(python) -m pytest -v
+	echo && uv run python -m pytest -v
+
+
+build:
+	uv build

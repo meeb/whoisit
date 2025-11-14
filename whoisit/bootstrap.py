@@ -164,12 +164,10 @@ class BaseBootstrap:
             if from_json:
                 data = json.loads(data)
         except Exception as e:
-            raise BootstrapError(f'Unable to load bootstrap data, failed to parse '
-                                 f'as JSON: {e}') from e
+            raise BootstrapError(f'Unable to load bootstrap data, failed to parse as JSON: {e}') from e
         timestamp = data.get('timestamp', None)
         if not isinstance(timestamp, int):
-            raise BootstrapError(f'Unable to load bootstrap data, missing or '
-                                 f'invalid timestamp')
+            raise BootstrapError('Unable to load bootstrap data, missing or invalid timestamp')
         items_loaded = set()
         for name, item in data.items():
             if name == 'timestamp':

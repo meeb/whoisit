@@ -2,7 +2,6 @@ import unittest
 import json
 from pathlib import Path
 from ipaddress import IPv4Network, IPv4Address, IPv6Network, IPv6Address
-
 import whoisit
 
 
@@ -87,7 +86,7 @@ class BootstrapTestCase(unittest.TestCase):
         }
         self.assertEqual(whoisit._bootstrap.parse_ipv6_data(test_data), expected)
 
-    def test_bootstrap_ipv6_parser(self):
+    def test_bootstrap_object_parser(self):
         test_rdap_url = 'https://rdap.example.com/'
         test_data = [[['does', 'nothing', 'yet'], [test_rdap_url]]]
         expected = {}

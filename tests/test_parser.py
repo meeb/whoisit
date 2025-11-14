@@ -3,9 +3,7 @@ import json
 from pathlib import Path
 from datetime import datetime
 from ipaddress import IPv4Network, IPv6Network
-
 from dateutil.tz import tzoffset, tzutc
-
 import whoisit
 
 

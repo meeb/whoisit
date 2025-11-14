@@ -196,7 +196,7 @@ def recursive_merge(d1: dict, d2: dict) -> None:
 
 
 def recursive_merge_lists(l1: list, l2: list, dedup_on: str = 'title') -> list:
-    list1 = {l[dedup_on]: l for l in l1 if dedup_on in l}
-    list2 = {l[dedup_on]: l for l in l2 if dedup_on in l}
+    list1 = {l[dedup_on]: l for l in l1 if dedup_on in l} # noqa: E741
+    list2 = {l[dedup_on]: l for l in l2 if dedup_on in l} # noqa: E741
     recursive_merge(list1, list2)
     return list(list1.values())

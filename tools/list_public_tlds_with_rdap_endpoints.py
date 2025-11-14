@@ -14,11 +14,11 @@ parent_dir = Path(__file__).resolve().parent.parent
 sys.path.append(str(parent_dir))
 
 
-import requests
-import whoisit
-from whoisit.logger import get_logger
-from whoisit.errors import UnsupportedError
-from whoisit.overrides import iana_overrides
+import requests # noqa: E402
+import whoisit # noqa: E402
+from whoisit.logger import get_logger # noqa: E402
+from whoisit.errors import UnsupportedError # noqa: E402
+from whoisit.overrides import iana_overrides # noqa: E402
 
 
 log = get_logger('tools')
@@ -61,4 +61,4 @@ if __name__ == '__main__':
             log.error(f'.{tld} UNSUPPORTED')
         else:
             log.info(f'.{tld} ({label}) endpoints {endpoints_str}')
-    log.info(f'Done')
+    log.info('Done')

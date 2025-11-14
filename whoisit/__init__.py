@@ -6,8 +6,8 @@ from .bootstrap import _BootstrapWrapper
 from .errors import ArgumentError
 from .parser import parse
 from .query import Query, QueryAsync, QueryBuilder
-from .utils import get_async_client, get_session, recursive_merge, clear_session, set_proxy, get_proxy, clear_proxy
-from .version import version
+from .utils import get_async_client, get_session, recursive_merge, clear_session as clear_session, set_proxy as set_proxy, get_proxy as get_proxy, clear_proxy as clear_proxy
+from .version import version as version
 
 
 # Private methods

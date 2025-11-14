@@ -67,14 +67,13 @@ class QueryBuilder:
 
     def build(self, query_type: str | None = None, query_value: str | None = None, rir: str | None = None) -> tuple[str, str, bool]:
         if not self.bootstrap.is_bootstrapped():
-            raise QueryError(f'You need to load bootstrap data before making '
-                             f'any queries')
+            raise QueryError('You need to load bootstrap data before making any queries')
         query_type = str(query_type).strip().lower()
         what = self.QUERY_TYPES_MAP.get(query_type)
         if not what:
             raise QueryError(f'Unknown query_type: {query_type}')
         if not query_value:
-            raise QueryError(f'query_value must be set')
+            raise QueryError('query_value must be set')
         if rir:
             url, exact_match = self.get_override_endpoint(rir, what, query_value)
         else:
@@ -213,7 +212,7 @@ class BaseQuery:
         """
         try:
             return response.text.strip()
-        except (ValueError, UnicodeDecodeError) as e:
+        except (ValueError, UnicodeDecodeError):
             return response.content.decode('utf-8', errors='ignore').strip()
 
     def _process_response(self, response: requests.Response | httpx.Response) -> dict:

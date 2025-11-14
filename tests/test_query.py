@@ -2,7 +2,6 @@ import requests
 import unittest
 from pathlib import Path
 from ipaddress import IPv4Network, IPv4Address, IPv6Network, IPv6Address
-
 import whoisit
 
 

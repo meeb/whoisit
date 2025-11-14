@@ -2,7 +2,7 @@ from .bootstrap import _BootstrapMainModule
 from .errors import ArgumentError
 from .parser import parse
 from .query import Query, QueryAsync, QueryBuilder
-from .utils import get_async_client, get_session, recursive_merge, set_proxy, get_proxy, clear_proxy
+from .utils import get_async_client, get_session, recursive_merge, clear_session, set_proxy, get_proxy, clear_proxy
 from .version import version
 
 

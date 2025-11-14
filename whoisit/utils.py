@@ -34,28 +34,19 @@ def get_session_or_async_client(session_or_async_client=None, allow_insecure_ssl
         and one for SSL with an insecure cipher suite.
     """
     global _default_session
+    key = 'insecure' if allow_insecure_ssl else 'secure'
     if session_or_async_client:
-        if allow_insecure_ssl:
-            if not _default_session['insecure']:
-                _default_session['insecure'] = session_or_async_client
-            return _default_session['insecure']
-        else:
-            if not _default_session['secure']:
-                _default_session['secure'] = session_or_async_client
-            return _default_session['secure']
+        if _default_session[key] is None:
+            _default_session[key] = session_or_async_client
+        return _default_session[key]
     else:
-        if allow_insecure_ssl:
-            if is_async:
-                _default_session['insecure'] = create_async_client(allow_insecure_ssl=allow_insecure_ssl)
-            else:
-                _default_session['insecure'] = create_session(allow_insecure_ssl=allow_insecure_ssl)
-            return _default_session['insecure']
+        if is_async:
+            if not isinstance(_default_session[key], httpx.AsyncClient):
+                _default_session[key] = create_async_client(allow_insecure_ssl=allow_insecure_ssl)
         else:
-            if is_async:
-                _default_session['secure'] = create_async_client(allow_insecure_ssl=allow_insecure_ssl)
-            else:
-                _default_session['secure'] = create_session(allow_insecure_ssl=allow_insecure_ssl)
-            return _default_session['secure']
+            if not isinstance(_default_session[key], requests.Session):
+                _default_session[key] = create_session(allow_insecure_ssl=allow_insecure_ssl)
+        return _default_session[key]
 
 
 def clear_session():

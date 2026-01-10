@@ -292,3 +292,32 @@ async def entity_async(
     resp: dict = gen.send(await q.request())
     gen.close()
     return resp
+
+
+# Explose publicly
+
+__all__ = (
+    "version",
+    "parse",
+    "get_session",
+    "clear_session",
+    "set_proxy",
+    "get_proxy",
+    "clear_proxy",
+    "bootstrap",
+    "bootstrap_async",
+    "is_bootstrapped",
+    "clear_bootstrapping",
+    "save_bootstrap_data",
+    "load_bootstrap_data",
+    "bootstrap_is_older_than",
+    "build_query",
+    "asn",
+    "asn_async",
+    "domain",
+    "domain_async",
+    "ip",
+    "ip_async",
+    "entity",
+    "entity_async",
+)

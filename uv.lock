@@ -309,6 +309,7 @@ dependencies = [
     { name = "python-dateutil" },
     { name = "requests" },
     { name = "typing-extensions" },
+    { name = "urllib3" },
 ]
 
 [package.dev-dependencies]
@@ -324,6 +325,7 @@ requires-dist = [
     { name = "python-dateutil", specifier = ">=2.9.0.post0" },
     { name = "requests", specifier = ">=2.32.5" },
     { name = "typing-extensions", specifier = ">=4.15.0" },
+    { name = "urllib3", specifier = ">=2.6.3" },
 ]
 
 [package.metadata.requires-dev]

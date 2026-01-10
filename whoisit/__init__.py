@@ -10,12 +10,12 @@ from .utils import (
     get_async_client,
     get_session,
     recursive_merge,
-    clear_session as clear_session,
-    set_proxy as set_proxy,
-    get_proxy as get_proxy,
-    clear_proxy as clear_proxy,
+    clear_session,
+    set_proxy,
+    get_proxy,
+    clear_proxy,
 )
-from .version import version as version
+from .version import version
 
 
 # Private methods

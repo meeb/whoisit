@@ -49,7 +49,8 @@ def get_session_or_async_client(
     global _default_session
     key = "insecure" if allow_insecure_ssl else "secure"
     if session_or_async_client:
-        return session_or_async_client
+        _default_session[key] = session_or_async_client
+        return _default_session[key]
     else:
         if is_async:
             if not isinstance(_default_session[key], httpx.AsyncClient):

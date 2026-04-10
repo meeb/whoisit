@@ -49,9 +49,7 @@ def get_session_or_async_client(
     global _default_session
     key = "insecure" if allow_insecure_ssl else "secure"
     if session_or_async_client:
-        if _default_session[key] is None:
-            _default_session[key] = session_or_async_client
-        return _default_session[key]
+        return session_or_async_client
     else:
         if is_async:
             if not isinstance(_default_session[key], httpx.AsyncClient):
@@ -69,6 +67,34 @@ def get_session_or_async_client(
 def clear_session() -> bool:
     global _default_session
     _default_session = {"secure": None, "insecure": None}
+    return True
+
+
+def set_session(session: requests.Session, allow_insecure_ssl: bool = False) -> bool:
+    """
+    Explicitly store a requests.Session in the cache so it becomes the default
+    for all subsequent sync calls that do not supply their own session.
+    """
+    global _default_session
+    if not isinstance(session, requests.Session):
+        raise ValueError('"session" must be a requests.Session instance')
+    key = "insecure" if allow_insecure_ssl else "secure"
+    _default_session[key] = session
+    return True
+
+
+def set_async_client(
+    client: httpx.AsyncClient, allow_insecure_ssl: bool = False
+) -> bool:
+    """
+    Explicitly store an httpx.AsyncClient in the cache so it becomes the default
+    for all subsequent async calls that do not supply their own client.
+    """
+    global _default_session
+    if not isinstance(client, httpx.AsyncClient):
+        raise ValueError('"client" must be an httpx.AsyncClient instance')
+    key = "insecure" if allow_insecure_ssl else "secure"
+    _default_session[key] = client
     return True
 
 

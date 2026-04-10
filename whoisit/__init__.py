@@ -11,6 +11,8 @@ from .utils import (
     get_session,
     recursive_merge,
     clear_session,
+    set_session,
+    set_async_client,
     set_proxy,
     get_proxy,
     clear_proxy,

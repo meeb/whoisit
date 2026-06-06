@@ -63,7 +63,13 @@ class RemoteServerError(QueryError):
     """
 
 
-class QueryWarning(Warning):
+class WhoisItWarning(Warning):
+    """
+    Parent Warning for all whoisit raised warnings.
+    """
+
+
+class QueryWarning(WhoisItWarning):
     """
     Raised when there are any issues with queries that are not hard errors.
     """

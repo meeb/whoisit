@@ -38,6 +38,13 @@ bootstrap_is_older_than = _bootstrap.bootstrap_is_older_than
 build_query = _query_builder.build
 
 
+# Boostrap helpers
+
+
+def get_dns_endpoints_for_tld(tld):
+    return _bootstrap.get_dns_endpoints(tld)
+
+
 # Query helpers
 
 

@@ -21,8 +21,7 @@ class ParserTestCase(unittest.TestCase):
     def test_parser_interface(self):
         with self.assertRaises(whoisit.errors.ParseError):
             whoisit.parser.parse(whoisit._bootstrap, "invalid", "", {})
-        fake_response = {"handle": "TEST", "name": "test"}
-        fake_response["objectClassName"] = "autnum"
+        fake_response = {"handle": "TEST", "name": "test", "objectClassName": "autnum"}
         whoisit.parser.parse(whoisit._bootstrap, "autnum", "", fake_response)
         fake_response["objectClassName"] = "domain"
         whoisit.parser.parse(whoisit._bootstrap, "domain", "", fake_response)

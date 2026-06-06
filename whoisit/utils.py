@@ -30,8 +30,8 @@ _proxy = None
 
 def get_urllib3_version() -> tuple[int, int, int] | None:
     try:
+        # noinspection PyProtectedMember
         from urllib3._version import version_tuple
-
         return version_tuple
     except ImportError:
         return None
@@ -143,6 +143,7 @@ class InsecureSSLAdapter(requests.adapters.HTTPAdapter):
         self, connections: int, maxsize: int, block: bool = False
     ) -> None:
         insecure_ssl_ciphersuite = create_urllib3_context(ciphers=insecure_ssl_ciphers)
+        # noinspection PyAttributeOutsideInit
         self.poolmanager = PoolManager(ssl_context=insecure_ssl_ciphersuite)
 
 

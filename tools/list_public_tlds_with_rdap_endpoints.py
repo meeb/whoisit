@@ -38,7 +38,7 @@ def fetch_root_tlds(url: str) -> list[str]:
 
 def get_endpoint(tld: str) -> tuple[list[str], str]:
     try:
-        tld_endpoints, match = whoisit._bootstrap.get_dns_endpoints(tld)
+        tld_endpoints, match = whoisit.get_dns_endpoints_for_tld(tld)
         return tld_endpoints, "iana"
     except UnsupportedError:
         tld_endpoints = overrides.get(tld)

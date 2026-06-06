@@ -61,3 +61,9 @@ class RemoteServerError(QueryError):
     """
     Raised when querying a resource and getting a remote server error response.
     """
+
+
+class QueryWarning(Warning):
+    """
+    Raised when there are any issues with queries that are not hard errors.
+    """

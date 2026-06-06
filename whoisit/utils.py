@@ -32,6 +32,7 @@ def get_urllib3_version() -> tuple[int, int, int] | None:
     try:
         # noinspection PyProtectedMember
         from urllib3._version import version_tuple
+
         return version_tuple
     except ImportError:
         return None

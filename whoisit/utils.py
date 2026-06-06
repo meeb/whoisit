@@ -17,7 +17,7 @@ log = get_logger("utils")
 user_agent = "whoisit/{version}"
 insecure_ssl_ciphers = "ALL:@SECLEVEL=1"
 http_timeout = 10  # Maximum time in seconds to allow for an HTTP request
-http_retry_statuses = [429]  # HTTP status codes to trigger a retry wih backoff
+http_retry_statuses = [429]  # HTTP status codes to trigger a retry with backoff
 http_max_retries = 3  # Maximum number of HTTP requests to retry before failing
 retry_after_max = 10  # Maxumum duration for HTTP/429 Retry-After headers in seconds
 http_pool_connections = 10  # Maximum number of HTTP pooled connections

@@ -299,8 +299,8 @@ both `whoisit.save_bootstrap_data(as_json=False)` and
 load a Python dictionary instead of JSON and you can perform serialisation yourself however
 you need in your application.
 
-**Important**: when using the overrides you may recieve non-standard data, data that
-is not in the same format as officially listed IANA data and you may not recieve a copy
+**Important**: when using the overrides you may receive non-standard data, data that
+is not in the same format as officially listed IANA data and you may not receive a copy
 of any required terms of service or terms of use. You will have to manually verify data
 returned by overridden endpoints.
 
@@ -678,7 +678,7 @@ complies with the policy of the RDAP server you are querying.
 ## Excessive use
 
 As an API client `whoisit` is entirely subject to the resource and request limits
-applied by the remote RDAP servers it queries. If you recieve request errors for rate
+applied by the remote RDAP servers it queries. If you receive request errors for rate
 limiting you should slow down your requests. Different servers have different limits.
 The LACNIC RDAP server in particular only permits a low number of requests per minute.
 

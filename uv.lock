@@ -562,7 +562,7 @@ wheels = [
 [[package]]
 name = "whoisit"
 version = "4.0.5"
-source = { virtual = "." }
+source = { editable = "." }
 dependencies = [
     { name = "httpx" },
     { name = "python-dateutil" },

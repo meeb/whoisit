@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "whoisit"
-version = "4.0.5"
+version = "4.1.0"
 description = "A Python client to RDAP WHOIS-like services for internet resources."
 readme = "README.md"
 requires-python = ">=3.10"

@@ -1,10 +1,13 @@
 import json
-from ipaddress import IPv4Address, IPv4Network, IPv6Address, IPv6Network
 from collections.abc import Generator
+from ipaddress import IPv4Address, IPv4Network, IPv6Address, IPv6Network
 from time import time
+from typing import ClassVar
 from urllib.parse import urlsplit
+
 import httpx
 import requests
+
 from .errors import BootstrapError, UnsupportedError
 from .logger import get_logger
 from .overrides import iana_overrides
@@ -16,13 +19,12 @@ from .utils import (
     is_subnet_of,
 )
 
-
 log = get_logger("bootstrap")
 
 
 class BaseBootstrap:
     # Where we get bootstrap data from
-    BOOTSTRAP_URLS = {
+    BOOTSTRAP_URLS: ClassVar[dict[str, str]] = {
         "asn": "https://data.iana.org/rdap/asn.json",
         "dns": "https://data.iana.org/rdap/dns.json",
         "ipv4": "https://data.iana.org/rdap/ipv4.json",
@@ -39,7 +41,7 @@ class BaseBootstrap:
         "https://rdap.apnic.net/",
     )
     # Map of RIR RDAP endpoints
-    RIR_RDAP_ENDPOINTS = {
+    RIR_RDAP_ENDPOINTS: ClassVar[dict[str, str]] = {
         "afnic": "https://rdap.nic.fr/",
         "afrinic": "https://rdap.afrinic.net/rdap/",
         "arin": "https://rdap.arin.net/registry/",
@@ -53,7 +55,7 @@ class BaseBootstrap:
         "twnic": "https://twnic.rdap.apnic.net/",
     }
     # Map of entity prefix and postfixes to RIRs, used to guess entity RIR
-    RIR_ENTITY_PREFIXES = {
+    RIR_ENTITY_PREFIXES: ClassVar[dict[str, str]] = {
         "AFNIC": "afnic",
         "AFRINIC": "afrinic",
         "ARIN": "arin",
@@ -100,7 +102,7 @@ class BaseBootstrap:
     def clear_bootstrapping(self) -> bool:
         self._data = {}
         self._parsed_data = {}
-        for k in self.BOOTSTRAP_URLS.keys():
+        for k in self.BOOTSTRAP_URLS:
             self._data[k] = {}
         self._is_bootstrapped = False
         self._use_iana_overrides = False

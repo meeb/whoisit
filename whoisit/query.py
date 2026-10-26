@@ -7,6 +7,7 @@ from ipaddress import (
     ip_address,
     ip_network,
 )
+from typing import ClassVar
 from urllib.parse import (
     parse_qs,
     quote,
@@ -20,24 +21,23 @@ from urllib.parse import (
 import httpx
 import requests
 
+from .bootstrap import _BootstrapWrapper
 from .errors import (
     QueryError,
-    ResourceAccessDeniedError,
     RateLimitedError,
     RemoteServerError,
+    ResourceAccessDeniedError,
     ResourceDoesNotExist,
     UnsupportedError,
 )
 from .logger import get_logger
 from .utils import contains_only_chars, http_request, http_request_async
-from .bootstrap import _BootstrapWrapper
-
 
 log = get_logger("query")
 
 
 class QueryBuilder:
-    QUERY_TYPES_MAP = {
+    QUERY_TYPES_MAP: ClassVar[dict[str, str]] = {
         "asn": "autnum",
         "as": "autnum",
         "autnum": "autnum",
@@ -102,8 +102,7 @@ class QueryBuilder:
     def get_autnum_endpoint(self, value: str | int) -> tuple[str, bool]:
         if isinstance(value, str):
             value = value.strip().upper()
-            if value.startswith("AS"):
-                value = value[2:]
+            value = value.removeprefix("AS")
         try:
             value = int(value)
         except (TypeError, ValueError) as e:
@@ -240,33 +239,45 @@ class BaseQuery:
         status_code_map = {
             401: (
                 ResourceAccessDeniedError,
-                f"RDAP {self.method} request to {self.url} returned a "
-                f"401 error, unauthorized",
+                (
+                    f"RDAP {self.method} request to {self.url} returned a "
+                    f"401 error, unauthorized"
+                ),
             ),
             403: (
                 ResourceAccessDeniedError,
-                f"RDAP {self.method} request to {self.url} returned a "
-                f"403 error, forbidden",
+                (
+                    f"RDAP {self.method} request to {self.url} returned a "
+                    f"403 error, forbidden"
+                ),
             ),
             404: (
                 ResourceDoesNotExist,
-                f"RDAP {self.method} request to {self.url} returned a "
-                f"404 error, the resource does not exist",
+                (
+                    f"RDAP {self.method} request to {self.url} returned a "
+                    f"404 error, the resource does not exist"
+                ),
             ),
             422: (
                 ResourceAccessDeniedError,
-                f"RDAP {self.method} request to {self.url} returned a "
-                f"422 error, the request was unprocessable",
+                (
+                    f"RDAP {self.method} request to {self.url} returned a "
+                    f"422 error, the request was unprocessable"
+                ),
             ),
             429: (
                 RateLimitedError,
-                f"RDAP {self.method} request to {self.url} returned a "
-                f"429 error, the resource has been rate limited",
+                (
+                    f"RDAP {self.method} request to {self.url} returned a "
+                    f"429 error, the resource has been rate limited"
+                ),
             ),
             500: (
                 RemoteServerError,
-                f"RDAP {self.method} request to {self.url} returned a "
-                f"500 error, the resource returned a remote server error",
+                (
+                    f"RDAP {self.method} request to {self.url} returned a "
+                    f"500 error, the resource returned a remote server error"
+                ),
             ),
         }
         if response.status_code in status_code_map:
@@ -278,8 +289,10 @@ class BaseQuery:
         elif response.status_code != 200:
             error_content = self._decode_content(response)
             raise QueryError(
-                f"RDAP {self.method} request to {self.url} returned a "
-                f"non-200 status code of {response.status_code}",
+                (
+                    f"RDAP {self.method} request to {self.url} returned a "
+                    f"non-200 status code of {response.status_code}"
+                ),
                 status_code=response.status_code,
                 response=error_content,
             )
@@ -309,7 +322,7 @@ class Query(BaseQuery):
     def request(self, *args, **kwargs) -> dict:
         # args and kwargs here are passed directly to requests.request(...)
         response = http_request(
-            self.session, url=self.url, method=self.method, *args, **kwargs
+            self.session, *args, url=self.url, method=self.method, **kwargs
         )
         return self._process_response(response)
 
@@ -330,6 +343,6 @@ class QueryAsync(BaseQuery):
     async def request(self, *args, **kwargs) -> dict:
         # args and kwargs here are passed directly to httpx.request(...)
         response = await http_request_async(
-            self.client, url=self.url, method=self.method, *args, **kwargs
+            self.client, *args, url=self.url, method=self.method, **kwargs
         )
         return self._process_response(response)

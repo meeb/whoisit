@@ -10,16 +10,16 @@ Usage:
 import sys
 from pathlib import Path
 
-
 parent_dir = Path(__file__).resolve().parent.parent
 sys.path.append(str(parent_dir))
 
 
-from datetime import datetime, timezone  # noqa: E402
-import json  # noqa: E402
-import requests  # noqa: E402
-from whoisit.logger import get_logger  # noqa: E402
+import json
+from datetime import datetime, timezone
 
+import requests
+
+from whoisit.logger import get_logger
 
 log = get_logger("tools")
 CCTLD_SUPPLEMENTAL: str = "https://raw.githubusercontent.com/case/iana-data/refs/heads/main/data/manual/supplemental-cctld-rdap.json"

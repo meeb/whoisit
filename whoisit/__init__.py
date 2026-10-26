@@ -1,25 +1,26 @@
+import warnings
 from collections.abc import Iterator
 from ipaddress import IPv4Address, IPv4Network, IPv6Address, IPv6Network
-import warnings
+
 import httpx
 import requests
+
 from .bootstrap import _BootstrapWrapper
 from .errors import ArgumentError, QueryError, QueryWarning
 from .parser import parse
 from .query import Query, QueryAsync, QueryBuilder
 from .utils import (
+    clear_proxy,
+    clear_session,
     get_async_client,
+    get_proxy,
     get_session,
     recursive_merge,
-    clear_session,
-    set_session,
     set_async_client,
     set_proxy,
-    get_proxy,
-    clear_proxy,
+    set_session,
 )
 from .version import version
-
 
 # Private methods
 
@@ -159,8 +160,7 @@ def domain(
     gen = _domain(domain_name, raw, include_raw, follow_related, session, None)
     resp: dict | None = None
     q: Query
-    i: int = 0
-    for q in gen:
+    for i, q in enumerate(gen):
         try:
             req_resp: dict = q.request()
         except QueryError as e:
@@ -174,7 +174,6 @@ def domain(
         if resp is req_resp:
             gen.close()
             break
-        i += 1
     return resp
 
 
@@ -190,8 +189,7 @@ async def domain_async(
     gen = _domain(domain_name, raw, include_raw, follow_related, None, async_client)
     resp: dict | None = None
     q: QueryAsync
-    i: int = 0
-    for q in gen:
+    for i, q in enumerate(gen):
         try:
             req_resp: dict = await q.request()
         except QueryError as e:
@@ -205,7 +203,6 @@ async def domain_async(
         if resp is req_resp:
             gen.close()
             break
-        i += 1
     return resp
 
 
@@ -215,7 +212,7 @@ def _ip(
     raw: bool = False,
     include_raw: bool = False,
     session: requests.Session | None = None,
-    async_client: bool = None,
+    async_client: httpx.AsyncClient | None = None,
 ) -> Iterator:
     if raw and include_raw:
         raise ArgumentError("You cannot set both raw=True and include_raw=True")
@@ -326,27 +323,29 @@ async def entity_async(
 # Explose publicly
 
 __all__ = (
-    "version",
-    "parse",
-    "get_session",
-    "clear_session",
-    "set_proxy",
-    "get_proxy",
-    "clear_proxy",
-    "bootstrap",
-    "bootstrap_async",
-    "is_bootstrapped",
-    "clear_bootstrapping",
-    "save_bootstrap_data",
-    "load_bootstrap_data",
-    "bootstrap_is_older_than",
-    "build_query",
     "asn",
     "asn_async",
+    "bootstrap",
+    "bootstrap_async",
+    "bootstrap_is_older_than",
+    "build_query",
+    "clear_bootstrapping",
+    "clear_proxy",
+    "clear_session",
     "domain",
     "domain_async",
-    "ip",
-    "ip_async",
     "entity",
     "entity_async",
+    "get_proxy",
+    "get_session",
+    "ip",
+    "ip_async",
+    "is_bootstrapped",
+    "load_bootstrap_data",
+    "parse",
+    "save_bootstrap_data",
+    "set_async_client",
+    "set_proxy",
+    "set_session",
+    "version",
 )

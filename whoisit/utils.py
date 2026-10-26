@@ -1,6 +1,7 @@
 from ipaddress import IPv4Network, IPv6Network
-from urllib3.util import retry
+
 from urllib3.poolmanager import PoolManager
+from urllib3.util import retry
 
 try:
     from urllib3.util import create_urllib3_context
@@ -8,10 +9,10 @@ except ImportError:
     from urllib3.util.ssl_ import create_urllib3_context
 import httpx
 import requests
+
 from .errors import QueryError, UnsupportedError
 from .logger import get_logger
 from .version import version
-
 
 log = get_logger("utils")
 user_agent = "whoisit/{version}"
@@ -47,7 +48,6 @@ def get_session_or_async_client(
     Creates and caches the default sessions, one for secure (default) SSL
     and one for SSL with an insecure cipher suite.
     """
-    global _default_session
     key = "insecure" if allow_insecure_ssl else "secure"
     if session_or_async_client:
         _default_session[key] = session_or_async_client
@@ -77,9 +77,8 @@ def set_session(session: requests.Session, allow_insecure_ssl: bool = False) -> 
     Explicitly store a requests.Session in the cache so it becomes the default
     for all subsequent sync calls that do not supply their own session.
     """
-    global _default_session
     if not isinstance(session, requests.Session):
-        raise ValueError('"session" must be a requests.Session instance')
+        raise ValueError('"session" must be a requests.Session instance')  # noqa: TRY004
     key = "insecure" if allow_insecure_ssl else "secure"
     _default_session[key] = session
     return True
@@ -92,9 +91,8 @@ def set_async_client(
     Explicitly store an httpx.AsyncClient in the cache so it becomes the default
     for all subsequent async calls that do not supply their own client.
     """
-    global _default_session
     if not isinstance(client, httpx.AsyncClient):
-        raise ValueError('"client" must be an httpx.AsyncClient instance')
+        raise ValueError('"client" must be an httpx.AsyncClient instance')  # noqa: TRY004
     key = "insecure" if allow_insecure_ssl else "secure"
     _default_session[key] = client
     return True
@@ -108,14 +106,13 @@ def clear_proxy() -> bool:
 
 
 def get_proxy() -> str | None:
-    global _proxy
     return _proxy
 
 
 def set_proxy(proxy: str) -> bool:
     global _proxy
     if not isinstance(proxy, str):
-        raise ValueError(
+        raise ValueError(  # noqa: TRY004
             '"proxy" must be a string and specified in the proto://[user:pass]@host:port format'
         )
     _proxy = proxy
@@ -221,7 +218,7 @@ def http_request(
     Simple wrapper over requests. Allows for optionally downgrading SSL
     ciphers if required.
     """
-    headers, data, method, proxy, proxies, proxystr = _validate_request(
+    headers, data, method, _, proxies, proxystr = _validate_request(
         headers, data, method
     )
     log.debug(f"Making HTTP {method} request to {url}{proxystr}")
@@ -229,7 +226,7 @@ def http_request(
         if "timeout" not in kwargs:
             kwargs["timeout"] = http_timeout
         return session.request(
-            method, url, headers=headers, data=data, proxies=proxies, *args, **kwargs
+            method, url, *args, headers=headers, data=data, proxies=proxies, **kwargs
         )
     except Exception as e:
         raise QueryError(
@@ -249,15 +246,13 @@ async def http_request_async(
     """
     Simple wrapper over httpx.
     """
-    headers, data, method, proxy, proxies, proxystr = _validate_request(
-        headers, data, method
-    )
+    headers, data, method, _, _, proxystr = _validate_request(headers, data, method)
     log.debug(f"Making async HTTP {method} request to {url}{proxystr}")
     try:
         if "timeout" not in kwargs:
             kwargs["timeout"] = http_timeout
         return await client.request(
-            method, url, headers=headers, data=data, *args, **kwargs
+            method, url, *args, headers=headers, data=data, **kwargs
         )
     except Exception as e:
         raise QueryError(
@@ -308,7 +303,7 @@ def recursive_merge(d1: dict, d2: dict) -> None:
 
 
 def recursive_merge_lists(l1: list, l2: list, dedup_on: str = "title") -> list:
-    list1 = {l[dedup_on]: l for l in l1 if dedup_on in l}  # noqa: E741
-    list2 = {l[dedup_on]: l for l in l2 if dedup_on in l}  # noqa: E741
+    list1 = {l[dedup_on]: l for l in l1 if dedup_on in l}
+    list2 = {l[dedup_on]: l for l in l2 if dedup_on in l}
     recursive_merge(list1, list2)
     return list(list1.values())

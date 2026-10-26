@@ -1,5 +1,6 @@
-import unittest
 import ssl
+import unittest
+
 import whoisit
 
 

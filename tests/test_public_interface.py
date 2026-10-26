@@ -3,6 +3,7 @@ import unittest
 from datetime import datetime, timezone
 from ipaddress import IPv4Network, IPv6Network
 from pathlib import Path
+
 import pytest
 import responses
 import yaml
@@ -10,7 +11,6 @@ from dateutil.tz import tzoffset
 
 # from responses import _recorder
 import whoisit
-
 
 BASE_DIR = Path(__file__).resolve().parent
 RESPONSES = BASE_DIR / "responses"

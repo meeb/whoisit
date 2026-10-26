@@ -8,17 +8,16 @@ could require an override.
 import sys
 from pathlib import Path
 
-
 parent_dir = Path(__file__).resolve().parent.parent
 sys.path.append(str(parent_dir))
 
 
-import requests  # noqa: E402
-import whoisit  # noqa: E402
-from whoisit.logger import get_logger  # noqa: E402
-from whoisit.errors import UnsupportedError  # noqa: E402
-from whoisit.overrides import iana_overrides  # noqa: E402
+import requests
 
+import whoisit
+from whoisit.errors import UnsupportedError
+from whoisit.logger import get_logger
+from whoisit.overrides import iana_overrides
 
 log = get_logger("tools")
 overrides: dict = iana_overrides.get("domain", {})
@@ -33,12 +32,12 @@ def fetch_root_tlds(url: str) -> list[str]:
         if not line or line.startswith("#"):
             continue
         root_tlds.append(line.lower())
-    return list(sorted(root_tlds))
+    return sorted(root_tlds)
 
 
 def get_endpoint(tld: str) -> tuple[list[str], str]:
     try:
-        tld_endpoints, match = whoisit.get_dns_endpoints_for_tld(tld)
+        tld_endpoints, _match = whoisit.get_dns_endpoints_for_tld(tld)
         return tld_endpoints, "iana"
     except UnsupportedError:
         tld_endpoints = overrides.get(tld)

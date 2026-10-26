@@ -1,9 +1,9 @@
-import unittest
 import json
+import unittest
+from ipaddress import IPv4Address, IPv4Network, IPv6Address, IPv6Network
 from pathlib import Path
-from ipaddress import IPv4Network, IPv4Address, IPv6Network, IPv6Address
-import whoisit
 
+import whoisit
 
 BASE_DIR = Path(__file__).resolve().parent
 
@@ -43,7 +43,7 @@ class BootstrapTestCase(unittest.TestCase):
         whoisit.load_bootstrap_data(self.bootstrap_data)
         self.assertTrue(whoisit.is_bootstrapped())
         test_dict = json.loads(self.bootstrap_data)
-        for item in whoisit._bootstrap.BOOTSTRAP_URLS.keys():
+        for item in whoisit._bootstrap.BOOTSTRAP_URLS:
             self.assertEqual(test_dict[item], whoisit._bootstrap._data[item])
         whoisit.clear_bootstrapping()
 

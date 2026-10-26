@@ -17,6 +17,7 @@ import warnings
 from datetime import datetime, timezone
 from ipaddress import ip_address, ip_network
 from pathlib import Path
+from typing import ClassVar
 from xml.etree import ElementTree
 
 import whoisit
@@ -206,9 +207,10 @@ def get_link(obj: dict, rel: str) -> str:
     for link in obj.get("links", []) or []:
         if not isinstance(link, dict):
             continue
-        if link.get("rel", "").strip().lower() == rel:
-            if not link.get("type", "").startswith("text/html"):
-                return link.get("href", "")
+        if link.get("rel", "").strip().lower() == rel and not link.get(
+            "type", ""
+        ).startswith("text/html"):
+            return link.get("href", "")
     return ""
 
 
@@ -296,7 +298,7 @@ class Formatter:
     Formats parsed whoisit response data into whois-like human readable text.
     """
 
-    event_labels = {
+    event_labels: ClassVar[dict[str, str]] = {
         "registration": "Registered",
         "expiration": "Expires",
         "last changed": "Last Changed",

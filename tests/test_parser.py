@@ -1,13 +1,41 @@
-import unittest
 import json
-from pathlib import Path
+import unittest
 from datetime import datetime
 from ipaddress import IPv4Network, IPv6Network
+from pathlib import Path
+
 from dateutil.tz import tzoffset, tzutc
+
 import whoisit
 
-
 BASE_DIR = Path(__file__).resolve().parent
+
+
+# Entity keys returned before additional entity data was parsed, existing assertions
+# check these are unchanged
+LEGACY_ENTITY_KEYS = (
+    "handle",
+    "url",
+    "type",
+    "whois_server",
+    "rir",
+    "name",
+    "email",
+    "tel",
+    "address",
+)
+
+
+def legacy_entities(entities):
+    legacy = []
+    for entity in entities:
+        entity = {k: v for k, v in entity.items() if k in LEGACY_ENTITY_KEYS}
+        if "address" in entity:
+            entity["address"] = {
+                k: v for k, v in entity["address"].items() if k != "label"
+            }
+        legacy.append(entity)
+    return legacy
 
 
 class ParserTestCase(unittest.TestCase):
@@ -59,7 +87,7 @@ class ParserTestCase(unittest.TestCase):
             datetime(2010, 7, 14, 18, 35, 57, tzinfo=tzoffset(None, -14400)),
         )
         self.assertEqual(
-            parsed["entities"]["registrant"],
+            legacy_entities(parsed["entities"]["registrant"]),
             [
                 {
                     "handle": "CLOUD14",
@@ -81,7 +109,7 @@ class ParserTestCase(unittest.TestCase):
             ],
         )
         self.assertEqual(
-            parsed["entities"]["abuse"],
+            legacy_entities(parsed["entities"]["abuse"]),
             [
                 {
                     "handle": "ABUSE2916-ARIN",
@@ -105,7 +133,7 @@ class ParserTestCase(unittest.TestCase):
             ],
         )
         self.assertEqual(
-            parsed["entities"]["noc"],
+            legacy_entities(parsed["entities"]["noc"]),
             [
                 {
                     "handle": "NOC11962-ARIN",
@@ -129,7 +157,7 @@ class ParserTestCase(unittest.TestCase):
             ],
         )
         self.assertEqual(
-            parsed["entities"]["technical"],
+            legacy_entities(parsed["entities"]["technical"]),
             [
                 {
                     "handle": "ADMIN2521-ARIN",
@@ -197,7 +225,7 @@ class ParserTestCase(unittest.TestCase):
             ],
         )
         self.assertEqual(
-            parsed["entities"]["registrar"],
+            legacy_entities(parsed["entities"]["registrar"]),
             [{"handle": "292", "type": "entity", "name": "MarkMonitor Inc."}],
         )
 
@@ -238,7 +266,7 @@ class ParserTestCase(unittest.TestCase):
         )
         self.assertEqual(parsed["status"], [])
         self.assertEqual(
-            parsed["entities"]["registrar"],
+            legacy_entities(parsed["entities"]["registrar"]),
             [
                 {
                     "handle": "REG42-NORID",
@@ -246,6 +274,7 @@ class ParserTestCase(unittest.TestCase):
                     "type": "entity",
                     "name": "Domeneshop AS",
                     "email": "kundeservice@domeneshop.no",
+                    "tel": "+47.22943333",
                     "address": {
                         "po_box": "",
                         "ext_address": "",
@@ -259,7 +288,7 @@ class ParserTestCase(unittest.TestCase):
             ],
         )
         self.assertEqual(
-            parsed["entities"]["technical"],
+            legacy_entities(parsed["entities"]["technical"]),
             [
                 {
                     "handle": "DH21326R-NORID",
@@ -267,6 +296,7 @@ class ParserTestCase(unittest.TestCase):
                     "type": "entity",
                     "name": "Domeneshop Hostmaster",
                     "email": "hostmaster@domeneshop.no",
+                    "tel": "+47.22943333",
                     "address": {
                         "po_box": "",
                         "ext_address": "",
@@ -295,7 +325,7 @@ class ParserTestCase(unittest.TestCase):
         )
         self.assertEqual(parsed["status"], ["client transfer prohibited"])
         self.assertEqual(
-            parsed["entities"]["registrar"],
+            legacy_entities(parsed["entities"]["registrar"]),
             [
                 {
                     "handle": "1647",
@@ -305,8 +335,15 @@ class ParserTestCase(unittest.TestCase):
             ],
         )
         self.assertEqual(
-            parsed["entities"]["abuse"],
-            [{"type": "entity", "name": "", "email": "abuse@registrar.eu"}],
+            legacy_entities(parsed["entities"]["abuse"]),
+            [
+                {
+                    "type": "entity",
+                    "name": "",
+                    "email": "abuse@registrar.eu",
+                    "tel": "+31.104482297",
+                }
+            ],
         )
 
     def test_ip_response_parser(self):
@@ -339,7 +376,7 @@ class ParserTestCase(unittest.TestCase):
             ],
         )
         self.assertEqual(
-            parsed["entities"]["administrative"],
+            legacy_entities(parsed["entities"]["administrative"]),
             [
                 {
                     "handle": "AR302-AP",
@@ -347,7 +384,7 @@ class ParserTestCase(unittest.TestCase):
                     "type": "entity",
                     "name": "APNIC RESEARCH",
                     "email": "research@apnic.net",
-                    "tel": "+61-7-3858-3199",
+                    "tel": "+61-7-3858-3188",
                     "rir": "apnic",
                     "address": {
                         "po_box": "",
@@ -419,7 +456,7 @@ class ParserTestCase(unittest.TestCase):
             ],
         )
         self.assertEqual(
-            parsed["entities"]["administrative"],
+            legacy_entities(parsed["entities"]["administrative"]),
             [
                 {
                     "handle": "AR302-AP",
@@ -427,7 +464,7 @@ class ParserTestCase(unittest.TestCase):
                     "type": "entity",
                     "name": "APNIC RESEARCH",
                     "email": "research@apnic.net",
-                    "tel": "+61-7-3858-3199",
+                    "tel": "+61-7-3858-3188",
                     "rir": "apnic",
                     "address": {
                         "po_box": "",
@@ -477,7 +514,7 @@ class ParserTestCase(unittest.TestCase):
         self.assertEqual(parsed["network"], IPv6Network("2001:4860::/32"))
         self.assertEqual(parsed["description"], [])
         self.assertEqual(
-            parsed["entities"]["registrant"],
+            legacy_entities(parsed["entities"]["registrant"]),
             [
                 {
                     "handle": "GOGL",
@@ -499,7 +536,7 @@ class ParserTestCase(unittest.TestCase):
             ],
         )
         self.assertEqual(
-            parsed["entities"]["noc"],
+            legacy_entities(parsed["entities"]["noc"]),
             [
                 {
                     "email": "arin-contact@google.com",
@@ -523,7 +560,7 @@ class ParserTestCase(unittest.TestCase):
             ],
         )
         self.assertEqual(
-            parsed["entities"]["technical"],
+            legacy_entities(parsed["entities"]["technical"]),
             [
                 {
                     "email": "arin-contact@google.com",
@@ -547,7 +584,7 @@ class ParserTestCase(unittest.TestCase):
             ],
         )
         self.assertEqual(
-            parsed["entities"]["abuse"],
+            legacy_entities(parsed["entities"]["abuse"]),
             [
                 {
                     "handle": "ABUSE5250-ARIN",
@@ -624,7 +661,7 @@ class ParserTestCase(unittest.TestCase):
         self.assertEqual(parsed["network"], IPv6Network("2001:4860::/32"))
         self.assertEqual(parsed["description"], [])
         self.assertEqual(
-            parsed["entities"]["registrant"],
+            legacy_entities(parsed["entities"]["registrant"]),
             [
                 {
                     "handle": "GOGL",
@@ -679,7 +716,7 @@ class ParserTestCase(unittest.TestCase):
             ["http://www.govital.net\\r", "Standard NOC hours are 10am to 6pm EST M-F"],
         )
         self.assertEqual(
-            parsed["entities"]["technical"],
+            legacy_entities(parsed["entities"]["technical"]),
             [
                 {
                     "email": "support@govital.net",
@@ -801,3 +838,269 @@ class ParserTestCase(unittest.TestCase):
                 whoisit._bootstrap, raw_data, "test.com", using_overrides=False
             )
             parser.parse()
+
+
+class ParserVCardTestCase(unittest.TestCase):
+    def test_parse_vcard(self):
+        vcard = [
+            "vcard",
+            [
+                ["version", {}, "text", "4.0"],
+                ["fn", {}, "text", "Example Person"],
+                ["kind", {}, "text", "individual"],
+                ["org", {}, "text", "Example Org"],
+                ["title", {}, "text", "Director"],
+                ["adr", {"label": "1 Street\n Town \n\nCountry"}, "text", ""],
+                ["email", {}, "text", "a@example.com"],
+                ["email", {}, "text", "b@example.com"],
+                ["tel", {"type": "fax"}, "text", "+1.5555555556"],
+                ["tel", {"type": ["work", "voice"]}, "uri", "tel:+1.5555555555"],
+                ["tel", {"type": ["cell"]}, "text", "+1.5555555557"],
+                ["url", {}, "uri", "https://example.com/"],
+                ["contact-uri", {}, "uri", "https://example.com/contact"],
+            ],
+        ]
+        self.assertEqual(
+            whoisit.parser.parse_vcard(vcard),
+            {
+                # name is the last of fn or org
+                "name": "Example Org",
+                "person": "Example Person",
+                "organisation": "Example Org",
+                "kind": "individual",
+                "title": "Director",
+                "address": {
+                    "po_box": "",
+                    "ext_address": "",
+                    "street_address": "",
+                    "locality": "",
+                    "region": "",
+                    "postal_code": "",
+                    "country": "",
+                    "label": "1 Street\nTown\nCountry",
+                },
+                "email": "a@example.com",
+                "emails": ["a@example.com", "b@example.com"],
+                "tel": "+1.5555555555",
+                "phones": ["+1.5555555555", "+1.5555555557"],
+                "fax": ["+1.5555555556"],
+                "websites": ["https://example.com/"],
+                "contact_uris": ["https://example.com/contact"],
+            },
+        )
+        self.assertIsNone(whoisit.parser.parse_vcard([]))
+        self.assertIsNone(whoisit.parser.parse_vcard(["notvcard", []]))
+
+    def test_parse_vcard_person(self):
+        def person(*props):
+            vcard = ["vcard", [list(p) for p in props]]
+            return whoisit.parser.parse_vcard(vcard).get("person")
+
+        # Organisations never have a person
+        self.assertIsNone(
+            person(("fn", {}, "text", "Org Name"), ("kind", {}, "text", "org"))
+        )
+        # Groups where the full name is already the name have no person
+        self.assertIsNone(
+            person(("fn", {}, "text", "NOC"), ("kind", {}, "text", "group"))
+        )
+        self.assertIsNone(
+            person(("fn", {}, "text", "Same"), ("org", {}, "text", "Same"))
+        )
+        # Individuals always have a person
+        self.assertEqual(
+            person(("fn", {}, "text", "A Person"), ("kind", {}, "text", "individual")),
+            "A Person",
+        )
+        # The full name is otherwise retained as the person if org replaced it
+        self.assertEqual(
+            person(("fn", {}, "text", "A Role"), ("org", {}, "text", "An Org")),
+            "A Role",
+        )
+
+    def test_parse_vcard_structured_address(self):
+        vcard = [
+            "vcard",
+            [["adr", {}, "text", ["", "", "1 Street", "Town", "", "AB1", "UK"]]],
+        ]
+        self.assertEqual(
+            whoisit.parser.parse_vcard(vcard)["address"],
+            {
+                "po_box": "",
+                "ext_address": "",
+                "street_address": "1 Street",
+                "locality": "Town",
+                "region": "",
+                "postal_code": "AB1",
+                "country": "UK",
+            },
+        )
+
+
+class ParserAdditionalDataTestCase(unittest.TestCase):
+    def setUp(self):
+        whoisit.clear_bootstrapping()
+        with open(BASE_DIR / "data_bootstrap.json", "rt") as f:
+            whoisit.load_bootstrap_data(f.read())
+
+    def parse(self, filename, data_type, query):
+        with open(BASE_DIR / f"data_rdap_response_{filename}.json") as f:
+            raw = json.loads(f.read())
+        return whoisit.parser.parse(whoisit._bootstrap, data_type, query, raw)
+
+    def test_domain_additional_data(self):
+        parsed = self.parse("domain1", "domain", "google.com")
+        self.assertEqual(
+            parsed["events"][0],
+            {
+                "action": "registration",
+                "date": datetime(1997, 9, 15, 4, 0, tzinfo=tzutc()),
+                "actor": "",
+            },
+        )
+        self.assertEqual(
+            parsed["registrar_url"],
+            "https://rdap.markmonitor.com/rdap/domain/GOOGLE.COM",
+        )
+        self.assertEqual(
+            parsed["nameserver_ips"],
+            {
+                "NS1.GOOGLE.COM": [],
+                "NS2.GOOGLE.COM": [],
+                "NS3.GOOGLE.COM": [],
+                "NS4.GOOGLE.COM": [],
+            },
+        )
+        self.assertEqual(parsed["dnssec_ds_data"], [])
+        registrar = parsed["entities"]["registrar"][0]
+        self.assertEqual(
+            registrar["public_ids"],
+            [{"type": "IANA Registrar ID", "identifier": "292"}],
+        )
+        abuse = parsed["entities"]["abuse"][0]
+        self.assertEqual(abuse["parent_name"], "MarkMonitor Inc.")
+        self.assertEqual(abuse["parent_handle"], "292")
+
+    def test_domain_nameserver_ips_and_dnssec(self):
+        raw = {
+            "objectClassName": "domain",
+            "handle": "TEST",
+            "ldhName": "example.com",
+            "nameservers": [
+                {
+                    "objectClassName": "nameserver",
+                    "ldhName": "ns1.example.com",
+                    "ipAddresses": {"v4": ["192.0.2.1"], "v6": ["2001:db8::1"]},
+                }
+            ],
+            "secureDNS": {
+                "delegationSigned": True,
+                "dsData": [
+                    {"keyTag": 1, "algorithm": 13, "digestType": 2, "digest": "AB"}
+                ],
+                "keyData": [
+                    {"flags": 257, "protocol": 3, "algorithm": 13, "publicKey": "CD"}
+                ],
+            },
+        }
+        parsed = whoisit.parser.parse(whoisit._bootstrap, "domain", "", raw)
+        self.assertEqual(
+            parsed["nameserver_ips"], {"ns1.example.com": ["192.0.2.1", "2001:db8::1"]}
+        )
+        self.assertTrue(parsed["dnssec"])
+        self.assertEqual(
+            parsed["dnssec_ds_data"],
+            [{"key_tag": 1, "algorithm": 13, "digest_type": 2, "digest": "AB"}],
+        )
+        self.assertEqual(
+            parsed["dnssec_key_data"],
+            [{"flags": 257, "protocol": 3, "algorithm": 13, "public_key": "CD"}],
+        )
+
+    def test_ip_additional_data(self):
+        parsed = self.parse("ip_v4", "ip", "1.1.1.1")
+        self.assertEqual(parsed["start_address"], "1.1.1.0")
+        self.assertEqual(parsed["end_address"], "1.1.1.255")
+        self.assertEqual(parsed["cidrs"], [IPv4Network("1.1.1.0/24")])
+        self.assertEqual(
+            [n["title"] for n in parsed["notices"]], ["Source", "Terms and Conditions"]
+        )
+        self.assertEqual(
+            parsed["remarks"][0]["description"],
+            [
+                "APNIC and Cloudflare DNS Resolver project",
+                "Routed globally by AS13335/Cloudflare",
+                "Research prefix for APNIC Labs",
+            ],
+        )
+        # A range which is not a single CIDR
+        parsed = self.parse("ip_v4_3", "ip", "13.107.4.50")
+        self.assertEqual(
+            parsed["cidrs"],
+            [
+                IPv4Network("13.64.0.0/11"),
+                IPv4Network("13.96.0.0/13"),
+                IPv4Network("13.104.0.0/14"),
+            ],
+        )
+        parsed = self.parse("ip_v6", "ip", "2001:4860::8888")
+        self.assertEqual(parsed["cidrs"], [IPv6Network("2001:4860::/32")])
+        self.assertEqual(parsed["origin_autnums"], [15169])
+
+    def test_ip_parent_url_and_redacted(self):
+        raw = {
+            "objectClassName": "ip network",
+            "handle": "TEST",
+            "links": [
+                {"rel": "up", "href": "https://example.com/ip/1.0.0.0/8"},
+                {
+                    "rel": "up",
+                    "href": "https://example.com/1.0.0.0",
+                    "type": "text/html",
+                },
+            ],
+            "redacted": [
+                {"name": {"description": "Registrant Name"}},
+                {"name": {"type": "Registrant Email"}},
+            ],
+        }
+        parsed = whoisit.parser.parse(whoisit._bootstrap, "ip", "", raw)
+        self.assertEqual(parsed["parent_url"], "https://example.com/ip/1.0.0.0/8")
+        self.assertEqual(parsed["redacted"], ["Registrant Name", "Registrant Email"])
+
+    def test_autnum_additional_data(self):
+        parsed = self.parse("asn", "autnum", "13335")
+        self.assertEqual(parsed["status"], [])
+        self.assertEqual(
+            [e["action"] for e in parsed["events"]], ["last changed", "registration"]
+        )
+        self.assertEqual(parsed["assignment_type"], "")
+        self.assertEqual(parsed["country"], "")
+
+    def test_entity_additional_data(self):
+        parsed = self.parse("entity", "entity", "GOVI")
+        self.assertEqual(parsed["roles"], [])
+        self.assertEqual(
+            parsed["networks"][0],
+            {
+                "handle": "NET6-2602-FE74-1",
+                "name": "GOVIV6",
+                "start_address": "2602:fe74::",
+                "end_address": "2602:fe74:fff:ffff:ffff:ffff:ffff:ffff",
+            },
+        )
+        self.assertEqual(
+            parsed["autnums"],
+            [
+                {
+                    "handle": "AS393996",
+                    "name": "GOVI-WNDS",
+                    "start_autnum": 393996,
+                    "end_autnum": 393996,
+                }
+            ],
+        )
+        admin = parsed["entities"]["administrative"][0]
+        self.assertEqual(admin["person"], "Stephen Karamatos")
+        self.assertEqual(admin["phones"], ["+1-519-254-5115", "+1-226-347-0456"])
+        self.assertEqual(admin["tel"], "+1-519-254-5115")

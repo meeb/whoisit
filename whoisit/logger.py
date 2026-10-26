@@ -1,6 +1,5 @@
-import os
 import logging
-
+import os
 
 debug_env_var: str = str(os.getenv("DEBUG", "")).strip().lower()
 is_debugging: bool = debug_env_var in ("yes", "y", "1", "true")

@@ -1,9 +1,10 @@
-import requests
 import unittest
+from ipaddress import IPv4Address, IPv4Network, IPv6Address, IPv6Network
 from pathlib import Path
-from ipaddress import IPv4Network, IPv4Address, IPv6Network, IPv6Address
-import whoisit
 
+import requests
+
+import whoisit
 
 BASE_DIR = Path(__file__).resolve().parent
 
@@ -41,24 +42,24 @@ class QueryTestCase(unittest.TestCase):
             whoisit.build_query()
 
         # ASN requests
-        method, url, exact_match = whoisit.build_query(
+        method, url, _exact_match = whoisit.build_query(
             query_type="asn", query_value=123
         )
         self.assertEqual(method, "GET")
         self.assertEqual(url, "https://rdap.arin.net/registry/autnum/123")
-        method, url, exact_match = whoisit.build_query(
+        method, url, _exact_match = whoisit.build_query(
             query_type="asn", query_value=61952
         )
         self.assertEqual(method, "GET")
         self.assertEqual(url, "https://rdap.db.ripe.net/autnum/61952")
 
         # Domain requests
-        method, url, exact_match = whoisit.build_query(
+        method, url, _exact_match = whoisit.build_query(
             query_type="domain", query_value="test.com"
         )
         self.assertEqual(method, "GET")
         self.assertEqual(url, "https://rdap.verisign.com/com/v1/domain/test.com")
-        method, url, exact_match = whoisit.build_query(
+        method, url, _exact_match = whoisit.build_query(
             query_type="domain", query_value="test.no"
         )
         self.assertEqual(method, "GET")
@@ -68,32 +69,32 @@ class QueryTestCase(unittest.TestCase):
             whoisit.build_query(query_type="domain", query_value="test.test")
 
         # IP requests
-        method, url, exact_match = whoisit.build_query(
+        method, url, _exact_match = whoisit.build_query(
             query_type="ip", query_value="1.1.1.1"
         )
         self.assertEqual(method, "GET")
         self.assertEqual(url, "https://rdap.apnic.net/ip/1.1.1.1")
-        method, url, exact_match = whoisit.build_query(
+        method, url, _exact_match = whoisit.build_query(
             query_type="ip", query_value=IPv4Address("1.1.1.1")
         )
         self.assertEqual(method, "GET")
         self.assertEqual(url, "https://rdap.apnic.net/ip/1.1.1.1")
-        method, url, exact_match = whoisit.build_query(
+        method, url, _exact_match = whoisit.build_query(
             query_type="ip", query_value=IPv4Network("1.1.1.0/24")
         )
         self.assertEqual(method, "GET")
         self.assertEqual(url, "https://rdap.apnic.net/ip/1.1.1.0/24")
-        method, url, exact_match = whoisit.build_query(
+        method, url, _exact_match = whoisit.build_query(
             query_type="ip", query_value="2606:4700:4700::1111"
         )
         self.assertEqual(method, "GET")
         self.assertEqual(url, "https://rdap.arin.net/registry/ip/2606:4700:4700::1111")
-        method, url, exact_match = whoisit.build_query(
+        method, url, _exact_match = whoisit.build_query(
             query_type="ip", query_value=IPv6Address("2606:4700:4700::1111")
         )
         self.assertEqual(method, "GET")
         self.assertEqual(url, "https://rdap.arin.net/registry/ip/2606:4700:4700::1111")
-        method, url, exact_match = whoisit.build_query(
+        method, url, _exact_match = whoisit.build_query(
             query_type="ip", query_value=IPv6Network("2606:4700::/32")
         )
         self.assertEqual(method, "GET")
@@ -101,13 +102,13 @@ class QueryTestCase(unittest.TestCase):
 
     def test_building_override_request(self):
         # Test that overriding the endpoint works, 1.1.1.1 is not allocated to afrinic
-        method, url, exact_match = whoisit.build_query(
+        method, url, _exact_match = whoisit.build_query(
             query_type="ip", query_value="1.1.1.1", rir="afrinic"
         )
         self.assertEqual(method, "GET")
         self.assertEqual(url, "https://rdap.afrinic.net/rdap/ip/1.1.1.1")
         # ... or ripe
-        method, url, exact_match = whoisit.build_query(
+        method, url, _exact_match = whoisit.build_query(
             query_type="ip", query_value="1.1.1.1", rir="ripe"
         )
         self.assertEqual(method, "GET")

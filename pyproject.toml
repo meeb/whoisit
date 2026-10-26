@@ -1,3 +1,7 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "whoisit"
 version = "4.0.5"
@@ -11,6 +15,9 @@ dependencies = [
     "typing-extensions>=4.15.0",
     "urllib3>=2.6.3",
 ]
+
+[project.scripts]
+whoisit = "whoisit.cli:run"
 
 [dependency-groups]
 dev = [

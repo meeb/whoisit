@@ -24,6 +24,46 @@ $ pip install whoisit
 Any modern version of Python3 will be compatible.
 
 
+## Command line usage
+
+From v4.1.0 Installing `whoisit` also installs a `whoisit` command which works as a
+replacement for the traditional `whois` command, using RDAP services instead of
+WHOIS servers:
+
+```bash
+$ whoisit example.com
+$ whoisit 1.1.1.1
+$ whoisit 2606:4700::/32
+$ whoisit AS13335
+$ whoisit -r ripe RIPE-NCC-MNT
+$ whoisit -t asn 13335
+$ whoisit -t asn -o json 13335
+```
+
+The query type is detected automatically, use `-t ip|asn|domain|entity` to set it
+manually. Related registrar RDAP services for domains are queried automatically and
+entities (contacts) which are only returned as a link to another RDAP object are looked
+up with additional sub-queries, use `-n` / `--no-follow` to disable this.
+
+The output format can be set with `-o` / `--output`:
+
+* `text` (default) human readable whois-like output
+* `json` the full RDAP response including any sub-query data, a list of responses is
+  output if multiple queries are given
+* `xml` the full RDAP response as XML, each query is a `<result>` element
+* `csv` the full RDAP response as two column `key,value` rows with dotted keys such as
+  `entities.0.vcard.email`, each query starts with a `query` row
+
+For `xml` and `csv` output the jCard `vcardArray` contact data is simplified into a
+`vcard` object. Use `-p` / `--parsed` to output the parsed `whoisit` response data
+instead of the full RDAP response (this implies `-o json` if no other structured
+format is set). Use `-v` / `--verbose` to show full notice text, links and contact
+remarks in `text` output. Bootstrap data is cached for a day in `~/.cache/whoisit/`, use
+`--refresh` to force it to be updated or `--no-cache` to disable the cache. See
+`whoisit --help` for all options. You can also run the command with
+`python -m whoisit`.
+
+
 ## Usage
 
 `whoisit` supports the 4 main types of lookups supported by RDAP services. These are:
@@ -43,25 +83,25 @@ import whoisit
 whoisit.bootstrap()
 
 results = whoisit.asn(1234)
-print(results['name'])
+print(results["name"])
 
-results = whoisit.domain('example.com')
-print(results['nameservers'])
+results = whoisit.domain("example.com")
+print(results["nameservers"])
 
-results = whoisit.ip('1.2.3.4')
-print(results['name'])
+results = whoisit.ip("1.2.3.4")
+print(results["name"])
 
-results = whoisit.ip('1.2.3.0/24')
-print(results['name'])
+results = whoisit.ip("1.2.3.0/24")
+print(results["name"])
 
-results = whoisit.ip('2404:1234:1234:1234:1234:1234:1234:1234')
-print(results['name'])
+results = whoisit.ip("2404:1234:1234:1234:1234:1234:1234:1234")
+print(results["name"])
 
-results = whoisit.ip('2404:1234::/32')
-print(results['name'])
+results = whoisit.ip("2404:1234::/32")
+print(results["name"])
 
-results = whoisit.entity('ARIN')
-print(results['last_changed_date'])
+results = whoisit.entity("ARIN")
+print(results["last_changed_date"])
 ```
 
 Basic async examples:
@@ -70,21 +110,23 @@ Basic async examples:
 import whoisit
 import asyncio
 
+
 async def whoisit_lookups():
     results = await whoisit.asn_async(1234)
-    print(results['name'])
-    results = await whoisit.domain_async('example.com')
-    print(results['nameservers'])
-    results = await whoisit.ip_async('1.2.3.4')
-    print(results['name'])
-    results = await whoisit.ip_async('1.2.3.0/24')
-    print(results['name'])
-    results = await whoisit.ip_async('2404:1234:1234:1234:1234:1234:1234:1234')
-    print(results['name'])
-    results = await whoisit.ip_async('2404:1234::/32')
-    print(results['name'])
-    results = await whoisit.entity_async('ARIN')
-    print(results['last_changed_date'])
+    print(results["name"])
+    results = await whoisit.domain_async("example.com")
+    print(results["nameservers"])
+    results = await whoisit.ip_async("1.2.3.4")
+    print(results["name"])
+    results = await whoisit.ip_async("1.2.3.0/24")
+    print(results["name"])
+    results = await whoisit.ip_async("2404:1234:1234:1234:1234:1234:1234:1234")
+    print(results["name"])
+    results = await whoisit.ip_async("2404:1234::/32")
+    print(results["name"])
+    results = await whoisit.entity_async("ARIN")
+    print(results["last_changed_date"])
+
 
 loop = asyncio.get_event_loop()
 loop.run_until_complete(whoisit.bootstrap_async())
@@ -101,7 +143,7 @@ unparsed and large RDAP JSON data by adding the `raw=True` argument to the reque
 example:
 
 ```python
-results = whoisit.domain('example.com', raw=True)
+results = whoisit.domain("example.com", raw=True)
 # 'results' is now the full, raw response from the RDAP service
 ```
 
@@ -109,14 +151,14 @@ If you want to obtain both the parsed and raw data you can use the `include_raw=
 argument. In this case, the `results` will contain an additional `raw` key that contains the raw data. For example:
 
 ```python
-results = whoisit.domain('example.com', include_raw=True)
+results = whoisit.domain("example.com", include_raw=True)
 # 'results' is the parsed response from whoisit
 # the raw response can now be accessed as 'results["raw"]'
 ```
 
 The `raw` and `include_raw` arguments cannot be used together. In such a case an `ArgumentError` will be raised.
 ```python
-results = whoisit.domain('example.com', raw=True, include_raw=True)
+results = whoisit.domain("example.com", raw=True, include_raw=True)
 # This raises a whoisit.errors.ArgumentError
 ```
 
@@ -137,17 +179,17 @@ for "Regional Internet Registry". For example:
 
 ```python
 # This will work OK because the entity is prefixed with an obvious RIR name
-results = whoisit.entity('RIPE-NCC-MNT')
+results = whoisit.entity("RIPE-NCC-MNT")
 
 # This will cause a QueryError to be raised because ARIN returns a 404 for RIPE-NCC-MNT
-results = whoisit.entity('RIPE-NCC-MNT', rir='arin')
+results = whoisit.entity("RIPE-NCC-MNT", rir="arin")
 
 # This will cause a UnsupportedError to be raised because we have no way to detect
 # which RDAP service to query as the entity has no RIR prefix or postfix
-results = whoisit.entity('AS5089-MNT')
+results = whoisit.entity("AS5089-MNT")
 
 # This will work OK because the entity is registered at RIPE
-results = whoisit.entity('AS5089-MNT', rir='ripe')
+results = whoisit.entity("AS5089-MNT", rir="ripe")
 ```
 
 
@@ -163,11 +205,11 @@ For example (as of 2021-07-25):
 
 ```python
 # This will result in an SSL error
-results = whoisit.domain('nic.work')
+results = whoisit.domain("nic.work")
 # ... SSLError(SSLError(1, '[SSL: DH_KEY_TOO_SMALL] dh key too small (_ssl.c:1129)')))
 
 # This will work
-results = whoisit.domain('nic.work', allow_insecure_ssl=True)
+results = whoisit.domain("nic.work", allow_insecure_ssl=True)
 ```
 
 Note that with `allow_insecure_ssl=True` the upstream RDAP server certificate is
@@ -186,7 +228,7 @@ invalid format. You can disable related RDAP endpoint subrequests by passing the
 `follow_related=False` argument to `whoisit.domain(...)`. For example (as of 2024-04-30):
 
 ```python
-results = whoisit.domain('example.com', follow_related=False)
+results = whoisit.domain("example.com", follow_related=False)
 ```
 
 If you encounter a parsing error when using related RDAP endpoint data you can also
@@ -199,11 +241,11 @@ You can also write a fallback:
 
 ```python
 try:
-    results = whoisit.domain('example.com')
+    results = whoisit.domain("example.com")
     # Assume an error parsing the related RDAP data occurs here
 except Exception as e:
-    print(f'Failed to look up domain, trying fallback: {e}')
-    results = whoisit.domain('example.com', follow_related=False)
+    print(f"Failed to look up domain, trying fallback: {e}")
+    results = whoisit.domain("example.com", follow_related=False)
     # Likely to succeed if the related RDAP data was the issue
 ```
 
@@ -222,7 +264,7 @@ to the IANA every time you run a query. Example bootstrap information caching:
 import whoisit
 
 print(whoisit.is_bootstrapped())  # -> False
-whoisit.bootstrap()               # Slow, makes several HTTP requests to the IANA
+whoisit.bootstrap()  # Slow, makes several HTTP requests to the IANA
 print(whoisit.is_bootstrapped())  # -> True
 
 # bootstrap_info returned here is a string of JSON serialised bootstap information
@@ -260,16 +302,16 @@ Redis, for example:
 import whoisit
 import redis
 
-r = redis.Redis(host='localhost', port=6379, db=0)
+r = redis.Redis(host="localhost", port=6379, db=0)
 
-bootstrap_info = r.get('whoisit_bootstrap_info')
+bootstrap_info = r.get("whoisit_bootstrap_info")
 if bootstrap_info:
     whoisit.load_bootstrap_data(bootstrap_info)
 else:
     whoisit.bootstrap()
     bootstrap_info = whoisit.save_bootstrap_data()
-    expire_in_3_days = 60 * 60 * 24 *3
-    r.set('whoisit_bootstrap_info', bootstrap_info, ex=expire_in_3_days)
+    expire_in_3_days = 60 * 60 * 24 * 3
+    r.set("whoisit_bootstrap_info", bootstrap_info, ex=expire_in_3_days)
 
 # Send queries as normal once bootstrapped
 whoisit.asn(12345)
@@ -314,9 +356,11 @@ endpoint that is not loaded because it is insecure. For example:
 ```python
 # Enable debug logging
 import os
-os.environ['DEBUG'] = 'true'
- # Load and boostrap whoisit
+
+os.environ["DEBUG"] = "true"
+# Load and boostrap whoisit
 import whoisit
+
 # > [datetime] bootstrap [DEBUG] Cleared bootstrap data
 whoisit.bootstrap()
 # > ... debug logs ...
@@ -351,13 +395,13 @@ You can specify an HTTP proxy to use for all requests made by `whoisit` by calli
 by `whoisit` will use the proxy specified by the last call to `set_proxy(...)`. For example:
 
 ```python
-whoisit.set_proxy('http://127.0.0.1:8080')
+whoisit.set_proxy("http://127.0.0.1:8080")
 # Both bootstrapping and the IP query for 1.1.1.1 will use the proxy at http://127.0.0.1:8080
 whoisit.bootstrap()
-result = whoisit.ip('1.1.1.1')
+result = whoisit.ip("1.1.1.1")
 whoisit.clear_proxy()
 # All future requests will not use a proxy
-result = whoisit.domain('example.com')
+result = whoisit.domain("example.com")
 ```
 
 You can switch or clear proxies at any time. Note that setting or clearing a proxy will also
@@ -403,6 +447,13 @@ response = {
     'rir': str,                  # Short name of the RIR for the object, such as 'arin'
     'url': str,                  # URL to the RDAP query which was made for this request
     'entities': dict,            # A dict of entities linked to the object
+    'status': list,              # List of the object states as strings
+    'events': list,              # All events, as dicts of {'action': str, 'date': datetime, 'actor': str}
+    'public_ids': list,          # Public IDs, as dicts of {'type': str, 'identifier': str}
+    'links': list,               # All links, as dicts of {'rel': str, 'href': str, 'type': str}
+    'notices': list,             # Notices, as dicts of {'title': str, 'type': str, 'description': list, 'links': list}
+    'remarks': list,             # Remarks, in the same format as notices
+    'redacted': list,            # Names of any redacted fields as strings
 }
 ```
 
@@ -418,6 +469,28 @@ response['entities']['some_role'][] = { # Role names are strings, like 'registra
     'type': str,           # Type of the entity, usually 'entity'
     'url': str,            # URL to an RDAP service to query this entity 
     'whois_server': str,   # WHOIS server hostname entity data can be found on
+    'tel': str,            # The first phone number of the entity that is not a fax number
+    'address': dict,       # Address of the entity, with a 'label' key of the formatted
+                           # address if the entity provides one
+    # Only set if the entity has the data:
+    'person': str,         # Full name of the person, or role, if the entity is not an organisation
+    'organisation': str,   # Organisation of the entity
+    'kind': str,           # vCard kind, such as 'individual', 'org' or 'group'
+    'title': str,          # Job title
+    'role': str,           # Job role
+    'emails': list,        # All email addresses of the entity
+    'phones': list,        # All non-fax phone numbers of the entity
+    'fax': list,           # All fax numbers of the entity
+    'websites': list,      # Website URLs of the entity
+    'contact_uris': list,  # Contact form URLs of the entity
+    'status': list,        # List of the entity states as strings
+    'events': list,        # Events for the entity, same format as the object events
+    'public_ids': list,    # Public IDs for the entity, such as an IANA registrar ID
+    'remarks': list,       # Remarks for the entity, same format as the object remarks
+    'networks': list,      # Networks registered to the entity
+    'autnums': list,       # AS numbers registered to the entity
+    'parent_handle': str,  # Handle of the entity this entity was found under, if nested
+    'parent_name': str,    # Name of the entity this entity was found under, if nested
 }
 ```
 
@@ -429,8 +502,10 @@ extra fields in their responses, these are:
 ```python
 # ASN response data includes all shared general response fields above and also:
 response = {
-    'asn_range': list,       # A list of the start and end range for an AS allocation
-                             # For example, [123,134] or [123,123]
+    "asn_range": list,  # A list of the start and end range for an AS allocation
+    # For example, [123,134] or [123,123]
+    "assignment_type": str,  # Assignment type, if the RDAP service provides it
+    "country": str,  # Two letter country code, if the RDAP service provides it
 }
 ```
 
@@ -439,9 +514,14 @@ response = {
 ```python
 # Domain response data includes all shared general response fields above and also:
 response = {
-    'unicode_name': str,     # Domain name in unicode if available
-    'nameservers': list,     # List of name servers for the domain as strings
-    'status': list,          # List of the domain states as strings
+    "unicode_name": str,  # Domain name in unicode if available
+    "nameservers": list,  # List of name servers for the domain as strings
+    "nameserver_ips": dict,  # Dict of {nameserver: [ip addresses]} for the domain
+    "dnssec": bool,  # True if the domain has a signed delegation
+    "dnssec_ds_data": list,  # DS records, as dicts of key_tag, algorithm, digest_type, digest
+    "dnssec_key_data": list,  # DNSKEY records, as dicts of flags, protocol, algorithm, public_key
+    "registrar_url": str,  # URL of the registrar RDAP service for the domain, if any
+    "status": list,  # List of the domain states as strings
 }
 ```
 
@@ -450,10 +530,15 @@ response = {
 ```python
 # IP response data includes all shared general response fields above and also:
 response = {
-    'country': str,          # Two letter country code for the IP block
-    'ip_version': int,       # 4 or 6 to denote the IP version
-    'assignment_type': str,  # Assignment type, such as 'assigned portable'
-    'network': IPvXNetwork,  # A IPv4Network or IPv6Network object for the prefix
+    "country": str,  # Two letter country code for the IP block
+    "ip_version": int,  # 4 or 6 to denote the IP version
+    "assignment_type": str,  # Assignment type, such as 'assigned portable'
+    "network": IPvXNetwork,  # A IPv4Network or IPv6Network object for the prefix
+    "cidrs": list,  # All IPv4Network or IPv6Network objects for the IP block
+    "start_address": str,  # First IP address of the IP block
+    "end_address": str,  # Last IP address of the IP block
+    "origin_autnums": list,  # Origin AS numbers as ints, if the RDAP service provides them
+    "parent_url": str,  # URL of the parent IP block RDAP object, if any
 }
 ```
 
@@ -462,7 +547,11 @@ response = {
 ```python
 # Entity response data includes all shared general response fields above and also:
 response = {
-    'email': str,            # If the entity as a root vcard the email address
+    "email": str,  # If the entity as a root vcard the email address
+    # Plus all other entity fields above from the root vcard, and:
+    "roles": list,  # Roles of the entity as strings
+    "networks": list,  # Networks registered to the entity
+    "autnums": list,  # AS numbers registered to the entity
 }
 ```
 
@@ -575,10 +664,10 @@ is passed the RDAP queries will allow weaker SSL handshakes. Examples:
 
 ```python
 whoisit.asn(12345)
-whoisit.asn(12345, rir='arin')
+whoisit.asn(12345, rir="arin")
 whoisit.asn(12345, raw=True)
 whoisit.asn(12345, include_raw=True)
-whoisit.asn(12345, rir='arin', raw=True)
+whoisit.asn(12345, rir="arin", raw=True)
 whoisit.asn(12345, allow_insecure_ssl=True)
 ```
 
@@ -601,16 +690,16 @@ handshakes. **Note that not all TLDs are supported, only some have RDAP services
 Examples:
 
 ```python
-whoisit.domain('example.com')
-whoisit.domain('example.com', raw=True)
-whoisit.domain('example.com', include_raw=True)
-whoisit.domain('example.com', allow_insecure_ssl=True)
+whoisit.domain("example.com")
+whoisit.domain("example.com", raw=True)
+whoisit.domain("example.com", include_raw=True)
+whoisit.domain("example.com", allow_insecure_ssl=True)
 ```
 
 As of `whoisit` version 3.0.0 there is also an optional async interface:
 
 ```python
-response = await whoisit.domain_async('example.com')
+response = await whoisit.domain_async("example.com")
 ```
 
 ### `whoisit.ip(ip="1.1.1.1", rir=str, raw=bool, include_raw=False, allow_insecure_ssl=bool)` -> `dict`
@@ -625,22 +714,22 @@ if `allow_insecure_ssl=True` is passed the RDAP queries will allow weaker SSL ha
 Examples:
 
 ```python
-whoisit.ip('1.1.1.1')
-whoisit.ip('1.1.1.1', rir='apnic')
-whoisit.ip('1.1.1.1', raw=True, rir='apnic')
-whoisit.ip('1.1.1.1', include_raw=True, rir='apnic')
-whoisit.ip('1.1.1.0/24')
-whoisit.ip(IPv4Address('1.1.1.1'))
-whoisit.ip(IPv4Network('1.1.1.0/24'))
-whoisit.ip(IPv6Address('2001:4860:4860::8888'))
-whoisit.ip(IPv6Network('2001:4860::/32'), rir='arin')
-whoisit.ip('1.1.1.1', allow_insecure_ssl=True)
+whoisit.ip("1.1.1.1")
+whoisit.ip("1.1.1.1", rir="apnic")
+whoisit.ip("1.1.1.1", raw=True, rir="apnic")
+whoisit.ip("1.1.1.1", include_raw=True, rir="apnic")
+whoisit.ip("1.1.1.0/24")
+whoisit.ip(IPv4Address("1.1.1.1"))
+whoisit.ip(IPv4Network("1.1.1.0/24"))
+whoisit.ip(IPv6Address("2001:4860:4860::8888"))
+whoisit.ip(IPv6Network("2001:4860::/32"), rir="arin")
+whoisit.ip("1.1.1.1", allow_insecure_ssl=True)
 ```
 
 As of `whoisit` version 3.0.0 there is also an optional async interface:
 
 ```python
-response = await whoisit.ip_async('1.1.1.1')
+response = await whoisit.ip_async("1.1.1.1")
 ```
 
 ### `whoisit.entity(entity=str, rir=str, raw=bool, include_raw=False, allow_insecure_ssl=bool)` -> `dict`
@@ -654,17 +743,17 @@ raised. if `allow_insecure_ssl=True` is passed the RDAP queries will allow weake
 SSL handshakes. Examples:
 
 ```python
-whoisit.entity('ZG39-ARIN')
-whoisit.entity('ZG39-ARIN', rir='arin')
-whoisit.entity('ZG39-ARIN', rir='arin', raw=True)
-whoisit.entity('ZG39-ARIN', rir='arin', include_raw=True)
-whoisit.entity('ZG39-ARIN', allow_insecure_ssl=True)
+whoisit.entity("ZG39-ARIN")
+whoisit.entity("ZG39-ARIN", rir="arin")
+whoisit.entity("ZG39-ARIN", rir="arin", raw=True)
+whoisit.entity("ZG39-ARIN", rir="arin", include_raw=True)
+whoisit.entity("ZG39-ARIN", allow_insecure_ssl=True)
 ```
 
 As of `whoisit` version 3.0.0 there is also an optional async interface:
 
 ```python
-response = await whoisit.entity_async('ZG39-ARIN')
+response = await whoisit.entity_async("ZG39-ARIN")
 ```
 
 

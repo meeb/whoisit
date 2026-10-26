@@ -3,7 +3,7 @@ Various RDAP servers are either incorrect or not listed in the IANA
 bootstrap data. This file contains a list of overrides that are overlayed
 onto the IANA data by default.
 
-Last updated: 2026-01-05 03:46:00 UTC
+Last updated: 2026-10-26 13:54:00 UTC
 """
 
 iana_overrides: dict[str, ...] = {
